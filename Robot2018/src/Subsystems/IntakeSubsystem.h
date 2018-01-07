@@ -13,4 +13,6 @@ public:
 	void RunBothMotors(double power);
 	void RunLeftMotor(double power);
 	void RunRightMotor(double power);
+	double GetLeftCurrent();
+	double GetRightCurrent();
 };

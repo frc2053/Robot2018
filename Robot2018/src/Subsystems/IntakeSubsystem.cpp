@@ -23,3 +23,11 @@ void IntakeSubsystem::RunLeftMotor(double power) {
 void IntakeSubsystem::RunRightMotor(double power) {
 	rightIntakeTalon->Set(ControlMode::PercentOutput, power);
 }
+
+double IntakeSubsystem::GetLeftCurrent() {
+	return leftIntakeTalon->GetOutputCurrent();
+}
+
+double IntakeSubsystem::GetRightCurrent() {
+	return rightIntakeTalon->GetOutputCurrent();
+}

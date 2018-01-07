@@ -5,7 +5,7 @@
 
 class IntakeUntilCurrentSpike : public Command {
 public:
-	IntakeUntilCurrentSpike();
+	IntakeUntilCurrentSpike(double speed = 0, double time = 0);
 	void Initialize();
 	void Execute();
 	bool IsFinished();
@@ -13,4 +13,11 @@ public:
 	void Interrupted();
 private:
 	double currentThreshold;
+	double currentLeft;
+	double currentRight;
+	double timeTarget;
+	double timeCurrent;
+	double inputSpeed;
+	bool isDone;
+	std::shared_ptr<frc::Timer> timer;
 };
