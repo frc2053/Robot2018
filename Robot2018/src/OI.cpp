@@ -20,6 +20,8 @@ OI::OI() {
 
 	operatorJoystick->selectButton->WhileHeld(new RunClimberMotor(-1, 0));
 	operatorJoystick->selectButton->WhenReleased(new RunClimberMotor(0, 0));
+
+	//operatorJoystick->
 }
 
 std::shared_ptr<TigerJoystick> OI::GetDriverJoystick() {

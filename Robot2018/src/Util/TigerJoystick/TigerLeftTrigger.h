@@ -2,7 +2,7 @@
 
 #include "WPILib.h"
 
-class TigerLeftTrigger : public Trigger {
+class TigerLeftTrigger : public frc::JoystickButton {
 public:
 	TigerLeftTrigger(frc::Joystick* joy, int axis);
 	bool Get();
