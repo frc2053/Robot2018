@@ -3,6 +3,12 @@
 std::shared_ptr<can::TalonSRX> RobotMap::intakeSubsystemLeftMotor;
 std::shared_ptr<can::TalonSRX> RobotMap::intakeSubsystemRightMotor;
 
+std::shared_ptr<can::TalonSRX> RobotMap::elevatorSubsystemPrimaryMotor;
+std::shared_ptr<can::TalonSRX> RobotMap::elevatorSubsystemFollowerMotor;
+
+std::shared_ptr<can::TalonSRX> RobotMap::climberSubsystemPrimaryMotor;
+std::shared_ptr<can::TalonSRX> RobotMap::climberSubsystemFollowerMotor;
+
 std::shared_ptr<can::TalonSRX> RobotMap::swerveSubsystemFLDriveTalon;
 std::shared_ptr<can::TalonSRX> RobotMap::swerveSubsystemFRDriveTalon;
 std::shared_ptr<can::TalonSRX> RobotMap::swerveSubsystemBLDriveTalon;
@@ -19,11 +25,27 @@ std::shared_ptr<TigerDrive> RobotMap::tigerDrive;
 std::shared_ptr<TigerSwerve> RobotMap::tigerSwerve;
 std::vector<std::shared_ptr<can::TalonSRX>> RobotMap::talonVector;
 
+int RobotMap::TOP_POSITION_TICKS;
+double RobotMap::GROUND_POS_IN;
+double RobotMap::SCALE_POS_IN;
+double RobotMap::SWITCH_POS_IN;
+
 void RobotMap::init() {
 	std::cout << "RobotMap is starting!" << std::endl;
 
+	TOP_POSITION_TICKS = 24000;
+	GROUND_POS_IN = 0;
+	SCALE_POS_IN = 78;
+	SWITCH_POS_IN = 21;
+
 	intakeSubsystemLeftMotor.reset(new TalonSRX(10));
 	intakeSubsystemRightMotor.reset(new TalonSRX(11));
+
+	elevatorSubsystemPrimaryMotor.reset(new TalonSRX(13));
+	elevatorSubsystemFollowerMotor.reset(new TalonSRX(14));
+
+	climberSubsystemPrimaryMotor.reset(new TalonSRX(15));
+	climberSubsystemFollowerMotor.reset(new TalonSRX(16));
 
 	swerveSubsystemFLDriveTalon.reset(new can::TalonSRX(2));
 	swerveSubsystemFRDriveTalon.reset(new can::TalonSRX(3));
@@ -50,6 +72,23 @@ void RobotMap::init() {
 	tigerSwerve.reset(new TigerSwerve(RobotMap::talonVector));
 	tigerDrive.reset(new TigerDrive(RobotMap::robotIMU.get()));
 
+	elevatorSubsystemPrimaryMotor->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, 10);
+	elevatorSubsystemPrimaryMotor->SetSelectedSensorPosition(TOP_POSITION_TICKS, 0, 10);
+	elevatorSubsystemPrimaryMotor->SetSensorPhase(false);
+	elevatorSubsystemPrimaryMotor->SetInverted(false);
+	elevatorSubsystemPrimaryMotor->Set(ControlMode::Position, TOP_POSITION_TICKS);
+	elevatorSubsystemPrimaryMotor->Config_kP(0, 1, 10);
+	elevatorSubsystemPrimaryMotor->Config_kI(0, 0, 10);
+	elevatorSubsystemPrimaryMotor->Config_kD(0, 0, 10);
+
+	elevatorSubsystemFollowerMotor->Set(ControlMode::Follower, 13);
+	elevatorSubsystemFollowerMotor->SetInverted(false);
+
+	climberSubsystemPrimaryMotor->SetInverted(false);
+	climberSubsystemPrimaryMotor->Set(ControlMode::PercentOutput, 0);
+
+	climberSubsystemFollowerMotor->Set(ControlMode::Follower, 15);
+	climberSubsystemFollowerMotor->SetInverted(false);
 
 	swerveSubsystemFLDriveTalon->SetInverted(true);
 	swerveSubsystemFRDriveTalon->SetInverted(true);

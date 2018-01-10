@@ -17,6 +17,12 @@ public:
 	static std::shared_ptr<can::TalonSRX> intakeSubsystemLeftMotor;
 	static std::shared_ptr<can::TalonSRX> intakeSubsystemRightMotor;
 
+	static std::shared_ptr<can::TalonSRX> elevatorSubsystemPrimaryMotor;
+	static std::shared_ptr<can::TalonSRX> elevatorSubsystemFollowerMotor;
+
+	static std::shared_ptr<can::TalonSRX> climberSubsystemPrimaryMotor;
+	static std::shared_ptr<can::TalonSRX> climberSubsystemFollowerMotor;
+
 	static std::shared_ptr<can::TalonSRX> swerveSubsystemFLDriveTalon;
 	static std::shared_ptr<can::TalonSRX> swerveSubsystemFRDriveTalon;
 	static std::shared_ptr<can::TalonSRX> swerveSubsystemBLDriveTalon;
@@ -32,4 +38,9 @@ public:
 	static std::vector<std::shared_ptr<can::TalonSRX>> talonVector;
 	static std::shared_ptr<frc::PowerDistributionPanel> powerDistributionPanel;
 	static std::shared_ptr<TigerSwerve> tigerSwerve;
+
+	static int TOP_POSITION_TICKS;
+	static double GROUND_POS_IN;
+	static double SWITCH_POS_IN;
+	static double SCALE_POS_IN;
 };

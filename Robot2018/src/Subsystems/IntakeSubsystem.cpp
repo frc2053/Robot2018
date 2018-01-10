@@ -1,5 +1,4 @@
 #include "IntakeSubsystem.h"
-#include "../RobotMap.h"
 
 IntakeSubsystem::IntakeSubsystem() : Subsystem("IntakeSubsystem") {
 	std::cout << "Constructor for Intake Subsystem!" << std::endl;

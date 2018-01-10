@@ -1,30 +1,24 @@
 #include "OI.h"
 
 #include "Commands/Drive/ZeroYaw.h"
-#include "Commands/Test/WheelModuleTest.h"
+#include "Commands/Elevator/GoToElevatorPosition.h"
 
 OI::OI() {
 
 	driverJoystick.reset(new TigerJoystick(0));
-
-	driverJoystick->aButton->WhenPressed(new WheelModuleTest(deg2rad(0)));
-	driverJoystick->bButton->WhenPressed(new WheelModuleTest(deg2rad(45)));
-	driverJoystick->xButton->WhenPressed(new WheelModuleTest(deg2rad(90)));
-	driverJoystick->yButton->WhenPressed(new WheelModuleTest(deg2rad(135)));
-	driverJoystick->startButton->WhenPressed(new WheelModuleTest(deg2rad(180)));
-	driverJoystick->selectButton->WhenPressed(new WheelModuleTest(deg2rad(225)));
-	driverJoystick->leftShoulderButton->WhenPressed(new WheelModuleTest(deg2rad(270)));
-	driverJoystick->rightShoulderButton->WhenPressed(new WheelModuleTest(deg2rad(315)));
-	driverJoystick->leftStickButton->WhenPressed(new WheelModuleTest(deg2rad(360)));
+	operatorJoystick.reset(new TigerJoystick(1));
 
 	SmartDashboard::PutData("Zero Yaw", new ZeroYaw());
-	SmartDashboard::PutData("Wheel Module Test", new WheelModuleTest(0));
+
+	operatorJoystick->aButton->WhenPressed(new GoToElevatorPosition(RobotMap::GROUND_POS_IN));
+	operatorJoystick->yButton->WhenPressed(new GoToElevatorPosition(RobotMap::SCALE_POS_IN));
+	operatorJoystick->xButton->WhenPressed(new GoToElevatorPosition(RobotMap::SWITCH_POS_IN));
 }
 
 std::shared_ptr<TigerJoystick> OI::GetDriverJoystick() {
 	return driverJoystick;
 }
 
-double OI::deg2rad(double deg) {
-	return deg * (M_PI / 180);
+std::shared_ptr<TigerJoystick> OI::GetOperatorJoystick() {
+	return operatorJoystick;
 }

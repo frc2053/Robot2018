@@ -3,12 +3,16 @@
 std::unique_ptr<OI> Robot::oi;
 std::unique_ptr<SwerveSubsystem> Robot::swerveSubsystem;
 std::unique_ptr<IntakeSubsystem> Robot::intakeSubsystem;
+std::unique_ptr<ElevatorSubsystem> Robot::elevatorSubsystem;
+std::unique_ptr<ClimberSubsystem> Robot::climberSubsystem;
 
 void Robot::RobotInit() {
 	std::cout << "Robot is starting!" << std::endl;
 	RobotMap::init();
 	swerveSubsystem.reset(new SwerveSubsystem());
 	intakeSubsystem.reset(new IntakeSubsystem());
+	elevatorSubsystem.reset(new ElevatorSubsystem());
+	climberSubsystem.reset(new ClimberSubsystem());
 	oi.reset(new OI());
 	Robot::swerveSubsystem->ZeroYaw();
 	Robot::swerveSubsystem->SetAdjYaw(0);

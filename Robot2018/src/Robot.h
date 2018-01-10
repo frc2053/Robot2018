@@ -3,12 +3,16 @@
 #include "RobotMap.h"
 #include "Subsystems/SwerveSubsystem.h"
 #include "Subsystems/IntakeSubsystem.h"
+#include "Subsystems/ElevatorSubsystem.h"
+#include "Subsystems/ClimberSubsystem.h"
 #include "OI.h"
 
 class Robot : public frc::TimedRobot {
 public:
 	static std::unique_ptr<SwerveSubsystem> swerveSubsystem;
 	static std::unique_ptr<IntakeSubsystem> intakeSubsystem;
+	static std::unique_ptr<ElevatorSubsystem> elevatorSubsystem;
+	static std::unique_ptr<ClimberSubsystem> climberSubsystem;
 	static std::unique_ptr<OI> oi;
 	virtual void RobotInit();
 	virtual void DisabledInit();
