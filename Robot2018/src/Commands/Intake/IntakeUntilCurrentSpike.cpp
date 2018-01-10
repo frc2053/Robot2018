@@ -53,7 +53,7 @@ void IntakeUntilCurrentSpike::Execute() {
 }
 
 bool IntakeUntilCurrentSpike::IsFinished() {
-	return false;
+	return isDone;
 }
 
 void IntakeUntilCurrentSpike::End() {
