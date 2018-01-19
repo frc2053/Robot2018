@@ -7,6 +7,8 @@
 #include "Util/TigerSwerve/TigerSwerve.h"
 #include "Util/TigerDrive/TigerDrive.h"
 #include <iostream>
+#include "pathfinder.h"
+
 
 
 using namespace ctre::phoenix::motorcontrol;
