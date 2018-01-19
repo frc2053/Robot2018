@@ -1,12 +1,15 @@
 #include <Robot.h>
-
 #include "Commands/Autonomous/DoNothingAuto.h"
+#include "Pathfinder/TestFollower.h"
+
 
 std::unique_ptr<OI> Robot::oi;
 std::unique_ptr<SwerveSubsystem> Robot::swerveSubsystem;
 std::unique_ptr<IntakeSubsystem> Robot::intakeSubsystem;
 std::unique_ptr<ElevatorSubsystem> Robot::elevatorSubsystem;
 std::unique_ptr<ClimberSubsystem> Robot::climberSubsystem;
+TestFollower follower;
+
 
 void Robot::RobotInit() {
 	std::cout << "Robot is starting!" << std::endl;
@@ -21,6 +24,9 @@ void Robot::RobotInit() {
 	Robot::swerveSubsystem->ZeroYaw();
 	//if we start at an angle other than zero change this in auto
 	Robot::swerveSubsystem->SetAdjYaw(0);
+
+	//generate paths
+	follower.Generate();
 
 	autoChooser.AddDefault("Do Nothing Auto", new DoNothingAuto());
 
@@ -42,6 +48,7 @@ void Robot::AutonomousInit() {
 	if(selectedMode != nullptr) {
 		selectedMode->Start();
 	}
+	follower.FollowPath();
 }
 
 void Robot::AutonomousPeriodic() {
