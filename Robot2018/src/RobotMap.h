@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ROBOTMAP_H
+#define ROBOTMAP_H
 
 #include "WPILib.h"
 #include "ctre/phoenix/MotorControl/CAN/TalonSRX.h"
@@ -44,3 +45,5 @@ public:
 	static double SWITCH_POS_IN;
 	static double SCALE_POS_IN;
 };
+
+#endif

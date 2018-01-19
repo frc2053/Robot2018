@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SRC_UTIL_MATH_ROTATION2D_H_
+#define SRC_UTIL_MATH_ROTATION2D_H_
 
 #include <math.h>
 #include <limits>
@@ -35,3 +36,5 @@ private:
 	double m_sin;
 	const double kEpsilon = 1E-9;
 };
+
+#endif

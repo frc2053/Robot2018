@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SwerveSubsystem_H
+#define SwerveSubsystem_H
 
 #include "../RobotMap.h"
 #include <Commands/Subsystem.h>
@@ -33,3 +34,5 @@ private:
 	std::shared_ptr<can::TalonSRX> backRightRotationTalon;
 	std::shared_ptr<can::TalonSRX> backLeftRotationTalon;
 };
+
+#endif

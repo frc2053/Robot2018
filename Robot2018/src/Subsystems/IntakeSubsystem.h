@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IntakeSubsystem_H
+#define IntakeSubsystem_H
 
 #include "../RobotMap.h"
 #include <Commands/Subsystem.h>
@@ -16,3 +17,5 @@ public:
 	double GetLeftCurrent();
 	double GetRightCurrent();
 };
+
+#endif

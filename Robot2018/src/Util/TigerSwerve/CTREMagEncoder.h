@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SRC_UTIL_TIGERSWERVE_CTREMAGENCODER_H_
+#define SRC_UTIL_TIGERSWERVE_CTREMAGENCODER_H_
 
 #include "../Math/Rotation2D.h"
 #include "ctre/Phoenix.h"
@@ -23,3 +24,5 @@ public:
 	int ConvertAngleToSetpoint(Rotation2D targetAngle);
 	int ConvertAngleToEncoderTicks(Rotation2D angle);
 };
+
+#endif

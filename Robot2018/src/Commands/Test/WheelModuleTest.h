@@ -1,4 +1,5 @@
-#pragma once
+#ifndef WheelModuleTest_H
+#define WheelModuleTest_H
 
 #include "../../Robot.h"
 #include <chrono>
@@ -16,3 +17,5 @@ private:
 	bool testsPassed;
 	double talonSetpoint;
 };
+
+#endif

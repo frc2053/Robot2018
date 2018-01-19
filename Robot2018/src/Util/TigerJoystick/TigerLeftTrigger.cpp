@@ -1,4 +1,5 @@
 #include "TigerLeftTrigger.h"
+#include "WPILib.h"
 
 TigerLeftTrigger::TigerLeftTrigger(frc::Joystick* joy, int axis) {
 	joystick = joy;
@@ -16,7 +17,7 @@ bool TigerLeftTrigger::Get() {
 	}
 }
 
-double TigerLeftTrigger::Deadband(float axis) {
+double TigerLeftTrigger::Deadband(double axis) {
 	if(axis > -0.20 && axis < 0.20)
 	{
 		axis = 0;

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IntakeUntilCurrentSpike_H
+#define IntakeUntilCurrentSpike_H
 
 #include "Commands/Command.h"
 #include "../../Robot.h"
@@ -21,3 +22,5 @@ private:
 	bool isDone;
 	std::shared_ptr<frc::Timer> timer;
 };
+
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SRC_UTIL_MATH_TRANSLATION2D_H_
+#define SRC_UTIL_MATH_TRANSLATION2D_H_
 #include "Rotation2D.h"
 
 class Translation2D
@@ -28,3 +29,4 @@ private:
 	double m_x;
 	double m_y;
 };
+#endif

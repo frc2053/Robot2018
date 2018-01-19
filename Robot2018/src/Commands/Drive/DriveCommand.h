@@ -1,4 +1,5 @@
-#pragma once
+#ifndef DriveCommand_H
+#define DriveCommand_H
 
 #include "../../Robot.h"
 
@@ -29,3 +30,5 @@ private:
 	bool isLeftStickPressed;
 	bool isRotDone;
 };
+
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SRC_UTIL_TIGERSWERVE_SWERVEMODULE_H_
+#define SRC_UTIL_TIGERSWERVE_SWERVEMODULE_H_
 
 #include <math.h>
 #include <Util/Math/Rotation2D.h>
@@ -20,3 +21,5 @@ private:
 	std::shared_ptr<CTREMagEncoder> _angleEncoder;
 	bool isOptimizedAngle;
 };
+
+#endif

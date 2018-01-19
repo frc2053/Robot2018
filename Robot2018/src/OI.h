@@ -1,4 +1,5 @@
-#pragma once
+#ifndef OI_H
+#define OI_H
 
 #include "WPILib.h"
 #include "Util/TigerJoystick/TigerJoystick.h"
@@ -13,3 +14,5 @@ public:
 	std::shared_ptr<TigerJoystick> GetDriverJoystick();
 	std::shared_ptr<TigerJoystick> GetOperatorJoystick();
 };
+
+#endif

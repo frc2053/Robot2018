@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SRC_UTIL_TIGERDRIVE_TIGERDRIVE_H_
+#define SRC_UTIL_TIGERDRIVE_TIGERDRIVE_H_
 
 #include "AHRS.h"
 #include "WPILib.h"
@@ -42,3 +43,5 @@ public:
 	    rotateToAngleRate = output;
 	}
 };
+
+#endif

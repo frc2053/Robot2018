@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SetOffset_H
+#define SetOffset_H
 
 #include <Commands/Command.h>
 #include <Robot.h>
@@ -15,3 +16,5 @@ private:
 	bool isDone;
 	double inputYaw;
 };
+
+#endif

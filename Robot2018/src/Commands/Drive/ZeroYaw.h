@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ZeroYaw_H
+#define ZeroYaw_H
 
 #include <Commands/Command.h>
 #include <Robot.h>
@@ -15,3 +16,5 @@ public:
 private:
 	bool isDone;
 };
+
+#endif

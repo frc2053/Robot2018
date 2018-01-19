@@ -3,6 +3,7 @@
 #include "Commands/Drive/ZeroYaw.h"
 #include "Commands/Elevator/GoToElevatorPosition.h"
 #include "Commands/Climber/RunClimberMotor.h"
+#include "Commands/Intake/IntakeUntilCurrentSpike.h"
 
 OI::OI() {
 
@@ -21,7 +22,8 @@ OI::OI() {
 	operatorJoystick->selectButton->WhileHeld(new RunClimberMotor(-1, 0));
 	operatorJoystick->selectButton->WhenReleased(new RunClimberMotor(0, 0));
 
-	//operatorJoystick->
+	operatorJoystick->GetRightTrigger()->WhileActive(new IntakeUntilCurrentSpike(1, 0));
+	operatorJoystick->GetLeftTrigger()->WhenInactive(new IntakeUntilCurrentSpike(0, 0));
 }
 
 std::shared_ptr<TigerJoystick> OI::GetDriverJoystick() {

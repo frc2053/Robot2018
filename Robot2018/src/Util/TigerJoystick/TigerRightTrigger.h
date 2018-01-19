@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SRC_UTIL_TIGERJOYSTICK_TIGERRIGHTTRIGGER_H_
+#define SRC_UTIL_TIGERJOYSTICK_TIGERRIGHTTRIGGER_H_
 
 #include "WPILib.h"
 
@@ -8,9 +9,11 @@ public:
 	bool Get();
 	float GetTriggerValue();
 private:
-	float Deadband(float axis);
+	double Deadband(double axis);
 
 	int joystickAxis;
 	float joystickValue;
 	frc::Joystick* joystick;
 };
+
+#endif

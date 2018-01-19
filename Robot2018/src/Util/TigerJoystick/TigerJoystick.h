@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SRC_UTIL_TIGERJOYSTICK_TIGERJOYSTICK_H_
+#define SRC_UTIL_TIGERJOYSTICK_TIGERJOYSTICK_H_
 
 #include "WPILib.h"
 #include "TigerLeftTrigger.h"
@@ -35,3 +36,5 @@ private:
 	std::unique_ptr<TigerLeftTrigger> leftTrigger;
 	std::unique_ptr<TigerRightTrigger> rightTrigger;
 };
+
+#endif

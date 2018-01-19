@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _ROBOT_H
+#define _ROBOT_H
 
 #include "RobotMap.h"
 #include "Subsystems/SwerveSubsystem.h"
@@ -23,3 +24,5 @@ public:
 	virtual void TeleopPeriodic();
 	virtual void TestPeriodic();
 };
+
+#endif

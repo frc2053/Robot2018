@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SRC_UTIL_TIGERSWERVE_TIGERSWERVE_H_
+#define SRC_UTIL_TIGERSWERVE_TIGERSWERVE_H_
 
 #include <Util/Math/Rotation2D.h>
 #include <Util/Math/Translation2D.h>
@@ -46,3 +47,4 @@ public:
 				double rotation, double &wheelSpeedFR, double &wheelSpeedFL, double &wheelSpeedBR, double &wheelSpeedBL,
 				Rotation2D &wheelAngleFL, Rotation2D &wheelAngleFR, Rotation2D &wheelAngleBL, Rotation2D &wheelAngleBR);
 };
+#endif

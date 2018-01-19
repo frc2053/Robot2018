@@ -2,7 +2,7 @@
 
 IntakeUntilCurrentSpike::IntakeUntilCurrentSpike(double time, double speed) {
 	Requires(Robot::intakeSubsystem.get());
-	timer.reset(new Timer());
+	timer.reset(new frc::Timer());
 	timeCurrent = 0;
 	currentThreshold = .5;
 	isDone = false;
