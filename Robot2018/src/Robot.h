@@ -23,6 +23,9 @@ public:
 	virtual void TeleopInit();
 	virtual void TeleopPeriodic();
 	virtual void TestPeriodic();
+private:
+	frc::SendableChooser<frc::Command*> autoChooser;
+	std::unique_ptr<frc::Command> selectedMode;
 };
 
 #endif

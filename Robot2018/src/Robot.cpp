@@ -1,5 +1,7 @@
 #include <Robot.h>
 
+#include "Commands/Autonomous/DoNothingAuto.h"
+
 std::unique_ptr<OI> Robot::oi;
 std::unique_ptr<SwerveSubsystem> Robot::swerveSubsystem;
 std::unique_ptr<IntakeSubsystem> Robot::intakeSubsystem;
@@ -14,8 +16,16 @@ void Robot::RobotInit() {
 	elevatorSubsystem.reset(new ElevatorSubsystem());
 	climberSubsystem.reset(new ClimberSubsystem());
 	oi.reset(new OI());
+
+	//calibrate gyro
 	Robot::swerveSubsystem->ZeroYaw();
+	//if we start at an angle other than zero change this in auto
 	Robot::swerveSubsystem->SetAdjYaw(0);
+
+	autoChooser.AddDefault("Do Nothing Auto", new DoNothingAuto());
+
+	//Make the list of auto options avaliable on the Smart Dash
+	SmartDashboard::PutData("Auto mode chooser", &autoChooser);
 }
 
 void Robot::DisabledInit() {
@@ -28,6 +38,10 @@ void Robot::DisabledPeriodic() {
 
 void Robot::AutonomousInit() {
 	std::cout << "Autonomous Init!" << std::endl;
+	selectedMode.reset(autoChooser.GetSelected());
+	if(selectedMode != nullptr) {
+		selectedMode->Start();
+	}
 }
 
 void Robot::AutonomousPeriodic() {
@@ -36,6 +50,10 @@ void Robot::AutonomousPeriodic() {
 
 void Robot::TeleopInit() {
 	std::cout << "Teleop Init!" << std::endl;
+	if(selectedMode != nullptr) {
+		selectedMode->Cancel();
+	}
+	Robot::swerveSubsystem->CalibrateWheels();
 }
 
 void Robot::TeleopPeriodic() {

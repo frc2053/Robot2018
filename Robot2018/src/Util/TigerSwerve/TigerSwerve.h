@@ -5,18 +5,13 @@
 #include <Util/Math/Translation2D.h>
 #include "math.h"
 #include "ctre/Phoenix.h"
+#include "WPILib.h"
 #include "SwerveModule.h"
 #include <vector>
 #include <iostream>
 
-
-using namespace ctre::phoenix::motorcontrol;
-
 class TigerSwerve {
 private:
-	static constexpr double BASE_LENGTH = 20;
-	static constexpr double BASE_WIDTH = 20;
-
 	double xAxis = 0, yAxis = 0, rotAxis = 0, currentYaw = 0;
 
 	std::shared_ptr<Rotation2D> centerOfRotation;
@@ -35,6 +30,10 @@ private:
 
 	void Drive(double xSpeed, double ySpeed, double rotSpeed, double headingOffset);
 	double deg2rad(double deg);
+
+	Rotation2D prevFLAngle, prevFRAngle, prevBLAngle, prevBRAngle;
+
+	std::shared_ptr<frc::Timer> angleTimer;
 public:
 	TigerSwerve(std::vector<std::shared_ptr<can::TalonSRX>>& talons);
 	virtual ~TigerSwerve();
@@ -47,4 +46,5 @@ public:
 				double rotation, double &wheelSpeedFR, double &wheelSpeedFL, double &wheelSpeedBR, double &wheelSpeedBL,
 				Rotation2D &wheelAngleFL, Rotation2D &wheelAngleFR, Rotation2D &wheelAngleBL, Rotation2D &wheelAngleBR);
 };
+
 #endif

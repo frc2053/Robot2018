@@ -23,6 +23,7 @@ public:
 	void Calibrate();
 	int ConvertAngleToSetpoint(Rotation2D targetAngle);
 	int ConvertAngleToEncoderTicks(Rotation2D angle);
+	void SetEncoderRaw(int ticks);
 };
 
 #endif

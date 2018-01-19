@@ -6,7 +6,7 @@
 
 class IntakeUntilCurrentSpike : public Command {
 public:
-	IntakeUntilCurrentSpike(double speed = 0, double time = 0);
+	IntakeUntilCurrentSpike(double speed = 0, double time = 0, bool currentCheck = 0);
 	void Initialize();
 	void Execute();
 	bool IsFinished();
@@ -20,6 +20,7 @@ private:
 	double timeCurrent;
 	double inputSpeed;
 	bool isDone;
+	bool isCheckingForCurrentSpike;
 	std::shared_ptr<frc::Timer> timer;
 };
 

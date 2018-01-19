@@ -2,6 +2,7 @@
 #include "../../Robot.h"
 
 TigerSwerve::TigerSwerve(std::vector<std::shared_ptr<can::TalonSRX>>& talons) {
+
 	xAxis = 0;
 	yAxis = 0;
 	rotAxis = 0;
@@ -18,12 +19,18 @@ TigerSwerve::TigerSwerve(std::vector<std::shared_ptr<can::TalonSRX>>& talons) {
 	backLeftRot = talons.at(6);
 	backRightRot = talons.at(7);
 
-	//centerOfRotation.reset(new Vector(0, 0));
-
 	modules->push_back(SwerveModule(frontLeftDrive, frontLeftRot));
 	modules->push_back(SwerveModule(frontRightDrive, frontRightRot));
 	modules->push_back(SwerveModule(backLeftDrive, backLeftRot));
 	modules->push_back(SwerveModule(backRightDrive, backRightRot));
+
+	angleTimer.reset(new frc::Timer());
+	angleTimer->Reset();
+	prevFLAngle = Rotation2D::fromDegrees(0);
+	prevFRAngle = Rotation2D::fromDegrees(0);
+	prevBLAngle = Rotation2D::fromDegrees(0);
+	prevBRAngle = Rotation2D::fromDegrees(0);
+
 }
 
 TigerSwerve::~TigerSwerve() {
@@ -36,13 +43,16 @@ void TigerSwerve::SetCenterOfRotation(double x, double y) {
 }
 
 void TigerSwerve::Drive(double xSpeed, double ySpeed, double rotSpeed, double headingOffset) {
+	rotSpeed = rotSpeed * 0.05;
 	Translation2D trans(ySpeed, xSpeed);
 	Rotation2D rot = Rotation2D::fromDegrees(rotSpeed);
-
-	Rotation2D gyroAngle = Rotation2D::fromDegrees(headingOffset);
-
+	Rotation2D gyroAngle = Rotation2D::fromDegrees(-headingOffset);
 	currentYaw = headingOffset;
-	trans.rotateBy(gyroAngle);
+	//std::cout << "gyroAngle: " << gyroAngle.getDegrees() << std::endl;
+	//std::cout << "trans: (" << trans.getX() << ", " << trans.getY() << ")" <<std::endl;
+	trans = trans.rotateBy(gyroAngle);
+	//std::cout << "trans: (" << trans.getX() << ", " << trans.getY() << ")" <<std::endl;
+
 
 	double flWheelSpeed;
 	double frWheelSpeed;
@@ -52,11 +62,20 @@ void TigerSwerve::Drive(double xSpeed, double ySpeed, double rotSpeed, double he
 	Rotation2D frWheelAngle;
 	Rotation2D blWheelAngle;
 	Rotation2D brWheelAngle;
+
 	SwerveInverseKinematics(trans, rotSpeed, frWheelSpeed, flWheelSpeed, brWheelSpeed, blWheelSpeed, flWheelAngle, frWheelAngle, blWheelAngle, brWheelAngle);
-	modules->at(0).Set(flWheelSpeed, flWheelAngle);
-	modules->at(1).Set(frWheelSpeed, frWheelAngle);
-	modules->at(2).Set(blWheelSpeed, blWheelAngle);
-	modules->at(3).Set(brWheelSpeed, brWheelAngle);
+	angleTimer->Reset();
+	angleTimer->Start();
+	modules->at(0).Set(flWheelSpeed, flWheelAngle, true);
+	modules->at(1).Set(frWheelSpeed, frWheelAngle, true);
+	modules->at(2).Set(blWheelSpeed, blWheelAngle, true);
+	modules->at(3).Set(brWheelSpeed, brWheelAngle, true);
+
+
+	prevFLAngle = flWheelAngle;
+	prevFRAngle = frWheelAngle;
+	prevBLAngle = blWheelAngle;
+	prevBRAngle = brWheelAngle;
 }
 
 void TigerSwerve::SetBrakeMode() {
@@ -85,18 +104,18 @@ void TigerSwerve::SwerveInverseKinematics(Translation2D &translation,
 		double rotation, double &wheelSpeedFR, double &wheelSpeedFL, double &wheelSpeedBR, double &wheelSpeedBL,
 		Rotation2D &wheelAngleFL, Rotation2D &wheelAngleFR, Rotation2D &wheelAngleBL, Rotation2D &wheelAngleBR) {
 
-	double A = translation.getX() - rotation * (BASE_LENGTH / 2.0);
-	double B = translation.getX() + rotation * (BASE_LENGTH / 2.0);
-	double C = translation.getY() - rotation * (BASE_WIDTH / 2.0);
-	double D = translation.getY() + rotation * (BASE_WIDTH / 2.0);
-	wheelSpeedFL = sqrt(pow(B, 2) + pow(D, 2));
-	wheelSpeedFR = sqrt(pow(B, 2) + pow(C, 2));
-	wheelSpeedBR = sqrt(pow(A, 2) + pow(D, 2));
-	wheelSpeedBL = sqrt(pow(A, 2) + pow(C, 2));
-	wheelAngleFL = Rotation2D(B,D,true);
-	wheelAngleFR = Rotation2D(B,C,true);
-	wheelAngleBL = Rotation2D(A,D,true);
-	wheelAngleBR = Rotation2D(A,C,true);
+	double A = translation.getX() - rotation * (RobotMap::WHEELBASE_LENGTH / 2.0);
+	double B = translation.getX() + rotation * (RobotMap::WHEELBASE_LENGTH / 2.0);
+	double C = translation.getY() - rotation * (RobotMap::WHEELBASE_WIDTH / 2.0);
+	double D = translation.getY() + rotation * (RobotMap::WHEELBASE_WIDTH / 2.0);
+	wheelSpeedFL = sqrt(pow(A, 2) + pow(D, 2)); //sqrt(pow(B, 2) + pow(D, 2));
+	wheelSpeedFR = sqrt(pow(B, 2) + pow(C, 2)); //sqrt(pow(B, 2) + pow(C, 2));
+	wheelSpeedBR = sqrt(pow(B, 2) + pow(D, 2)); //sqrt(pow(A, 2) + pow(D, 2));
+	wheelSpeedBL = sqrt(pow(A, 2) + pow(C, 2)); //sqrt(pow(A, 2) + pow(C, 2));
+	wheelAngleFL = Rotation2D(A,C,true); //Rotation2D(B,D,true);
+	wheelAngleFR = Rotation2D(B,C,true); //Rotation2D(B,C,true);
+	wheelAngleBL = Rotation2D(A,D,true); //Rotation2D(A,D,true);
+	wheelAngleBR = Rotation2D(B,D,true); //Rotation2D(A,C,true);
 
 	double maxWheelSpeed = std::max(wheelSpeedFL,std::max(wheelSpeedFR,std::max(wheelSpeedBL,wheelSpeedBR)));
 	if (maxWheelSpeed > 1) {

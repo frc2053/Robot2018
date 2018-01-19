@@ -1,6 +1,6 @@
 #include "IntakeUntilCurrentSpike.h"
 
-IntakeUntilCurrentSpike::IntakeUntilCurrentSpike(double time, double speed) {
+IntakeUntilCurrentSpike::IntakeUntilCurrentSpike(double time, double speed, bool currentCheck) {
 	Requires(Robot::intakeSubsystem.get());
 	timer.reset(new frc::Timer());
 	timeCurrent = 0;
@@ -12,6 +12,7 @@ IntakeUntilCurrentSpike::IntakeUntilCurrentSpike(double time, double speed) {
 	timer->Start();
 	currentLeft = 0;
 	currentRight = 0;
+	isCheckingForCurrentSpike = currentCheck;
 }
 
 void IntakeUntilCurrentSpike::Initialize() {
@@ -19,6 +20,7 @@ void IntakeUntilCurrentSpike::Initialize() {
 	timeCurrent = 0;
 	timer->Reset();
 	timer->Start();
+	isCheckingForCurrentSpike = false;
 }
 
 void IntakeUntilCurrentSpike::Execute() {
@@ -46,9 +48,11 @@ void IntakeUntilCurrentSpike::Execute() {
 		}
 	}
 
-	if(currentLeft >= 1 && currentRight >= 1) {
-		isDone = true;
-		Robot::intakeSubsystem->RunBothMotors(0);
+	if(isCheckingForCurrentSpike) {
+		if(currentLeft >= 1 && currentRight >= 1) {
+			isDone = true;
+			Robot::intakeSubsystem->RunBothMotors(0);
+		}
 	}
 }
 

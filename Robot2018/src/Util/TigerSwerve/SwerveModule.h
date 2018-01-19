@@ -12,8 +12,8 @@ public:
 	virtual ~SwerveModule();
 
 	Rotation2D GetAngle() const;
-	void SetAngle(Rotation2D angle);
-	void Set(double speed, Rotation2D angle);
+	void SetAngle(Rotation2D angle, bool doOptimization);
+	void Set(double speed, Rotation2D angle, bool doOptimization);
 	void Stop();
 private:
 	std::shared_ptr<can::TalonSRX> _driveController;

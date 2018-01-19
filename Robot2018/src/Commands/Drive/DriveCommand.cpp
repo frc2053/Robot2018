@@ -77,16 +77,20 @@ void DriveCommand::GetInputs() {
 
 void DriveCommand::SetAngleFromInput() {
 	if(isAPressed) {
-		Robot::swerveSubsystem->tigerDrive->rotateController->SetSetpoint(180);
+		RobotMap::tigerDrive->rotateController->SetSetpoint(180);
+		setAngle = 180;
 	}
 	if(isBPressed) {
-		Robot::swerveSubsystem->tigerDrive->rotateController->SetSetpoint(90);
+		RobotMap::tigerDrive->rotateController->SetSetpoint(90);
+		setAngle = 90;
 	}
 	if(isXPressed) {
-		Robot::swerveSubsystem->tigerDrive->rotateController->SetSetpoint(-90);
+		RobotMap::tigerDrive->rotateController->SetSetpoint(-90);
+		setAngle = -90;
 	}
 	if(isYPressed) {
-		Robot::swerveSubsystem->tigerDrive->rotateController->SetSetpoint(0);
+		RobotMap::tigerDrive->rotateController->SetSetpoint(0);
+		setAngle = 0;
 	}
 	if(isLeftStickPressed)
 	{
@@ -94,7 +98,7 @@ void DriveCommand::SetAngleFromInput() {
 			double rad = atan2(xAxis, yAxis);
 			double degrees = rad * (180 / M_PI);
 			setAngle = degrees;
-			Robot::swerveSubsystem->tigerDrive->rotateController->SetSetpoint(degrees);
+			RobotMap::tigerDrive->rotateController->SetSetpoint(degrees);
 		}
 	}
 }
@@ -118,13 +122,13 @@ void DriveCommand::CallToSwerveDrive() {
 	if(rotAxis == 0)
 	{
 		Robot::swerveSubsystem->SetIsRotDoneOverride(false);
-		Robot::swerveSubsystem->SwerveDrive(xAxis, -yAxis, finalRotVal, currentYaw);
+		Robot::swerveSubsystem->SwerveDrive(xAxis, -yAxis, -finalRotVal, currentYaw);
 	}
 	else
 	{
 		Robot::swerveSubsystem->SetIsRotDoneOverride(true);
 		Robot::swerveSubsystem->SetIsRotDone(true);
 		Robot::swerveSubsystem->SetTimesThroughLoop(0);
-		Robot::swerveSubsystem->SwerveDrive(xAxis, -yAxis, rotAxis, currentYaw);
+		Robot::swerveSubsystem->SwerveDrive(xAxis, -yAxis, -rotAxis, currentYaw);
 	}
 }

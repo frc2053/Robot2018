@@ -41,9 +41,11 @@ public:
 	static std::shared_ptr<TigerSwerve> tigerSwerve;
 
 	static int TOP_POSITION_TICKS;
-	static double GROUND_POS_IN;
-	static double SWITCH_POS_IN;
-	static double SCALE_POS_IN;
+	static double GROUND_POS_FT;
+	static double SWITCH_POS_FT;
+	static double SCALE_POS_FT;
+	static double WHEELBASE_WIDTH;
+	static double WHEELBASE_LENGTH;
 };
 
 #endif
