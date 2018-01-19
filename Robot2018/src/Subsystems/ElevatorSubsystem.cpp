@@ -1,6 +1,6 @@
 #include "ElevatorSubsystem.h"
 
-ElevatorSubsystem::ElevatorSubsystem() : Subsystem("ElevatorTicks") {
+ElevatorSubsystem::ElevatorSubsystem() : Subsystem("ElevatorSubsystem") {
 	std::cout << "Constructor for Elevator Subsystem!" << std::endl;
 	primaryMotor = RobotMap::elevatorSubsystemPrimaryMotor;
 }
