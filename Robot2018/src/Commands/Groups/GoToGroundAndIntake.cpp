@@ -8,5 +8,5 @@ GoToGroundAndIntake::GoToGroundAndIntake() {
 	Requires(Robot::intakeSubsystem.get());
 
 	AddParallel(new GoToElevatorPosition(RobotMap::GROUND_POS_FT));
-	AddParallel(new IntakeUntilCurrentSpike(0, 1));
+	AddParallel(new IntakeUntilCurrentSpike(0, 1, true));
 }

@@ -24,13 +24,13 @@ OI::OI() {
 
 	//the boolean is if we want to stop when we hit current spike
 	//this means we dont need to have a command stop the intake it should do it on its own
-	operatorJoystick->GetRightTrigger()->WhenActive(new IntakeUntilCurrentSpike(1, 0, true));
+	operatorJoystick->GetLeftTrigger()->WhenActive(new IntakeUntilCurrentSpike(1, 0, true));
 
 	//this is to shoot out the box
 	//we want this to be manual because the driver needs to make sure we push it out all the way
 	//no way to check if box has completely left the intake
-	operatorJoystick->GetLeftTrigger()->WhileActive(new IntakeUntilCurrentSpike(-1, 0, false));
-	operatorJoystick->GetLeftTrigger()->WhenInactive(new IntakeUntilCurrentSpike(0, 0, false));
+	operatorJoystick->GetRightTrigger()->WhileActive(new IntakeUntilCurrentSpike(-1, 0, false));
+	operatorJoystick->GetRightTrigger()->WhenInactive(new IntakeUntilCurrentSpike(0, 0, false));
 }
 
 std::shared_ptr<TigerJoystick> OI::GetDriverJoystick() {

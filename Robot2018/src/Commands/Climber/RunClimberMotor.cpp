@@ -16,6 +16,7 @@ void RunClimberMotor::Initialize() {
 	timeCurrent = 0;
 	timer->Reset();
 	timer->Start();
+	Robot::climberSubsystem->SwitchToClimberMode();
 }
 
 void RunClimberMotor::Execute() {

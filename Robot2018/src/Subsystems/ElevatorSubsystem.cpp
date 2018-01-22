@@ -2,11 +2,18 @@
 
 ElevatorSubsystem::ElevatorSubsystem() : Subsystem("ElevatorSubsystem") {
 	std::cout << "Constructor for Elevator Subsystem!" << std::endl;
-	primaryMotor = RobotMap::elevatorSubsystemPrimaryMotor;
+	primaryMotor = RobotMap::elevatorClimberSubsystemPrimaryTalon;
+	followerMotor01 = RobotMap::elevatorClimberSubsystemFollower01Talon;
+	followerMotor02 = RobotMap::elevatorClimberSubsystemFollower02Talon;
+	shifterSolenoid = RobotMap::elevatorClimberSubsystemShifterSolenoid;
 }
 
 void ElevatorSubsystem::InitDefaultCommand() {
 
+}
+
+void ElevatorSubsystem::SwitchToElevatorMotor() {
+	shifterSolenoid->Set(frc::DoubleSolenoid::Value::kReverse);
 }
 
 void ElevatorSubsystem::GoToHeight(double inputHeight) {

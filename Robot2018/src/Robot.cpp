@@ -40,10 +40,16 @@ void Robot::DisabledInit() {
 
 void Robot::DisabledPeriodic() {
 	Scheduler::GetInstance()->Run();
+	gameData = frc::DriverStation::GetInstance().GetGameSpecificMessage();
 }
 
 void Robot::AutonomousInit() {
 	std::cout << "Autonomous Init!" << std::endl;
+	//we need to make sure we are elevator mode
+	Robot::elevatorSubsystem->SwitchToElevatorMotor();
+	//align the wheels straight
+	Robot::swerveSubsystem->CalibrateWheels();
+	//get the auto mode we want to run from the smart dashboard
 	selectedMode.reset(autoChooser.GetSelected());
 	if(selectedMode != nullptr) {
 		selectedMode->Start();
@@ -60,7 +66,6 @@ void Robot::TeleopInit() {
 	if(selectedMode != nullptr) {
 		selectedMode->Cancel();
 	}
-	Robot::swerveSubsystem->CalibrateWheels();
 }
 
 void Robot::TeleopPeriodic() {

@@ -3,11 +3,9 @@
 std::shared_ptr<can::TalonSRX> RobotMap::intakeSubsystemLeftMotor;
 std::shared_ptr<can::TalonSRX> RobotMap::intakeSubsystemRightMotor;
 
-std::shared_ptr<can::TalonSRX> RobotMap::elevatorSubsystemPrimaryMotor;
-std::shared_ptr<can::TalonSRX> RobotMap::elevatorSubsystemFollowerMotor;
-
-std::shared_ptr<can::TalonSRX> RobotMap::climberSubsystemPrimaryMotor;
-std::shared_ptr<can::TalonSRX> RobotMap::climberSubsystemFollowerMotor;
+std::shared_ptr<can::TalonSRX> RobotMap::elevatorClimberSubsystemPrimaryTalon;
+std::shared_ptr<can::TalonSRX> RobotMap::elevatorClimberSubsystemFollower01Talon;
+std::shared_ptr<can::TalonSRX> RobotMap::elevatorClimberSubsystemFollower02Talon;
 
 std::shared_ptr<can::TalonSRX> RobotMap::swerveSubsystemFLDriveTalon;
 std::shared_ptr<can::TalonSRX> RobotMap::swerveSubsystemFRDriveTalon;
@@ -18,6 +16,10 @@ std::shared_ptr<can::TalonSRX> RobotMap::swerveSubsystemFLRotTalon;
 std::shared_ptr<can::TalonSRX> RobotMap::swerveSubsystemFRRotTalon;
 std::shared_ptr<can::TalonSRX> RobotMap::swerveSubsystemBLRotTalon;
 std::shared_ptr<can::TalonSRX> RobotMap::swerveSubsystemBRRotTalon;
+
+std::shared_ptr<frc::DoubleSolenoid> RobotMap::climberSubsystemLatchSolenoid;
+std::shared_ptr<frc::DoubleSolenoid> RobotMap::climberSubsystemWingSolenoid;
+std::shared_ptr<frc::DoubleSolenoid> RobotMap::elevatorClimberSubsystemShifterSolenoid;
 
 std::shared_ptr<AHRS> RobotMap::robotIMU;
 std::shared_ptr<frc::PowerDistributionPanel> RobotMap::powerDistributionPanel;
@@ -47,11 +49,9 @@ void RobotMap::init() {
 	intakeSubsystemLeftMotor.reset(new TalonSRX(10));
 	intakeSubsystemRightMotor.reset(new TalonSRX(11));
 
-	elevatorSubsystemPrimaryMotor.reset(new TalonSRX(13));
-	elevatorSubsystemFollowerMotor.reset(new TalonSRX(14));
-
-	climberSubsystemPrimaryMotor.reset(new TalonSRX(15));
-	climberSubsystemFollowerMotor.reset(new TalonSRX(16));
+	elevatorClimberSubsystemPrimaryTalon.reset(new TalonSRX(13));
+	elevatorClimberSubsystemFollower01Talon.reset(new TalonSRX(14));
+	elevatorClimberSubsystemFollower02Talon.reset(new TalonSRX(15));
 
 	swerveSubsystemFLDriveTalon.reset(new can::TalonSRX(2));
 	swerveSubsystemFRDriveTalon.reset(new can::TalonSRX(3));
@@ -62,6 +62,10 @@ void RobotMap::init() {
 	swerveSubsystemFRRotTalon.reset(new can::TalonSRX(7));
 	swerveSubsystemBLRotTalon.reset(new can::TalonSRX(8));
 	swerveSubsystemBRRotTalon.reset(new can::TalonSRX(9));
+
+	climberSubsystemLatchSolenoid.reset(new frc::DoubleSolenoid(0, 1));
+	climberSubsystemWingSolenoid.reset(new frc::DoubleSolenoid(2, 3));
+	elevatorClimberSubsystemShifterSolenoid.reset(new frc::DoubleSolenoid(4, 5));
 
 	talonVector.push_back(swerveSubsystemFLDriveTalon);
 	talonVector.push_back(swerveSubsystemFRDriveTalon);
@@ -82,26 +86,20 @@ void RobotMap::init() {
 	//We want to use the relative encoder because we dont need absolute feedback
 	//then we set the top of the elevator to zero i think..
 	//sets PIDS
-	elevatorSubsystemPrimaryMotor->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, 10);
-	elevatorSubsystemPrimaryMotor->SetSelectedSensorPosition(TOP_POSITION_TICKS, 0, 10);
-	elevatorSubsystemPrimaryMotor->SetSensorPhase(false);
-	elevatorSubsystemPrimaryMotor->SetInverted(false);
-	elevatorSubsystemPrimaryMotor->Set(ControlMode::Position, TOP_POSITION_TICKS);
-	elevatorSubsystemPrimaryMotor->Config_kP(0, 1, 10);
-	elevatorSubsystemPrimaryMotor->Config_kI(0, 0, 10);
-	elevatorSubsystemPrimaryMotor->Config_kD(0, 0, 10);
+	elevatorClimberSubsystemPrimaryTalon->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, 10);
+	elevatorClimberSubsystemPrimaryTalon->SetSelectedSensorPosition(TOP_POSITION_TICKS, 0, 10);
+	elevatorClimberSubsystemPrimaryTalon->SetSensorPhase(false);
+	elevatorClimberSubsystemPrimaryTalon->SetInverted(false);
+	elevatorClimberSubsystemPrimaryTalon->Config_kP(0, 1, 10);
+	elevatorClimberSubsystemPrimaryTalon->Config_kI(0, 0, 10);
+	elevatorClimberSubsystemPrimaryTalon->Config_kD(0, 0, 10);
 
 	//make the other motor follow the primary one
-	elevatorSubsystemFollowerMotor->Set(ControlMode::Follower, 13);
-	elevatorSubsystemFollowerMotor->SetInverted(false);
+	elevatorClimberSubsystemFollower01Talon->Set(ControlMode::Follower, 13);
+	elevatorClimberSubsystemFollower02Talon->SetInverted(false);
 
-	//this one is simple we push a button we climb
-	climberSubsystemPrimaryMotor->SetInverted(false);
-	climberSubsystemPrimaryMotor->Set(ControlMode::PercentOutput, 0);
-
-	//follow the other climber motor
-	climberSubsystemFollowerMotor->Set(ControlMode::Follower, 15);
-	climberSubsystemFollowerMotor->SetInverted(false);
+	elevatorClimberSubsystemFollower02Talon->Set(ControlMode::Follower, 13);
+	elevatorClimberSubsystemFollower02Talon->SetInverted(false);
 
 	//makes the drive talons drive the right way
 	swerveSubsystemFLDriveTalon->SetInverted(false);

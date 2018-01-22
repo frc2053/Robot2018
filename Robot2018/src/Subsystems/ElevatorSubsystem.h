@@ -7,10 +7,13 @@
 class ElevatorSubsystem : public frc::Subsystem {
 private:
 	std::shared_ptr<can::TalonSRX> primaryMotor;
-	std::shared_ptr<can::TalonSRX> followerMotor;
+	std::shared_ptr<can::TalonSRX> followerMotor01;
+	std::shared_ptr<can::TalonSRX> followerMotor02;
+	std::shared_ptr<frc::DoubleSolenoid> shifterSolenoid;
 public:
 	ElevatorSubsystem();
 	void InitDefaultCommand();
+	void SwitchToElevatorMotor();
 	void GoToHeight(double inputHeight);
 	int ConvertHeightToTicks(double inputHeight);
 };

@@ -26,6 +26,7 @@ public:
 private:
 	frc::SendableChooser<frc::Command*> autoChooser;
 	std::unique_ptr<frc::Command> selectedMode;
+	std::string gameData;
 };
 
 #endif

@@ -20,11 +20,9 @@ public:
 	static std::shared_ptr<can::TalonSRX> intakeSubsystemLeftMotor;
 	static std::shared_ptr<can::TalonSRX> intakeSubsystemRightMotor;
 
-	static std::shared_ptr<can::TalonSRX> elevatorSubsystemPrimaryMotor;
-	static std::shared_ptr<can::TalonSRX> elevatorSubsystemFollowerMotor;
-
-	static std::shared_ptr<can::TalonSRX> climberSubsystemPrimaryMotor;
-	static std::shared_ptr<can::TalonSRX> climberSubsystemFollowerMotor;
+	static std::shared_ptr<can::TalonSRX> elevatorClimberSubsystemPrimaryTalon;
+	static std::shared_ptr<can::TalonSRX> elevatorClimberSubsystemFollower01Talon;
+	static std::shared_ptr<can::TalonSRX> elevatorClimberSubsystemFollower02Talon;
 
 	static std::shared_ptr<can::TalonSRX> swerveSubsystemFLDriveTalon;
 	static std::shared_ptr<can::TalonSRX> swerveSubsystemFRDriveTalon;
@@ -35,6 +33,10 @@ public:
 	static std::shared_ptr<can::TalonSRX> swerveSubsystemFRRotTalon;
 	static std::shared_ptr<can::TalonSRX> swerveSubsystemBLRotTalon;
 	static std::shared_ptr<can::TalonSRX> swerveSubsystemBRRotTalon;
+
+	static std::shared_ptr<frc::DoubleSolenoid> climberSubsystemWingSolenoid;
+	static std::shared_ptr<frc::DoubleSolenoid> climberSubsystemLatchSolenoid;
+	static std::shared_ptr<frc::DoubleSolenoid> elevatorClimberSubsystemShifterSolenoid;
 
 	static std::shared_ptr<AHRS> robotIMU;
 	static std::shared_ptr<TigerDrive> tigerDrive;
