@@ -1,4 +1,5 @@
 #include <Util/TigerJoystick/TigerJoystick.h>
+#include "WPILib.h"
 
 TigerJoystick::TigerJoystick(int port) {
 	joystick.reset(new frc::Joystick(port));
