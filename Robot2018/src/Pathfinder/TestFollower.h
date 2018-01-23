@@ -2,6 +2,8 @@
 #define SRC_PATHFINDER_TESTFOLLOWER_H_
 
 #include "MotionProfileExample.h"
+#include "MotionProfilerHelper.h"
+#include <pathfinder.h>
 
 class TestFollower {
 public:
@@ -9,7 +11,7 @@ public:
 	virtual ~TestFollower();
 	void Generate();
 	void FollowPath();
-	MotionProfileExample _example;
+	MotionProfilerHelper helper;
 private:
 	//ALL IN FEET PLEASE!!!
 	int POINT_LENGTH = 2;
@@ -28,11 +30,11 @@ private:
 	double WHEELBASE_WIDTH;
 	double WHEELBASE_LENGTH;
 	TrajectoryCandidate candidate;
-	//Segment* trajectory;
-	//Segment* frontLeft;
-	//Segment* frontRight;
-	//Segment* backLeft;
-	//Segment* backRight;
+	Segment* trajectory;
+	Segment* frontLeft;
+	Segment* frontRight;
+	Segment* backLeft;
+	Segment* backRight;
 	int length;
 	std::shared_ptr<std::vector<SwerveModule>> modules;
 	//EncoderFollower* flFollower = (EncoderFollower*)malloc(sizeof(EncoderFollower));
