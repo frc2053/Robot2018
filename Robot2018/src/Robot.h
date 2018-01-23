@@ -7,6 +7,7 @@
 #include "Subsystems/ElevatorSubsystem.h"
 #include "Subsystems/ClimberSubsystem.h"
 #include "OI.h"
+#include "Pathfinder/TestFollower.h"
 
 class Robot : public frc::TimedRobot {
 public:
@@ -15,6 +16,7 @@ public:
 	static std::unique_ptr<ElevatorSubsystem> elevatorSubsystem;
 	static std::unique_ptr<ClimberSubsystem> climberSubsystem;
 	static std::unique_ptr<OI> oi;
+	static std::unique_ptr<TestFollower> follower;
 	virtual void RobotInit();
 	virtual void DisabledInit();
 	virtual void DisabledPeriodic();

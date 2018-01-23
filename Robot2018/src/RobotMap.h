@@ -7,6 +7,7 @@
 #include "Util/TigerSwerve/TigerSwerve.h"
 #include "Util/TigerDrive/TigerDrive.h"
 #include <iostream>
+#include "LiveWindow/LiveWindow.h"
 #include "pathfinder.h"
 
 

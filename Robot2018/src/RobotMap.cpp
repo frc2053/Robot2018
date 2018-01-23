@@ -46,6 +46,8 @@ void RobotMap::init() {
 	WHEELBASE_LENGTH = 23;
 	WHEELBASE_WIDTH = 21.875;
 
+	LiveWindow::GetInstance()->DisableAllTelemetry();
+
 	intakeSubsystemLeftMotor.reset(new TalonSRX(10));
 	intakeSubsystemRightMotor.reset(new TalonSRX(11));
 
@@ -86,7 +88,7 @@ void RobotMap::init() {
 	//We want to use the relative encoder because we dont need absolute feedback
 	//then we set the top of the elevator to zero i think..
 	//sets PIDS
-	elevatorClimberSubsystemPrimaryTalon->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, 10);
+	/*elevatorClimberSubsystemPrimaryTalon->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, 10);
 	elevatorClimberSubsystemPrimaryTalon->SetSelectedSensorPosition(TOP_POSITION_TICKS, 0, 10);
 	elevatorClimberSubsystemPrimaryTalon->SetSensorPhase(false);
 	elevatorClimberSubsystemPrimaryTalon->SetInverted(false);
@@ -99,7 +101,7 @@ void RobotMap::init() {
 	elevatorClimberSubsystemFollower02Talon->SetInverted(false);
 
 	elevatorClimberSubsystemFollower02Talon->Set(ControlMode::Follower, 13);
-	elevatorClimberSubsystemFollower02Talon->SetInverted(false);
+	elevatorClimberSubsystemFollower02Talon->SetInverted(false);*/
 
 	//makes the drive talons drive the right way
 	swerveSubsystemFLDriveTalon->SetInverted(false);

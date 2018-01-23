@@ -8,12 +8,15 @@ std::unique_ptr<SwerveSubsystem> Robot::swerveSubsystem;
 std::unique_ptr<IntakeSubsystem> Robot::intakeSubsystem;
 std::unique_ptr<ElevatorSubsystem> Robot::elevatorSubsystem;
 std::unique_ptr<ClimberSubsystem> Robot::climberSubsystem;
-TestFollower follower;
+std::unique_ptr<TestFollower> Robot::follower;
 
 
 void Robot::RobotInit() {
 	std::cout << "Robot is starting!" << std::endl;
 	RobotMap::init();
+	std::cout << "Before follower!" << std::endl;
+	follower.reset(new TestFollower());
+	std::cout << "After follower!" << std::endl;
 	swerveSubsystem.reset(new SwerveSubsystem());
 	intakeSubsystem.reset(new IntakeSubsystem());
 	elevatorSubsystem.reset(new ElevatorSubsystem());
@@ -26,7 +29,7 @@ void Robot::RobotInit() {
 	Robot::swerveSubsystem->SetAdjYaw(0);
 
 	//generate paths
-	follower.Generate();
+	follower->Generate();
 
 	autoChooser.AddDefault("Do Nothing Auto", new DoNothingAuto());
 
@@ -54,11 +57,12 @@ void Robot::AutonomousInit() {
 	if(selectedMode != nullptr) {
 		selectedMode->Start();
 	}
-	follower.FollowPath();
+	follower->_example.start();
 }
 
 void Robot::AutonomousPeriodic() {
 	Scheduler::GetInstance()->Run();
+	follower->FollowPath();
 }
 
 void Robot::TeleopInit() {

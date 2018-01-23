@@ -1,8 +1,7 @@
 #ifndef SRC_PATHFINDER_TESTFOLLOWER_H_
 #define SRC_PATHFINDER_TESTFOLLOWER_H_
 
-#include "../RobotMap.h"
-#include "../Robot.h"
+#include "MotionProfileExample.h"
 
 class TestFollower {
 public:
@@ -10,6 +9,7 @@ public:
 	virtual ~TestFollower();
 	void Generate();
 	void FollowPath();
+	MotionProfileExample _example;
 private:
 	//ALL IN FEET PLEASE!!!
 	int POINT_LENGTH = 2;
@@ -28,17 +28,17 @@ private:
 	double WHEELBASE_WIDTH;
 	double WHEELBASE_LENGTH;
 	TrajectoryCandidate candidate;
-	Segment* trajectory;
-	Segment* frontLeft;
-	Segment* frontRight;
-	Segment* backLeft;
-	Segment* backRight;
+	//Segment* trajectory;
+	//Segment* frontLeft;
+	//Segment* frontRight;
+	//Segment* backLeft;
+	//Segment* backRight;
 	int length;
 	std::shared_ptr<std::vector<SwerveModule>> modules;
-	EncoderFollower* flFollower = (EncoderFollower*)malloc(sizeof(EncoderFollower));
-	EncoderFollower* frFollower = (EncoderFollower*)malloc(sizeof(EncoderFollower));
-	EncoderFollower* blFollower = (EncoderFollower*)malloc(sizeof(EncoderFollower));
-	EncoderFollower* brFollower = (EncoderFollower*)malloc(sizeof(EncoderFollower));
+	//EncoderFollower* flFollower = (EncoderFollower*)malloc(sizeof(EncoderFollower));
+	//EncoderFollower* frFollower = (EncoderFollower*)malloc(sizeof(EncoderFollower));
+	//EncoderFollower* blFollower = (EncoderFollower*)malloc(sizeof(EncoderFollower));
+	//EncoderFollower* brFollower = (EncoderFollower*)malloc(sizeof(EncoderFollower));
 	EncoderConfig flconfig = {0, TICKS_PER_REV, WHEEL_CIRCUMFERENCE, K_P, K_I, K_D, K_V, K_A};
 	EncoderConfig frconfig = {0, TICKS_PER_REV, WHEEL_CIRCUMFERENCE, K_P, K_I, K_D, K_V, K_A};
 	EncoderConfig blconfig = {0, TICKS_PER_REV, WHEEL_CIRCUMFERENCE, K_P, K_I, K_D, K_V, K_A};

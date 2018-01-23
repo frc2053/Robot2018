@@ -73,28 +73,19 @@ void SwerveSubsystem::CalibrateWheels() {
 	currentQuadbl = backLeftRotationTalon->GetSensorCollection().GetQuadraturePosition();
 	currentQuadbr = backRightRotationTalon->GetSensorCollection().GetQuadraturePosition();
 
-	/*std::cout << "currentPWMfl: " << currentPWMfl << std::endl;
-	std::cout << "currentPWMfr: " << currentPWMfr << std::endl;
-	std::cout << "currentPWMbl: " << currentPWMbl << std::endl;
-	std::cout << "currentPWMbr: " << currentPWMbr << std::endl;
-
-	std::cout << "currentQuadfl: " << currentQuadfl << std::endl;
-	std::cout << "currentQuadfr: " << currentQuadfr << std::endl;
-	std::cout << "currentQuadbl: " << currentQuadbl << std::endl;
-	std::cout << "currentQuadbr: " << currentQuadbr << std::endl;*/
+	std::cout << "Calibrated Wheels!" << std::endl;
 }
 
 int SwerveSubsystem::AbsMod(int value, int ticks) {
+	int retVal = value;
 	if(value < 0) {
-		return ticks - abs(value);
+		retVal = ticks - abs(value);
 	}
-	else {
-		return value;
-	}
+	return retVal;
 }
 
 void SwerveSubsystem::InitDefaultCommand() {
-	SetDefaultCommand(new DriveCommand());
+	//SetDefaultCommand(new DriveCommand());
 }
 
 double SwerveSubsystem::CalculateRotValue(double setAngle, double setSpeed)
