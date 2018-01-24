@@ -6,9 +6,6 @@ TestFollower::TestFollower() {
 }
 
 void TestFollower::Generate() {
-	RobotMap::swerveSubsystemBLDriveTalon->ConfigMotionProfileTrajectoryPeriod(10, kTimeoutMs);
-	RobotMap::swerveSubsystemBLDriveTalon->SetStatusFramePeriod(StatusFrameEnhanced::Status_9_MotProfBuffer, 10, kTimeoutMs);
-
 	modules = RobotMap::tigerSwerve->GetModules();
 	Waypoint points[POINT_LENGTH];
 	Waypoint p1 = {0, 0, d2r(0)};
@@ -36,11 +33,9 @@ void TestFollower::Generate() {
 	pathfinder_serialize_csv(fp, trajectory, length);
 	fclose(fp);
 
-	helper.ConfigureFPID(.66, 1, 0, 0);
+	helper.ConfigureFPID(K_F, K_P, 0, 0);
 	helper.ConfigureMpUpdateRate(10);
-	helper.ConfigureTicksPerRev(TICKS_PER_REV);
-	helper.ConfigureWheelDiameter(2.5);
-	helper.LoadPathfinder(trajectory, length);
+	helper.PushTrajectoryToTalons(helper.convertToSRXTrajectory(trajectory, length));
 }
 
 void TestFollower::FollowPath() {

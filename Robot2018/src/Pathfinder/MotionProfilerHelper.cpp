@@ -36,14 +36,6 @@ void MotionProfilerHelper::ConfigureFPID(double kF, double kP, double kI, double
 	RobotMap::swerveSubsystemBRDriveTalon->Config_kD(0, kD, 0);
 }
 
-void MotionProfilerHelper::ConfigureTicksPerRev(unsigned int ticksPerRev) {
-	_ticksPerRev = ticksPerRev;
-}
-
-void MotionProfilerHelper::ConfigureWheelDiameter(double diameter) {
-	wheelDiameter = diameter;
-}
-
 void MotionProfilerHelper::ConfigureMpUpdateRate(unsigned int milliseconds) {
 	RobotMap::swerveSubsystemFLDriveTalon->ConfigMotionProfileTrajectoryPeriod(milliseconds, 0);
 	RobotMap::swerveSubsystemFRDriveTalon->ConfigMotionProfileTrajectoryPeriod(milliseconds, 0);
@@ -56,45 +48,41 @@ void MotionProfilerHelper::ConfigureMpUpdateRate(unsigned int milliseconds) {
 	RobotMap::swerveSubsystemBRDriveTalon->ChangeMotionControlFramePeriod(milliseconds / 2);
 }
 
-bool MotionProfilerHelper::LoadPathfinder(Segment* segments, int length) {
-	if(_mpLoadOffset == 0) {
-		RobotMap::swerveSubsystemFLDriveTalon->ClearMotionProfileTrajectories();
-		RobotMap::swerveSubsystemFRDriveTalon->ClearMotionProfileTrajectories();
-		RobotMap::swerveSubsystemBLDriveTalon->ClearMotionProfileTrajectories();
-		RobotMap::swerveSubsystemBRDriveTalon->ClearMotionProfileTrajectories();
+std::vector<TrajectoryPoint> MotionProfilerHelper::convertToSRXTrajectory(Segment* trajectory, int inputLength) {
+	int length = inputLength;
+	std::vector<TrajectoryPoint> retVal;
+
+	for(int i = 0; i < length; i++) {
+		Segment* currentSegment = &trajectory[i];
+		TrajectoryPoint point;
+
+		point.position = ConvertFeetToTicks(currentSegment->position);
+		point.velocity = (currentSegment->velocity  / MAX_VELOCITY) / 10;
+		point.timeDur = TrajectoryDuration_0ms;
+		point.profileSlotSelect0 = 0;
+		point.zeroPos = (i == 0);
+		point.isLastPoint = (i == length - 1);
+		point.velocity = point.zeroPos ? point.velocity : 0;
+
+		retVal.push_back(point);
 	}
 
-	ctrlMode = ControlMode::MotionProfile;
+	return retVal;
+}
 
-	double revs_per_m = 1 / (M_PI * wheelDiameter);
-	for(int i = _mpLoadOffset; i < length; i++) {
-		if(RobotMap::swerveSubsystemFLDriveTalon->IsMotionProfileTopLevelBufferFull()) {
-			_mpLoadOffset = i;
-			return false;
-		}
+int MotionProfilerHelper::ConvertFeetToTicks(double pos) {
+	int retVal = 0;
+	retVal = pos * TICKS_PER_FOOT;
+	return retVal;
+}
 
-		Segment* s = &segments[i];
-		//this is rads per second
-		double rpm = (s->velocity / (wheelDiameter / 2 * .10472));
-		double pos = s->position * revs_per_m * _ticksPerRev;
-		double vel = (rpm / 60) * _ticksPerRev * 10;
-		ctre::phoenix::motion::TrajectoryPoint tp = {
-			pos,
-			vel,
-			0, //heading (only works with ctre imu)
-			0, 0, //slot select
-			i == (length - 1), //last point?
-			i == 0, //zero sensor
-			ctre::phoenix::motion::TrajectoryDuration_0ms
-		};
-
-		if(RobotMap::swerveSubsystemFLDriveTalon->PushMotionProfileTrajectory(tp) != ctre::phoenix::ErrorCode::OKAY) {
-			_mpLoadOffset = i + 1;
-			return false;
-		}
+void MotionProfilerHelper::PushTrajectoryToTalons(std::vector<TrajectoryPoint> points) {
+	for(int i = 0; i < points.size(); i++) {
+		RobotMap::swerveSubsystemFLDriveTalon->PushMotionProfileTrajectory(points.at(i));
+		RobotMap::swerveSubsystemFRDriveTalon->PushMotionProfileTrajectory(points.at(i));
+		RobotMap::swerveSubsystemBLDriveTalon->PushMotionProfileTrajectory(points.at(i));
+		RobotMap::swerveSubsystemBRDriveTalon->PushMotionProfileTrajectory(points.at(i));
 	}
-	_mpLoadOffset = length - 1;
-	return true;
 }
 
 void MotionProfilerHelper::ResetMp() {
@@ -106,6 +94,7 @@ void MotionProfilerHelper::ResetMp() {
 }
 
 void MotionProfilerHelper::EnableMp()  {
+	ctrlMode = ControlMode::MotionProfile;
 	RobotMap::swerveSubsystemFLDriveTalon->Set(ctrlMode, ctre::phoenix::motion::SetValueMotionProfile::Enable);
 	RobotMap::swerveSubsystemFRDriveTalon->Set(ctrlMode, ctre::phoenix::motion::SetValueMotionProfile::Enable);
 	RobotMap::swerveSubsystemBLDriveTalon->Set(ctrlMode, ctre::phoenix::motion::SetValueMotionProfile::Enable);
