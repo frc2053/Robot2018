@@ -59,7 +59,6 @@ void Robot::AutonomousInit() {
 	if(selectedMode != nullptr) {
 		selectedMode->Start();
 	}
-	follower->helper.EnableMp();
 }
 
 void Robot::AutonomousPeriodic() {
