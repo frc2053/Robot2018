@@ -85,7 +85,7 @@ int SwerveSubsystem::AbsMod(int value, int ticks) {
 }
 
 void SwerveSubsystem::InitDefaultCommand() {
-	SetDefaultCommand(new DriveCommand());
+	//SetDefaultCommand(new DriveCommand());
 }
 
 double SwerveSubsystem::CalculateRotValue(double setAngle, double setSpeed)

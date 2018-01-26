@@ -1,7 +1,8 @@
 #include <Robot.h>
 #include "Commands/Autonomous/DoNothingAuto.h"
 #include "Pathfinder/TestFollower.h"
-
+#include "Commands/Autonomous/DriveCommandAuto.h"
+#include "Commands/Drive/DriveCommand.h"
 
 std::unique_ptr<OI> Robot::oi;
 std::unique_ptr<SwerveSubsystem> Robot::swerveSubsystem;
@@ -22,6 +23,7 @@ void Robot::RobotInit() {
 	elevatorSubsystem.reset(new ElevatorSubsystem());
 	climberSubsystem.reset(new ClimberSubsystem());
 	oi.reset(new OI());
+	runOnce = false;
 
 	//calibrate gyro
 	Robot::swerveSubsystem->ZeroYaw();
@@ -35,8 +37,6 @@ void Robot::RobotInit() {
 
 	//Make the list of auto options avaliable on the Smart Dash
 	SmartDashboard::PutData("Auto mode chooser", &autoChooser);
-
-	follower->Generate();
 }
 
 void Robot::DisabledInit() {
@@ -64,7 +64,16 @@ void Robot::AutonomousInit() {
 
 void Robot::AutonomousPeriodic() {
 	Scheduler::GetInstance()->Run();
-	follower->FollowPath();
+	bool isFinished = false;
+	if(!runOnce) {
+	 isFinished = follower->FollowPath();
+	}
+	if(isFinished && !runOnce) {
+		std::cout << "Finished first traj! Rotating" << "\n";
+		//Scheduler::GetInstance()->AddCommand(new DriveCommandAuto(0, 0, 0, 1, -90));
+		runOnce = true;
+		follower->StopFollowing();
+	}
 }
 
 void Robot::TeleopInit() {
@@ -72,6 +81,7 @@ void Robot::TeleopInit() {
 	if(selectedMode != nullptr) {
 		selectedMode->Cancel();
 	}
+	Robot::swerveSubsystem->SetDefaultCommand(new DriveCommand());
 }
 
 void Robot::TeleopPeriodic() {

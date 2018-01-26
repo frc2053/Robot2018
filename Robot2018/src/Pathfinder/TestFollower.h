@@ -8,8 +8,9 @@ public:
 	TestFollower();
 	virtual ~TestFollower();
 	void Generate();
-	void FollowPath();
+	bool FollowPath();
 	void ConfigureEncoders();
+	void StopFollowing();
 private:
 	//ALL IN FEET PLEASE!!!
 	int POINT_LENGTH = 2;
@@ -24,7 +25,7 @@ private:
 	const double K_D = .15;
 	const double K_V = .06;//.66;
 	const double K_A = 0.0856;
-	const double K_T = 1;
+	const double K_T = .35;
 	double WHEELBASE_WIDTH;
 	double WHEELBASE_LENGTH;
 	TrajectoryCandidate candidate;
