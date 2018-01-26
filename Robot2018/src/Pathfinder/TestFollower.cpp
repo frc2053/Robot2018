@@ -3,10 +3,10 @@
 TestFollower::TestFollower() {
 	WHEELBASE_WIDTH = RobotMap::WHEELBASE_WIDTH;
 	WHEELBASE_LENGTH = RobotMap::WHEELBASE_LENGTH;
-	frontLeft = NULL;
-	frontRight = NULL;
-	backLeft = NULL;
-	backRight = NULL;
+	flTraj = NULL;
+	frTraj = NULL;
+	blTraj = NULL;
+	brTraj = NULL;
 	trajectory = NULL;
 	length = 0;
 }
@@ -15,29 +15,38 @@ void TestFollower::Generate() {
 	modules = RobotMap::tigerSwerve->GetModules();
 	Waypoint points[POINT_LENGTH];
 	Waypoint p1 = {0, 0, d2r(0)};
-	Waypoint p2 = {5, 0, d2r(0)};
+	Waypoint p2 = {10, 0, d2r(0)};
+	//Waypoint p3 = {10, -4, d2r(0)};
 	points[0] = p1;
 	points[1] = p2;
 	//points[2] = p3;
 
-	pathfinder_prepare(points, POINT_LENGTH, FIT_HERMITE_CUBIC, PATHFINDER_SAMPLES_HIGH, TIMESTEP, MAX_VEL, MAX_ACCEL, MAX_JERK, &candidate);
+	int trajLength = pathfinder_prepare(points, POINT_LENGTH, FIT_HERMITE_CUBIC, PATHFINDER_SAMPLES_HIGH, TIMESTEP, MAX_VEL, MAX_ACCEL, MAX_JERK, &candidate);
+	std::cout << "trajLength: " << trajLength << "\n";
 	length = candidate.length;
 	trajectory = (Segment*)malloc(length * sizeof(Segment));
 	pathfinder_generate(&candidate, trajectory);
 
 	//Modify for swerve
-	frontLeft = (Segment*)malloc(length * sizeof(Segment));
-	frontRight = (Segment*)malloc(length * sizeof(Segment));
-	backLeft = (Segment*)malloc(length * sizeof(Segment));
-	backRight = (Segment*)malloc(length * sizeof(Segment));
+	flTraj = (Segment*)malloc(length * sizeof(Segment));
+	frTraj = (Segment*)malloc(length * sizeof(Segment));
+	blTraj = (Segment*)malloc(length * sizeof(Segment));
+	brTraj = (Segment*)malloc(length * sizeof(Segment));
 
 	SWERVE_MODE mode = SWERVE_DEFAULT;
 
-	pathfinder_modify_swerve(trajectory, length, frontLeft, frontRight, backLeft, backRight, WHEELBASE_WIDTH, WHEELBASE_LENGTH, mode);
+	pathfinder_modify_swerve(trajectory, length, flTraj, frTraj, blTraj, brTraj, WHEELBASE_WIDTH, WHEELBASE_LENGTH, mode);
 
 	FILE* fp = fopen("/home/lvuser/myfile.csv", "w");
 	pathfinder_serialize_csv(fp, trajectory, length);
 	fclose(fp);
+}
+
+void TestFollower::ConfigureEncoders() {
+	flconfig = {RobotMap::swerveSubsystemFLDriveTalon->GetSelectedSensorPosition(0), TICKS_PER_REV, WHEEL_CIRCUMFERENCE, K_P, K_I, K_D, K_V, K_A};
+	frconfig = {RobotMap::swerveSubsystemFRDriveTalon->GetSelectedSensorPosition(0), TICKS_PER_REV, WHEEL_CIRCUMFERENCE, K_P, K_I, K_D, K_V, K_A};
+	blconfig = {RobotMap::swerveSubsystemBLDriveTalon->GetSelectedSensorPosition(0), TICKS_PER_REV, WHEEL_CIRCUMFERENCE, K_P, K_I, K_D, K_V, K_A};
+	brconfig = {RobotMap::swerveSubsystemBRDriveTalon->GetSelectedSensorPosition(0), TICKS_PER_REV, WHEEL_CIRCUMFERENCE, K_P, K_I, K_D, K_V, K_A};
 
 	flFollower->last_error = 0;
 	flFollower->segment = 0;
@@ -63,10 +72,10 @@ void TestFollower::FollowPath() {
 	int blCurrentPos = RobotMap::swerveSubsystemBLDriveTalon->GetSelectedSensorPosition(0);
 	int brCurrentPos = RobotMap::swerveSubsystemBRDriveTalon->GetSelectedSensorPosition(0);
 
-	double fl = pathfinder_follow_encoder(flconfig, flFollower, frontLeft, length, flCurrentPos);
-	double fr = pathfinder_follow_encoder(frconfig, frFollower, frontRight, length, frCurrentPos);
-	double bl = pathfinder_follow_encoder(blconfig, blFollower, backLeft, length, blCurrentPos);
-	double br = pathfinder_follow_encoder(brconfig, brFollower, backRight, length, brCurrentPos);
+	double fl = pathfinder_follow_encoder(flconfig, flFollower, flTraj, length, flCurrentPos);
+	double fr = pathfinder_follow_encoder(frconfig, frFollower, frTraj, length, frCurrentPos);
+	double bl = pathfinder_follow_encoder(blconfig, blFollower, blTraj, length, blCurrentPos);
+	double br = pathfinder_follow_encoder(brconfig, brFollower, brTraj, length, brCurrentPos);
 
 	/*double desired_headingfl = r2d(K_T * (d2r(Robot::swerveSubsystem->GetAdjYaw() - flFollower->heading)));
 	double desired_headingfr = r2d(K_T * (d2r(Robot::swerveSubsystem->GetAdjYaw() - frFollower->heading)));
@@ -91,10 +100,10 @@ void TestFollower::FollowPath() {
 
 TestFollower::~TestFollower() {
 	free(trajectory);
-	free(frontLeft);
-	free(frontRight);
-	free(backLeft);
-	free(backRight);
+	free(flTraj);
+	free(frTraj);
+	free(blTraj);
+	free(brTraj);
 	free(flFollower);
 	free(frFollower);
 	free(blFollower);

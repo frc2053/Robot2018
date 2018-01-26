@@ -50,6 +50,7 @@ void Robot::DisabledPeriodic() {
 
 void Robot::AutonomousInit() {
 	std::cout << "Autonomous Init!" << std::endl;
+	follower->ConfigureEncoders();
 	//we need to make sure we are elevator mode
 	Robot::elevatorSubsystem->SwitchToElevatorMotor();
 	//align the wheels straight
