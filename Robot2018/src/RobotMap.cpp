@@ -55,8 +55,8 @@ void RobotMap::init() {
 	SCALE_POS_FT = 6.5;
 	SWITCH_POS_FT = 1.75;
 	//INCHES - don't question it
-	WHEELBASE_LENGTH = 23;
-	WHEELBASE_WIDTH = 21.875;
+	WHEELBASE_LENGTH = 21;
+	WHEELBASE_WIDTH = 26.249;
 
 	TIMESTEP = 0.02;
 	MAX_VEL = 18;
