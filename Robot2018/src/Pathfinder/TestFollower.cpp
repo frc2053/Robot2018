@@ -88,11 +88,6 @@ bool TestFollower::FollowPath() {
 	double angle_difference = r2d(flFollower->heading) - currentYaw;
 	double turn = K_T * angle_difference;
 
-	//SmartDashboard::PutNumber("FL ERROR", flFollower->last_error);
-	//SmartDashboard::PutNumber("FR ERROR", frFollower->last_error);
-	//SmartDashboard::PutNumber("BL ERROR", blFollower->last_error);
-	//SmartDashboard::PutNumber("BR ERROR", brFollower->last_error);
-
 	modules->at(0).Set(fl + turn, Rotation2D::fromDegrees(desired_headingfl), false);
 	modules->at(1).Set(fr - turn, Rotation2D::fromDegrees(desired_headingfr), false);
 	modules->at(2).Set(bl + turn, Rotation2D::fromDegrees(desired_headingbl), false);

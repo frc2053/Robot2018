@@ -33,6 +33,18 @@ double RobotMap::SCALE_POS_FT;
 double RobotMap::SWITCH_POS_FT;
 double RobotMap::WHEELBASE_WIDTH;
 double RobotMap::WHEELBASE_LENGTH;
+double RobotMap::TIMESTEP;
+double RobotMap::MAX_VEL;
+double RobotMap::MAX_ACCEL;
+double RobotMap::MAX_JERK;
+int RobotMap::TICKS_PER_REV;
+double RobotMap::WHEEL_CIRCUMFERENCE;
+double RobotMap::K_P;
+double RobotMap::K_I;
+double RobotMap::K_D;
+double RobotMap::K_V;
+double RobotMap::K_A;
+double RobotMap::K_T;
 
 void RobotMap::init() {
 	std::cout << "RobotMap is starting!" << std::endl;
@@ -45,6 +57,19 @@ void RobotMap::init() {
 	//INCHES - don't question it
 	WHEELBASE_LENGTH = 23;
 	WHEELBASE_WIDTH = 21.875;
+
+	TIMESTEP = 0.02;
+	MAX_VEL = 18;
+	MAX_ACCEL = 12;
+	MAX_JERK = 60;
+	TICKS_PER_REV = 26214;
+	WHEEL_CIRCUMFERENCE = 0.65449867893738;
+	K_P = 1;
+	K_I = 0.0;
+	K_D = .15;
+	K_V = .06;
+	K_A = 0.0856;
+	K_T = .35;
 
 	LiveWindow::GetInstance()->DisableAllTelemetry();
 

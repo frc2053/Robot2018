@@ -51,6 +51,18 @@ public:
 	static double SCALE_POS_FT;
 	static double WHEELBASE_WIDTH;
 	static double WHEELBASE_LENGTH;
+	static double TIMESTEP;
+	static double MAX_VEL;
+	static double MAX_ACCEL;
+	static double MAX_JERK;
+	static int TICKS_PER_REV;
+	static double WHEEL_CIRCUMFERENCE;
+	static double K_P;
+	static double K_I;
+	static double K_D;
+	static double K_V;
+	static double K_A;
+	static double K_T;
 };
 
 #endif

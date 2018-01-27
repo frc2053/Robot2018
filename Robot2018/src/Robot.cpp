@@ -3,20 +3,22 @@
 #include "Pathfinder/TestFollower.h"
 #include "Commands/Autonomous/DriveCommandAuto.h"
 #include "Commands/Drive/DriveCommand.h"
+#include "pathfinder.h"
+#include "Commands/Autonomous/FollowPath.h"
 
 std::unique_ptr<OI> Robot::oi;
 std::unique_ptr<SwerveSubsystem> Robot::swerveSubsystem;
 std::unique_ptr<IntakeSubsystem> Robot::intakeSubsystem;
 std::unique_ptr<ElevatorSubsystem> Robot::elevatorSubsystem;
 std::unique_ptr<ClimberSubsystem> Robot::climberSubsystem;
-std::unique_ptr<TestFollower> Robot::follower;
 
+Segment* pathGenerated;
+Command* pathFollower;
 
 void Robot::RobotInit() {
 	std::cout << "Robot is starting!" << std::endl;
 	RobotMap::init();
 	std::cout << "Before follower!" << std::endl;
-	follower.reset(new TestFollower());
 	std::cout << "After follower!" << std::endl;
 	swerveSubsystem.reset(new SwerveSubsystem());
 	intakeSubsystem.reset(new IntakeSubsystem());
@@ -31,7 +33,18 @@ void Robot::RobotInit() {
 	Robot::swerveSubsystem->SetAdjYaw(0);
 
 	//generate paths
-	follower->Generate();
+	Waypoint p1 = {0, 0, d2r(0)};
+	Waypoint p2 = {12, 0, d2r(0)};
+	points[0] = p1;
+	points[1] = p2;
+
+	pathfinder_prepare(points, POINT_LENGTH, FIT_HERMITE_CUBIC, PATHFINDER_SAMPLES_HIGH, RobotMap::TIMESTEP, RobotMap::MAX_VEL, RobotMap::MAX_ACCEL, RobotMap::MAX_JERK, &candidate);
+	int trajLength = candidate.length;
+	std::cout << "trajLength: " << trajLength << "\n";
+	pathGenerated = (Segment*)malloc(trajLength * sizeof(Segment));
+	pathfinder_generate(&candidate, pathGenerated);
+
+	pathFollower = new FollowPath(pathGenerated, trajLength);
 
 	autoChooser.AddDefault("Do Nothing Auto", new DoNothingAuto());
 
@@ -50,7 +63,6 @@ void Robot::DisabledPeriodic() {
 
 void Robot::AutonomousInit() {
 	std::cout << "Autonomous Init!" << std::endl;
-	follower->ConfigureEncoders();
 	//we need to make sure we are elevator mode
 	Robot::elevatorSubsystem->SwitchToElevatorMotor();
 	//align the wheels straight
@@ -60,19 +72,19 @@ void Robot::AutonomousInit() {
 	if(selectedMode != nullptr) {
 		selectedMode->Start();
 	}
+
+	pathFollower->Start();
 }
 
 void Robot::AutonomousPeriodic() {
 	Scheduler::GetInstance()->Run();
 	bool isFinished = false;
 	if(!runOnce) {
-	 isFinished = follower->FollowPath();
 	}
 	if(isFinished && !runOnce) {
 		std::cout << "Finished first traj! Rotating" << "\n";
 		//Scheduler::GetInstance()->AddCommand(new DriveCommandAuto(0, 0, 0, 1, -90));
 		runOnce = true;
-		follower->StopFollowing();
 	}
 }
 

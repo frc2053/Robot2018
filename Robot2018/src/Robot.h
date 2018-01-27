@@ -16,7 +16,6 @@ public:
 	static std::unique_ptr<ElevatorSubsystem> elevatorSubsystem;
 	static std::unique_ptr<ClimberSubsystem> climberSubsystem;
 	static std::unique_ptr<OI> oi;
-	static std::unique_ptr<TestFollower> follower;
 	virtual void RobotInit();
 	virtual void DisabledInit();
 	virtual void DisabledPeriodic();
@@ -30,6 +29,9 @@ private:
 	std::unique_ptr<frc::Command> selectedMode;
 	std::string gameData;
 	bool runOnce;
+	static const int POINT_LENGTH = 2;
+	TrajectoryCandidate candidate;
+	Waypoint points[POINT_LENGTH];
 };
 
 #endif
