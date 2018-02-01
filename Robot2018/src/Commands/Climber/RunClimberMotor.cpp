@@ -16,9 +16,6 @@ void RunClimberMotor::Initialize() {
 	timeCurrent = 0;
 	timer->Reset();
 	timer->Start();
-	Robot::climberSubsystem->SwitchToClimberMode();
-	Robot::climberSubsystem->HookLatch();
-	Robot::climberSubsystem->ReleaseWings();
 }
 
 void RunClimberMotor::Execute() {
