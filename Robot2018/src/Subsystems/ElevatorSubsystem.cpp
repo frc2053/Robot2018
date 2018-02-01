@@ -23,5 +23,7 @@ void ElevatorSubsystem::GoToHeight(double inputHeight) {
 
 int ElevatorSubsystem::ConvertHeightToTicks(double inputHeight) {
 	int tickSetpoint = 0;
+	//tickSetpoint = (inputHeight * 5141); //IF INCHES
+	tickSetpoint = (inputHeight * 61692);//IF FEET
 	return tickSetpoint;
 }

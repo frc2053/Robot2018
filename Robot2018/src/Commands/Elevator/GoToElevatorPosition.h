@@ -6,7 +6,7 @@
 
 class GoToElevatorPosition : public frc::Command {
 public:
-	GoToElevatorPosition(double inputHeight);
+	GoToElevatorPosition(double inputHeight, bool ifClimbing);
 	void Initialize();
 	void Execute();
 	bool IsFinished();
@@ -14,6 +14,7 @@ public:
 	void Interrupted();
 private:
 	double heightTarget;
+	bool isClimbing;
 	bool isDone;
 };
 

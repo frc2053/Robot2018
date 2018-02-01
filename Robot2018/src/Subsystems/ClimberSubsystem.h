@@ -3,6 +3,7 @@
 
 #include "../RobotMap.h"
 #include <Commands/Subsystem.h>
+#include "WPILib.h"
 
 class ClimberSubsystem : public frc::Subsystem {
 private:

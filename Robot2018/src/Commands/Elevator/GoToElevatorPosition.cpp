@@ -1,12 +1,20 @@
 #include "GoToElevatorPosition.h"
 
-GoToElevatorPosition::GoToElevatorPosition(double inputHeight) {
+GoToElevatorPosition::GoToElevatorPosition(double inputHeight, bool ifClimbing) {
 	Requires(Robot::elevatorSubsystem.get());
+	Requires(Robot::climberSubsystem.get());
+
 	heightTarget = inputHeight;
+	isClimbing = ifClimbing;
 	isDone = false;
 }
 
 void GoToElevatorPosition::Initialize() {
+	if(isClimbing)
+	{
+		Robot::climberSubsystem->SwitchToClimberMode();
+	}
+
 	isDone = false;
 }
 
@@ -20,7 +28,7 @@ bool GoToElevatorPosition::IsFinished() {
 }
 
 void GoToElevatorPosition::End() {
-
+	Robot::elevatorSubsystem->SwitchToElevatorMotor();
 }
 
 void GoToElevatorPosition::Interrupted() {

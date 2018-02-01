@@ -49,6 +49,7 @@ public:
 	static double GROUND_POS_FT;
 	static double SWITCH_POS_FT;
 	static double SCALE_POS_FT;
+	static double CLIMBBAR_POS_FT;
 	static double WHEELBASE_WIDTH;
 	static double WHEELBASE_LENGTH;
 	static double TIMESTEP;

@@ -1,4 +1,5 @@
-#include <RobotMap.h>
+#include "RobotMap.h"
+#include "WPILib.h"
 
 std::shared_ptr<can::TalonSRX> RobotMap::intakeSubsystemLeftMotor;
 std::shared_ptr<can::TalonSRX> RobotMap::intakeSubsystemRightMotor;
@@ -31,6 +32,7 @@ int RobotMap::TOP_POSITION_TICKS;
 double RobotMap::GROUND_POS_FT;
 double RobotMap::SCALE_POS_FT;
 double RobotMap::SWITCH_POS_FT;
+double RobotMap::CLIMBBAR_POS_FT;
 double RobotMap::WHEELBASE_WIDTH;
 double RobotMap::WHEELBASE_LENGTH;
 double RobotMap::TIMESTEP;
@@ -54,6 +56,7 @@ void RobotMap::init() {
 	GROUND_POS_FT = 0;
 	SCALE_POS_FT = 6.5;
 	SWITCH_POS_FT = 1.75;
+	CLIMBBAR_POS_FT = 7.0;
 	//INCHES - don't question it
 	WHEELBASE_LENGTH = 21;
 	WHEELBASE_WIDTH = 26.249;
@@ -113,8 +116,9 @@ void RobotMap::init() {
 	//We want to use the relative encoder because we dont need absolute feedback
 	//then we set the top of the elevator to zero i think..
 	//sets PIDS
-	/*elevatorClimberSubsystemPrimaryTalon->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, 10);
-	elevatorClimberSubsystemPrimaryTalon->SetSelectedSensorPosition(TOP_POSITION_TICKS, 0, 10);
+	elevatorClimberSubsystemPrimaryTalon->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, 10);
+	//elevatorClimberSubsystemPrimaryTalon->SetSelectedSensorPosition(TOP_POSITION_TICKS, 0, 10);
+	elevatorClimberSubsystemPrimaryTalon->SetSelectedSensorPosition(0, 0, 10);
 	elevatorClimberSubsystemPrimaryTalon->SetSensorPhase(false);
 	elevatorClimberSubsystemPrimaryTalon->SetInverted(false);
 	elevatorClimberSubsystemPrimaryTalon->Config_kP(0, 1, 10);
@@ -126,7 +130,7 @@ void RobotMap::init() {
 	elevatorClimberSubsystemFollower02Talon->SetInverted(false);
 
 	elevatorClimberSubsystemFollower02Talon->Set(ControlMode::Follower, 13);
-	elevatorClimberSubsystemFollower02Talon->SetInverted(false);*/
+	elevatorClimberSubsystemFollower02Talon->SetInverted(false);
 
 	//makes the drive talons drive the right way
 	swerveSubsystemFLDriveTalon->SetInverted(false);
