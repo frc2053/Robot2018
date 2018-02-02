@@ -2,10 +2,7 @@
 #define DeployWings_H
 
 #include "Commands/Command.h"
-<<<<<<< HEAD
 #include "../../Robot.h"
-=======
->>>>>>> ce3394613c23ad1596312f251a3e1d46d227aa44
 
 class DeployWings : public frc::Command {
 public:
@@ -20,8 +17,4 @@ private:
 	bool currentDirection;
 };
 
-<<<<<<< HEAD
 #endif  // DeployWings_H
-=======
-#endif
->>>>>>> ce3394613c23ad1596312f251a3e1d46d227aa44

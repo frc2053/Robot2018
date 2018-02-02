@@ -16,13 +16,11 @@ void RunClimberMotor::Initialize() {
 	timeCurrent = 0;
 	timer->Reset();
 	timer->Start();
-<<<<<<< HEAD
 	Robot::climberSubsystem->SwitchToClimberMode();
 	//Robot::climberSubsystem->HookLatch();
 	Robot::climberSubsystem->ReleaseWings();
 
-=======
->>>>>>> ce3394613c23ad1596312f251a3e1d46d227aa44
+
 }
 
 void RunClimberMotor::Execute() {
