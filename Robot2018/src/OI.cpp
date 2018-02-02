@@ -4,7 +4,6 @@
 #include "Commands/Elevator/GoToElevatorPosition.h"
 #include "Commands/Climber/RunClimberMotor.h"
 #include "Commands/Intake/IntakeUntilCurrentSpike.h"
-#include "Commands/Groups/SwitchToClimb.h"
 
 OI::OI() {
 
@@ -15,9 +14,13 @@ OI::OI() {
 
 	operatorJoystick->aButton->WhenPressed(new GoToElevatorPosition(RobotMap::GROUND_POS_FT));
 	operatorJoystick->yButton->WhenPressed(new GoToElevatorPosition(RobotMap::SCALE_POS_FT));
-	operatorJoystick->bButton->WhenPressed(new GoToElevatorPosition(RobotMap::SWITCH_POS_FT));
+	operatorJoystick->xButton->WhenPressed(new GoToElevatorPosition(RobotMap::SWITCH_POS_FT));
 
-	operatorJoystick->startButton->WhenPressed(new SwitchToClimb());
+	operatorJoystick->startButton->WhileHeld(new RunClimberMotor(1, 0));
+	operatorJoystick->startButton->WhenReleased(new RunClimberMotor(0, 0));
+
+	operatorJoystick->selectButton->WhileHeld(new RunClimberMotor(-1, 0));
+	operatorJoystick->selectButton->WhenReleased(new RunClimberMotor(0, 0));
 
 	//the boolean is if we want to stop when we hit current spike
 	//this means we dont need to have a command stop the intake it should do it on its own

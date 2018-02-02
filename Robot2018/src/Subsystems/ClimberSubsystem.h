@@ -17,8 +17,6 @@ public:
 	void InitDefaultCommand();
 	void SwitchToClimberMode();
 	void ReleaseWings();
-	void RetractWings();
-	void UnhookLatch();
 	void HookLatch();
 	void SetPrimaryMotor(double power);
 };

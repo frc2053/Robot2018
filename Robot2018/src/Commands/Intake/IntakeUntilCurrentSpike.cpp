@@ -61,7 +61,7 @@ bool IntakeUntilCurrentSpike::IsFinished() {
 }
 
 void IntakeUntilCurrentSpike::End() {
-	Robot::oi->GetOperatorJoystick()->
+
 }
 
 void IntakeUntilCurrentSpike::Interrupted() {

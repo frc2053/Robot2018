@@ -12,8 +12,8 @@ std::unique_ptr<IntakeSubsystem> Robot::intakeSubsystem;
 std::unique_ptr<ElevatorSubsystem> Robot::elevatorSubsystem;
 std::unique_ptr<ClimberSubsystem> Robot::climberSubsystem;
 
-Segment* Robot::pathGenerated;
-Command* Robot::pathFollower;
+Segment* pathGenerated;
+Command* pathFollower;
 
 void Robot::RobotInit() {
 	std::cout << "Robot is starting!" << std::endl;
