@@ -1,4 +1,6 @@
 #include "TigerDrive.h"
+#include "WPILib.h"
+
 
 TigerDrive::TigerDrive(AHRS* imuP)
 {

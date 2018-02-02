@@ -5,7 +5,7 @@
 #include <Commands/Subsystem.h>
 
 
-class SwerveSubsystem : public Subsystem {
+class SwerveSubsystem : public frc::Subsystem {
 public:
 	SwerveSubsystem();
 	void InitDefaultCommand();
@@ -35,14 +35,10 @@ private:
 	std::shared_ptr<can::TalonSRX> frontLeftRotationTalon;
 	std::shared_ptr<can::TalonSRX> backRightRotationTalon;
 	std::shared_ptr<can::TalonSRX> backLeftRotationTalon;
-	//	int FL_CAL = 817;
-	//	int BL_CAL = 911;
-	//	int FR_CAL = 2685;
-	//	int BR_CAL = 230;
-	int FL_CAL = 2756;
-	int BL_CAL = 2912;
-	int FR_CAL = 3881;
-	int BR_CAL = 258;
+	int FL_CAL = 1956;
+	int BL_CAL = 3500;
+	int FR_CAL = 722;
+	int BR_CAL = 3336;
 	int TICKS_PER_REV = 4096;
 };
 

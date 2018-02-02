@@ -32,6 +32,8 @@ private:
 	static const int POINT_LENGTH = 2;
 	TrajectoryCandidate candidate;
 	Waypoint points[POINT_LENGTH];
+	static Segment* pathGenerated;
+	static Command* pathFollower;
 };
 
 #endif

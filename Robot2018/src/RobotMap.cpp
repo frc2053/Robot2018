@@ -51,7 +51,7 @@ double RobotMap::K_T;
 void RobotMap::init() {
 	std::cout << "RobotMap is starting!" << std::endl;
 
-	TOP_POSITION_TICKS = 24000;
+	TOP_POSITION_TICKS = 431885; //24000; VALUE TO BE TESTED AND CHANGED
 	//FEET
 	GROUND_POS_FT = 0;
 	SCALE_POS_FT = 6.5;

@@ -28,7 +28,6 @@ bool GoToElevatorPosition::IsFinished() {
 }
 
 void GoToElevatorPosition::End() {
-	Robot::elevatorSubsystem->SwitchToElevatorMotor();
 }
 
 void GoToElevatorPosition::Interrupted() {

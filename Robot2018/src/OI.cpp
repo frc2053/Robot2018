@@ -4,7 +4,11 @@
 #include "Commands/Elevator/GoToElevatorPosition.h"
 #include "Commands/Climber/RunClimberMotor.h"
 #include "Commands/Intake/IntakeUntilCurrentSpike.h"
+<<<<<<< HEAD
 #include "Commands/Climber/DeployWings.h"
+=======
+>>>>>>> ce3394613c23ad1596312f251a3e1d46d227aa44
+#include "Commands/Groups/SwitchToClimb.h"
 
 OI::OI() {
 
@@ -15,8 +19,10 @@ OI::OI() {
 
 	/*operatorJoystick->aButton->WhenPressed(new GoToElevatorPosition(RobotMap::GROUND_POS_FT));
 	operatorJoystick->yButton->WhenPressed(new GoToElevatorPosition(RobotMap::SCALE_POS_FT));
-	operatorJoystick->xButton->WhenPressed(new GoToElevatorPosition(RobotMap::SWITCH_POS_FT));
+	operatorJoystick->bButton->WhenPressed(new GoToElevatorPosition(RobotMap::SWITCH_POS_FT));
 
+<<<<<<< HEAD
+<<<<<<< HEAD
 	operatorJoystick->startButton->WhileHeld(new RunClimberMotor(1, 0));
 	operatorJoystick->startButton->WhenReleased(new RunClimberMotor(0, 0));
 
@@ -40,9 +46,13 @@ OI::OI() {
 
 	//CLIMBING
 	operatorJoystick->GetRightTrigger()->WhenActive(new GoToElevatorPosition(7, false)); //Go to Climb Position
-	operatorJoystick->selectButton->WhenPressed(new DeployWings());
+	//operatorJoystick->selectButton->WhenPressed(new DeployWings());
 	operatorJoystick->startButton->WhenPressed(new GoToElevatorPosition(6, true));
 	//CLIMBLING
+	//operatorJoystick->startButton->WhenPressed(new SwitchToClimb());
+=======
+	operatorJoystick->startButton->WhenPressed(new SwitchToClimb());
+>>>>>>> ce3394613c23ad1596312f251a3e1d46d227aa44
 
 	//the boolean is if we want to stop when we hit current spike
 	//this means we dont need to have a command stop the intake it should do it on its own

@@ -6,14 +6,15 @@
 #include "pathfinder.h"
 #include "Commands/Autonomous/FollowPath.h"
 
+
 std::unique_ptr<OI> Robot::oi;
 std::unique_ptr<SwerveSubsystem> Robot::swerveSubsystem;
 std::unique_ptr<IntakeSubsystem> Robot::intakeSubsystem;
 std::unique_ptr<ElevatorSubsystem> Robot::elevatorSubsystem;
 std::unique_ptr<ClimberSubsystem> Robot::climberSubsystem;
 
-Segment* pathGenerated;
-Command* pathFollower;
+Segment* Robot::pathGenerated;
+Command* Robot::pathFollower;
 
 void Robot::RobotInit() {
 	std::cout << "Robot is starting!" << std::endl;
@@ -50,6 +51,9 @@ void Robot::RobotInit() {
 
 	//Make the list of auto options avaliable on the Smart Dash
 	SmartDashboard::PutData("Auto mode chooser", &autoChooser);
+
+	//Robot::swerveSubsystem->CalibrateWheels();
+
 }
 
 void Robot::DisabledInit() {
@@ -66,7 +70,7 @@ void Robot::AutonomousInit() {
 	//we need to make sure we are elevator mode
 	Robot::elevatorSubsystem->SwitchToElevatorMotor();
 	//align the wheels straight
-	//Robot::swerveSubsystem->CalibrateWheels();
+	Robot::swerveSubsystem->CalibrateWheels();
 	//get the auto mode we want to run from the smart dashboard
 	selectedMode.reset(autoChooser.GetSelected());
 	if(selectedMode != nullptr) {
