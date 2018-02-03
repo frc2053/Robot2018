@@ -13,11 +13,15 @@ std::unique_ptr<IntakeSubsystem> Robot::intakeSubsystem;
 std::unique_ptr<ElevatorSubsystem> Robot::elevatorSubsystem;
 std::unique_ptr<ClimberSubsystem> Robot::climberSubsystem;
 
+double Robot::MATCHTIME;
+
 Segment* Robot::pathGenerated;
 Command* Robot::pathFollower;
 
 void Robot::RobotInit() {
 	std::cout << "Robot is starting!" << std::endl;
+	MATCHTIME = 0;
+
 	RobotMap::init();
 	std::cout << "Before follower!" << std::endl;
 	std::cout << "After follower!" << std::endl;
@@ -81,7 +85,7 @@ void Robot::AutonomousInit() {
 }
 
 void Robot::AutonomousPeriodic() {
-	Scheduler::GetInstance()->Run();
+	//Scheduler::GetInstance()->Run();
 	bool isFinished = false;
 	if(!runOnce) {
 	}
@@ -101,6 +105,7 @@ void Robot::TeleopInit() {
 }
 
 void Robot::TeleopPeriodic() {
+	MATCHTIME = DriverStation::GetInstance().GetMatchTime();
 	Scheduler::GetInstance()->Run();
 }
 

@@ -79,6 +79,9 @@ void RobotMap::init() {
 	intakeSubsystemLeftMotor.reset(new TalonSRX(10));
 	intakeSubsystemRightMotor.reset(new TalonSRX(11));
 
+	intakeSubsystemRightMotor->SetInverted(true);
+
+
 	elevatorClimberSubsystemPrimaryTalon.reset(new TalonSRX(13));
 	elevatorClimberSubsystemFollower01Talon.reset(new TalonSRX(14));
 	elevatorClimberSubsystemFollower02Talon.reset(new TalonSRX(15));
