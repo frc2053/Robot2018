@@ -21,6 +21,7 @@ public:
 	void ZeroYaw();
 	void CalibrateWheels();
 	int AbsMod(int value, int ticks);
+	int OptimizeRot(int value, int ticks);
 
 	std::shared_ptr<TigerSwerve> tigerSwerve;
 	std::shared_ptr<TigerDrive> tigerDrive;
@@ -35,11 +36,14 @@ private:
 	std::shared_ptr<can::TalonSRX> frontLeftRotationTalon;
 	std::shared_ptr<can::TalonSRX> backRightRotationTalon;
 	std::shared_ptr<can::TalonSRX> backLeftRotationTalon;
-	int FL_CAL = 1936;
-	int BL_CAL = 1730;
-	int FR_CAL = 1976;
-	int BR_CAL = 3293;
+	int FL_CAL = 2176;
+	int BL_CAL = 944;
+	int FR_CAL = 1231;
+	int BR_CAL = 2741;
+
 	int TICKS_PER_REV = 4096;
+	int absVal = 0;
+	int halfTicks = 0;
 };
 
 #endif

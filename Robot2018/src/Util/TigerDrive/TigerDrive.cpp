@@ -68,7 +68,7 @@ double TigerDrive::CalculateSpeedAndOvershoot(int spinDir, double speedMulti) {
 		calculatedRotate = rotateToAngleRate * speedMulti;
 		timesThroughLoop = 1;
 	}
-	else
+	/*else
 	{
 		if(timesThroughLoop == OVERSHOOT_TIMEOUT || timesThroughLoop == 0)
 		{
@@ -78,7 +78,9 @@ double TigerDrive::CalculateSpeedAndOvershoot(int spinDir, double speedMulti) {
 			calculatedRotate = 0;
 		}
 		timesThroughLoop = timesThroughLoop + 1;
-	}
+	}*/
+
+
 	return calculatedRotate;
 }
 

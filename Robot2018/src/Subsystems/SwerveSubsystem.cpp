@@ -48,10 +48,20 @@ void SwerveSubsystem::CalibrateWheels() {
 	std::cout << "absModbl: " << absModbl << std::endl;
 	std::cout << "absModbr: " << absModbr << std::endl;
 
-	int flSetpoint = ((absModfl) % 4096) + (FL_CAL - currentPWMfl);
-	int frSetpoint = ((absModfr) % 4096) + (FR_CAL - currentPWMfr);
-	int blSetpoint = ((absModbl) % 4096) + (BL_CAL - currentPWMbl);
-	int brSetpoint = ((absModbr) % 4096) + (BR_CAL - currentPWMbr);
+	int flSetpoint = ((absModfl) % TICKS_PER_REV) + (FL_CAL - currentPWMfl);
+	int frSetpoint = ((absModfr) % TICKS_PER_REV) + (FR_CAL - currentPWMfr);
+	int blSetpoint = ((absModbl) % TICKS_PER_REV) + (BL_CAL - currentPWMbl);
+	int brSetpoint = ((absModbr) % TICKS_PER_REV) + (BR_CAL - currentPWMbr);
+
+	std::cout << "flSetpoint: " << flSetpoint << std::endl;
+	std::cout << "frSetpoint: " << frSetpoint << std::endl;
+	std::cout << "blSetpoint: " << blSetpoint << std::endl;
+	std::cout << "brSetpoint: " << brSetpoint << std::endl;
+
+	flSetpoint = (SwerveSubsystem::OptimizeRot(flSetpoint, TICKS_PER_REV));
+	frSetpoint = (SwerveSubsystem::OptimizeRot(frSetpoint, TICKS_PER_REV));
+	blSetpoint = (SwerveSubsystem::OptimizeRot(blSetpoint, TICKS_PER_REV));
+	brSetpoint = (SwerveSubsystem::OptimizeRot(brSetpoint, TICKS_PER_REV));
 
 	std::cout << "flSetpoint: " << flSetpoint << std::endl;
 	std::cout << "frSetpoint: " << frSetpoint << std::endl;
@@ -135,4 +145,21 @@ void SwerveSubsystem::SwerveDrive(double xAxis, double yAxis, double rotAxis, do
 
 std::shared_ptr<TigerSwerve> SwerveSubsystem::GetSwerveStuff() {
 	return tigerSwerve;
+}
+
+int SwerveSubsystem::OptimizeRot(int value, int ticks) {
+	int retVal = value;
+
+	absVal = abs(value);
+	halfTicks =  ticks/2;
+
+	if(absVal > halfTicks) {
+		retVal = (ticks - absVal);
+	}
+
+	if (value > halfTicks) {
+		retVal = retVal * -1;
+	}
+
+	return retVal;
 }
