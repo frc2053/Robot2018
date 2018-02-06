@@ -23,41 +23,50 @@ void SwerveSubsystem::CalibrateWheels() {
 	int currentQuadbl = backLeftRotationTalon->GetSensorCollection().GetQuadraturePosition();
 	int currentQuadbr = backRightRotationTalon->GetSensorCollection().GetQuadraturePosition();
 
+/*
 	std::cout << "currentQuadfl: " << currentQuadfl << std::endl;
 	std::cout << "currentQuadfr: " << currentQuadfr << std::endl;
 	std::cout << "currentQuadbl: " << currentQuadbl << std::endl;
 	std::cout << "currentQuadbr: " << currentQuadbr << std::endl;
+*/
 
 	int currentPWMfl = frontLeftRotationTalon->GetSensorCollection().GetPulseWidthPosition();
 	int currentPWMfr = frontRightRotationTalon->GetSensorCollection().GetPulseWidthPosition();
 	int currentPWMbl = backLeftRotationTalon->GetSensorCollection().GetPulseWidthPosition();
 	int currentPWMbr = backRightRotationTalon->GetSensorCollection().GetPulseWidthPosition();
 
+/*
 	std::cout << "currentPWMfl: " << currentPWMfl << std::endl;
 	std::cout << "currentPWMfr: " << currentPWMfr << std::endl;
 	std::cout << "currentPWMbl: " << currentPWMbl << std::endl;
 	std::cout << "currentPWMbr: " << currentPWMbr << std::endl;
+*/
 
 	int absModfl = AbsMod(currentQuadfl, TICKS_PER_REV);
 	int absModfr = AbsMod(currentQuadfr, TICKS_PER_REV);
 	int absModbl = AbsMod(currentQuadbl, TICKS_PER_REV);
 	int absModbr = AbsMod(currentQuadbr, TICKS_PER_REV);
 
+/*
 	std::cout << "absModfl: " << absModfl << std::endl;
 	std::cout << "absModfr: " << absModfr << std::endl;
 	std::cout << "absModbl: " << absModbl << std::endl;
 	std::cout << "absModbr: " << absModbr << std::endl;
+*/
 
 	int flSetpoint = ((absModfl) % TICKS_PER_REV) + (FL_CAL - currentPWMfl);
 	int frSetpoint = ((absModfr) % TICKS_PER_REV) + (FR_CAL - currentPWMfr);
 	int blSetpoint = ((absModbl) % TICKS_PER_REV) + (BL_CAL - currentPWMbl);
 	int brSetpoint = ((absModbr) % TICKS_PER_REV) + (BR_CAL - currentPWMbr);
 
+/*
 	std::cout << "flSetpoint: " << flSetpoint << std::endl;
 	std::cout << "frSetpoint: " << frSetpoint << std::endl;
 	std::cout << "blSetpoint: " << blSetpoint << std::endl;
 	std::cout << "brSetpoint: " << brSetpoint << std::endl;
+*/
 
+/*
 	flSetpoint = (SwerveSubsystem::OptimizeRot(flSetpoint, TICKS_PER_REV));
 	frSetpoint = (SwerveSubsystem::OptimizeRot(frSetpoint, TICKS_PER_REV));
 	blSetpoint = (SwerveSubsystem::OptimizeRot(blSetpoint, TICKS_PER_REV));
@@ -67,6 +76,7 @@ void SwerveSubsystem::CalibrateWheels() {
 	std::cout << "frSetpoint: " << frSetpoint << std::endl;
 	std::cout << "blSetpoint: " << blSetpoint << std::endl;
 	std::cout << "brSetpoint: " << brSetpoint << std::endl;
+*/
 
 	frontLeftRotationTalon->Set(ControlMode::Position, flSetpoint);
 	frontRightRotationTalon->Set(ControlMode::Position, frSetpoint);

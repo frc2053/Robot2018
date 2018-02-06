@@ -16,31 +16,34 @@ void RunClimberMotor::Initialize() {
 	timeCurrent = 0;
 	timer->Reset();
 	timer->Start();
+	std::cout << "MADE IT TO RUNCLIMBERMOTOR INIT" << std::endl;
 	Robot::climberSubsystem->SwitchToClimberMode();
+	Robot::elevatorSubsystem->SwitchToElevatorMotor();
+
 	//Robot::climberSubsystem->HookLatch();
-	Robot::climberSubsystem->ReleaseWings();
+	//Robot::climberSubsystem->ReleaseWings();
 
 
 }
 
 void RunClimberMotor::Execute() {
 	if(inputSpeed == 0) {
-		Robot::climberSubsystem->SetPrimaryMotor(0);
+		//Robot::climberSubsystem->SetPrimaryMotor(0);
 		isDone = true;
 	}
 	else {
 		timeCurrent = timer->Get();
 		if(timeTarget == 0) {
-			Robot::climberSubsystem->SetPrimaryMotor(inputSpeed);
+			//Robot::climberSubsystem->SetPrimaryMotor(inputSpeed);
 			isDone = false;
 		}
 		else {
 			if(timeCurrent >= timeTarget) {
-				Robot::climberSubsystem->SetPrimaryMotor(0);
+				//Robot::climberSubsystem->SetPrimaryMotor(0);
 				isDone = true;
 			}
 			else {
-				Robot::climberSubsystem->SetPrimaryMotor(inputSpeed);
+				//Robot::climberSubsystem->SetPrimaryMotor(inputSpeed);
 				isDone = false;
 			}
 		}

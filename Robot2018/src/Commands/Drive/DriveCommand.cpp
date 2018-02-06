@@ -28,7 +28,7 @@ void DriveCommand::Initialize() {
 }
 
 void DriveCommand::Execute() {
-	std::cout << "drivecommand!\n";
+	//std::cout << "drivecommand!\n";
 	SmartDashboard::PutNumber("IMU Yaw", currentYaw);
 	SmartDashboard::PutNumber("X Axis", xAxis);
 	SmartDashboard::PutNumber("Y Axis", yAxis);

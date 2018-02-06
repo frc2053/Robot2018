@@ -44,7 +44,10 @@ OI::OI() {
 	//CLIMBING
 	operatorJoystick->GetRightTrigger()->WhenActive(new GoToElevatorPosition(7, false)); //Go to Climb Position
 	//operatorJoystick->selectButton->WhenPressed(new DeployWings());
-	operatorJoystick->startButton->WhenPressed(new GoToElevatorPosition(6, true));
+	//operatorJoystick->startButton->WhenPressed(new GoToElevatorPosition(6, true));
+
+	operatorJoystick->startButton->WhenPressed(new RunClimberMotor(0, 0));
+
 	//CLIMBLING
 	//operatorJoystick->startButton->WhenPressed(new SwitchToClimb());
 	//operatorJoystick->startButton->WhenPressed(new SwitchToClimb());

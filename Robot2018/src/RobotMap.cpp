@@ -96,9 +96,9 @@ void RobotMap::init() {
 	swerveSubsystemBLRotTalon.reset(new can::TalonSRX(8));
 	swerveSubsystemBRRotTalon.reset(new can::TalonSRX(9));
 
-	climberSubsystemLatchSolenoid.reset(new frc::DoubleSolenoid(0, 1));
+	climberSubsystemLatchSolenoid.reset(new frc::DoubleSolenoid(4, 5));
 	climberSubsystemWingSolenoid.reset(new frc::DoubleSolenoid(2, 3));
-	elevatorClimberSubsystemShifterSolenoid.reset(new frc::DoubleSolenoid(4, 5));
+	elevatorClimberSubsystemShifterSolenoid.reset(new frc::DoubleSolenoid(0, 1));
 
 	talonVector.push_back(swerveSubsystemFLDriveTalon);
 	talonVector.push_back(swerveSubsystemFRDriveTalon);
@@ -123,17 +123,17 @@ void RobotMap::init() {
 	//elevatorClimberSubsystemPrimaryTalon->SetSelectedSensorPosition(TOP_POSITION_TICKS, 0, 10);
 	elevatorClimberSubsystemPrimaryTalon->SetSelectedSensorPosition(0, 0, 10);
 	elevatorClimberSubsystemPrimaryTalon->SetSensorPhase(false);
-	elevatorClimberSubsystemPrimaryTalon->SetInverted(false);
+	elevatorClimberSubsystemPrimaryTalon->SetInverted(true);
 	elevatorClimberSubsystemPrimaryTalon->Config_kP(0, 1, 10);
 	elevatorClimberSubsystemPrimaryTalon->Config_kI(0, 0, 10);
 	elevatorClimberSubsystemPrimaryTalon->Config_kD(0, 0, 10);
 
 	//make the other motor follow the primary one
 	elevatorClimberSubsystemFollower01Talon->Set(ControlMode::Follower, 13);
-	elevatorClimberSubsystemFollower02Talon->SetInverted(false);
+	elevatorClimberSubsystemFollower01Talon->SetInverted(true);
 
 	elevatorClimberSubsystemFollower02Talon->Set(ControlMode::Follower, 13);
-	elevatorClimberSubsystemFollower02Talon->SetInverted(false);
+	elevatorClimberSubsystemFollower02Talon->SetInverted(true);
 
 	//makes the drive talons drive the right way
 	swerveSubsystemFLDriveTalon->SetInverted(false);
