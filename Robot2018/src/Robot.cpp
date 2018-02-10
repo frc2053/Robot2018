@@ -49,7 +49,7 @@ void Robot::RobotInit() {
 	pathGenerated = (Segment*)malloc(trajLength * sizeof(Segment));
 	pathfinder_generate(&candidate, pathGenerated);
 
-	pathFollower = new FollowPath(pathGenerated, trajLength);
+	//pathFollower = new FollowPath(pathGenerated, trajLength);
 
 	autoChooser.AddDefault("Do Nothing Auto", new DoNothingAuto());
 
@@ -75,16 +75,25 @@ void Robot::AutonomousInit() {
 	Robot::elevatorSubsystem->SwitchToElevatorMotor();
 	//align the wheels straight
 	Robot::swerveSubsystem->CalibrateWheels();
+	std::cout << "BACK IN AUTO INIT" << std::endl;
 	//get the auto mode we want to run from the smart dashboard
 	selectedMode.reset(autoChooser.GetSelected());
 	if(selectedMode != nullptr) {
 		selectedMode->Start();
 	}
 
-	pathFollower->Start();
+	std::cout << "STARTING PATHFOLLOWER" << std::endl;
+
+	//pathFollower->Start();
+
+	std::cout << "ENDING PATHFOLLOWER" << std::endl;
+
 }
 
 void Robot::AutonomousPeriodic() {
+
+	//std::cout << "MADE IT TO AUTO PERIODIC" << std::endl;
+
 	//Scheduler::GetInstance()->Run();
 	bool isFinished = false;
 	if(!runOnce) {
@@ -101,7 +110,9 @@ void Robot::TeleopInit() {
 	if(selectedMode != nullptr) {
 		selectedMode->Cancel();
 	}
-	Robot::swerveSubsystem->SetDefaultCommand(new DriveCommand());
+	//Robot::swerveSubsystem->SetDefaultCommand(new DriveCommand());
+
+	RobotMap::elevatorClimberSubsystemShifterSolenoid->Set(frc::DoubleSolenoid::Value::kForward);
 }
 
 void Robot::TeleopPeriodic() {

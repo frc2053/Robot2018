@@ -2,6 +2,9 @@
 #include "../../Robot.h"
 
 FollowPath::FollowPath(Segment* inputPath, int length) {
+
+	std::cout << "MADE IT TO FOLLOWPATH AUTO" << std::endl;
+
 	Requires(Robot::swerveSubsystem.get());
 	isDone = false;
 	pathLength = length;
@@ -46,6 +49,9 @@ void FollowPath::Initialize() {
 }
 
 void FollowPath::Execute() {
+	std::cout << "MADE IT TO FOLLOWPATH AUTO" << std::endl;
+
+
 	int flCurrentPos = RobotMap::swerveSubsystemFLDriveTalon->GetSelectedSensorPosition(0);
 	int frCurrentPos = RobotMap::swerveSubsystemFRDriveTalon->GetSelectedSensorPosition(0);
 	int blCurrentPos = RobotMap::swerveSubsystemBLDriveTalon->GetSelectedSensorPosition(0);

@@ -2,6 +2,9 @@
 #include "../Robot.h"
 
 TestFollower::TestFollower() {
+
+	std::cout << "TEST FOLLOWER INIT" << std::endl;
+
 	WHEELBASE_WIDTH = RobotMap::WHEELBASE_WIDTH;
 	WHEELBASE_LENGTH = RobotMap::WHEELBASE_LENGTH;
 	flTraj = NULL;
@@ -67,6 +70,7 @@ void TestFollower::ConfigureEncoders() {
 }
 
 bool TestFollower::FollowPath() {
+
 
 	int flCurrentPos = RobotMap::swerveSubsystemFLDriveTalon->GetSelectedSensorPosition(0);
 	int frCurrentPos = RobotMap::swerveSubsystemFRDriveTalon->GetSelectedSensorPosition(0);

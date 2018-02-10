@@ -18,82 +18,152 @@ SwerveSubsystem::SwerveSubsystem() : Subsystem("SwerveSubsystem") {
 }
 
 void SwerveSubsystem::CalibrateWheels() {
-	int currentQuadfl = frontLeftRotationTalon->GetSensorCollection().GetQuadraturePosition();
-	int currentQuadfr = frontRightRotationTalon->GetSensorCollection().GetQuadraturePosition();
-	int currentQuadbl = backLeftRotationTalon->GetSensorCollection().GetQuadraturePosition();
-	int currentQuadbr = backRightRotationTalon->GetSensorCollection().GetQuadraturePosition();
 
-/*
-	std::cout << "currentQuadfl: " << currentQuadfl << std::endl;
-	std::cout << "currentQuadfr: " << currentQuadfr << std::endl;
-	std::cout << "currentQuadbl: " << currentQuadbl << std::endl;
-	std::cout << "currentQuadbr: " << currentQuadbr << std::endl;
-*/
+	frontLeftRotationTalon->SetSelectedSensorPosition(0,0,10);
+	frontRightRotationTalon->SetSelectedSensorPosition(0,0,10);
+	backLeftRotationTalon->SetSelectedSensorPosition(0,0,10);
+	backRightRotationTalon->SetSelectedSensorPosition(0,0,10);
 
 	int currentPWMfl = frontLeftRotationTalon->GetSensorCollection().GetPulseWidthPosition();
 	int currentPWMfr = frontRightRotationTalon->GetSensorCollection().GetPulseWidthPosition();
 	int currentPWMbl = backLeftRotationTalon->GetSensorCollection().GetPulseWidthPosition();
 	int currentPWMbr = backRightRotationTalon->GetSensorCollection().GetPulseWidthPosition();
 
-/*
 	std::cout << "currentPWMfl: " << currentPWMfl << std::endl;
 	std::cout << "currentPWMfr: " << currentPWMfr << std::endl;
 	std::cout << "currentPWMbl: " << currentPWMbl << std::endl;
 	std::cout << "currentPWMbr: " << currentPWMbr << std::endl;
-*/
+
+
+	int currentQuadfl = frontLeftRotationTalon->GetSensorCollection().GetQuadraturePosition();
+	int currentQuadfr = frontRightRotationTalon->GetSensorCollection().GetQuadraturePosition();
+	int currentQuadbl = backLeftRotationTalon->GetSensorCollection().GetQuadraturePosition();
+	int currentQuadbr = backRightRotationTalon->GetSensorCollection().GetQuadraturePosition();
+
+	std::cout << "currentQuadfl: " << currentQuadfl << std::endl;
+	std::cout << "currentQuadfr: " << currentQuadfr << std::endl;
+	std::cout << "currentQuadbl: " << currentQuadbl << std::endl;
+	std::cout << "currentQuadbr: " << currentQuadbr << std::endl;
+
+
 
 	int absModfl = AbsMod(currentQuadfl, TICKS_PER_REV);
 	int absModfr = AbsMod(currentQuadfr, TICKS_PER_REV);
 	int absModbl = AbsMod(currentQuadbl, TICKS_PER_REV);
 	int absModbr = AbsMod(currentQuadbr, TICKS_PER_REV);
 
-/*
 	std::cout << "absModfl: " << absModfl << std::endl;
 	std::cout << "absModfr: " << absModfr << std::endl;
 	std::cout << "absModbl: " << absModbl << std::endl;
 	std::cout << "absModbr: " << absModbr << std::endl;
-*/
+
+
+
+	std::cout << "FL_CAL: " << FL_CAL << std::endl;
+	std::cout << "FR_CAL: " << FR_CAL << std::endl;
+	std::cout << "BL_CAL: " << BL_CAL << std::endl;
+	std::cout << "BR_CAL: " << BR_CAL << std::endl;
 
 	int flSetpoint = ((absModfl) % TICKS_PER_REV) + (FL_CAL - currentPWMfl);
 	int frSetpoint = ((absModfr) % TICKS_PER_REV) + (FR_CAL - currentPWMfr);
 	int blSetpoint = ((absModbl) % TICKS_PER_REV) + (BL_CAL - currentPWMbl);
 	int brSetpoint = ((absModbr) % TICKS_PER_REV) + (BR_CAL - currentPWMbr);
 
-/*
 	std::cout << "flSetpoint: " << flSetpoint << std::endl;
 	std::cout << "frSetpoint: " << frSetpoint << std::endl;
 	std::cout << "blSetpoint: " << blSetpoint << std::endl;
 	std::cout << "brSetpoint: " << brSetpoint << std::endl;
-*/
 
-/*
+
+
 	flSetpoint = (SwerveSubsystem::OptimizeRot(flSetpoint, TICKS_PER_REV));
 	frSetpoint = (SwerveSubsystem::OptimizeRot(frSetpoint, TICKS_PER_REV));
 	blSetpoint = (SwerveSubsystem::OptimizeRot(blSetpoint, TICKS_PER_REV));
 	brSetpoint = (SwerveSubsystem::OptimizeRot(brSetpoint, TICKS_PER_REV));
 
-	std::cout << "flSetpoint: " << flSetpoint << std::endl;
-	std::cout << "frSetpoint: " << frSetpoint << std::endl;
-	std::cout << "blSetpoint: " << blSetpoint << std::endl;
-	std::cout << "brSetpoint: " << brSetpoint << std::endl;
-*/
+	std::cout << "OptflSetpoint: " << flSetpoint << std::endl;
+	std::cout << "OptfrSetpoint: " << frSetpoint << std::endl;
+	std::cout << "OptblSetpoint: " << blSetpoint << std::endl;
+	std::cout << "OptbrSetpoint: " << brSetpoint << std::endl;
+
+
 
 	frontLeftRotationTalon->Set(ControlMode::Position, flSetpoint);
 	frontRightRotationTalon->Set(ControlMode::Position, frSetpoint);
 	backLeftRotationTalon->Set(ControlMode::Position, blSetpoint);
 	backRightRotationTalon->Set(ControlMode::Position, brSetpoint);
 
+	std::cout << "currentQuadfl: " << currentQuadfl << std::endl;
+	std::cout << "currentQuadfr: " << currentQuadfr << std::endl;
+	std::cout << "currentQuadbl: " << currentQuadbl << std::endl;
+	std::cout << "currentQuadbr: " << currentQuadbr << std::endl;
+	std::cout << "---------------------" << std::endl;
+	//frc::Wait(3);
+
+	//frontLeftRotationTalon->Set(ControlMode::Position, flSetpoint);
+	//frontRightRotationTalon->Set(ControlMode::Position, frSetpoint);
+	//backLeftRotationTalon->Set(ControlMode::Position, blSetpoint);
+	//backRightRotationTalon->Set(ControlMode::Position, brSetpoint);
+
+	std::cout << "currentQuadfl: " << currentQuadfl << std::endl;
+	std::cout << "currentQuadfr: " << currentQuadfr << std::endl;
+	std::cout << "currentQuadbl: " << currentQuadbl << std::endl;
+	std::cout << "currentQuadbr: " << currentQuadbr << std::endl;
+	std::cout << "---------------------" << std::endl;
+
+
+	//frc::Wait(3);
+
+	//frontLeftRotationTalon->Set(ControlMode::Position, flSetpoint);
+	//frontRightRotationTalon->Set(ControlMode::Position, frSetpoint);
+	//backLeftRotationTalon->Set(ControlMode::Position, blSetpoint);
+	//backRightRotationTalon->Set(ControlMode::Position, brSetpoint);
+
+	std::cout << "currentQuadfl: " << currentQuadfl << std::endl;
+	std::cout << "currentQuadfr: " << currentQuadfr << std::endl;
+	std::cout << "currentQuadbl: " << currentQuadbl << std::endl;
+	std::cout << "currentQuadbr: " << currentQuadbr << std::endl;
+	std::cout << "---------------------" << std::endl;
+
+	//frc::Wait(3);
+
+	//frontLeftRotationTalon->GetSensorCollection().SetQuadraturePosition(0, 10);
+	//frontRightRotationTalon->GetSensorCollection().SetQuadraturePosition(0, 10);
+	//backLeftRotationTalon->GetSensorCollection().SetQuadraturePosition(0, 10);
+	//backRightRotationTalon->GetSensorCollection().SetQuadraturePosition(0, 10);
+
+	frontLeftRotationTalon->SetSelectedSensorPosition(0,0,10);
+	frontRightRotationTalon->SetSelectedSensorPosition(0,0,10);
+	backLeftRotationTalon->SetSelectedSensorPosition(0,0,10);
+	backRightRotationTalon->SetSelectedSensorPosition(0,0,10);
+
+
+
 	currentPWMfl = frontLeftRotationTalon->GetSensorCollection().GetPulseWidthPosition();
 	currentPWMfr = frontRightRotationTalon->GetSensorCollection().GetPulseWidthPosition();
 	currentPWMbl = backLeftRotationTalon->GetSensorCollection().GetPulseWidthPosition();
 	currentPWMbr = backRightRotationTalon->GetSensorCollection().GetPulseWidthPosition();
+
+	std::cout << "currentPWMfl: " << currentPWMfl << std::endl;
+	std::cout << "currentPWMfr: " << currentPWMfr << std::endl;
+	std::cout << "currentPWMbl: " << currentPWMbl << std::endl;
+	std::cout << "currentPWMbr: " << currentPWMbr << std::endl;
+
+
 
 	currentQuadfl = frontLeftRotationTalon->GetSensorCollection().GetQuadraturePosition();
 	currentQuadfr = frontRightRotationTalon->GetSensorCollection().GetQuadraturePosition();
 	currentQuadbl = backLeftRotationTalon->GetSensorCollection().GetQuadraturePosition();
 	currentQuadbr = backRightRotationTalon->GetSensorCollection().GetQuadraturePosition();
 
+	std::cout << "currentQuadfl: " << currentQuadfl << std::endl;
+	std::cout << "currentQuadfr: " << currentQuadfr << std::endl;
+	std::cout << "currentQuadbl: " << currentQuadbl << std::endl;
+	std::cout << "currentQuadbr: " << currentQuadbr << std::endl;
+
+
 	std::cout << "Calibrated Wheels!" << std::endl;
+
 }
 
 int SwerveSubsystem::AbsMod(int value, int ticks) {
