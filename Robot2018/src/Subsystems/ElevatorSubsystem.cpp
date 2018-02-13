@@ -14,6 +14,12 @@ void ElevatorSubsystem::InitDefaultCommand() {
 
 void ElevatorSubsystem::SwitchToElevatorMotor() {
 	shifterSolenoid->Set(frc::DoubleSolenoid::Value::kReverse);
+	std::cout << "changed to elevator!" <<  shifterSolenoid->Get() <<std::endl;
+}
+
+void ElevatorSubsystem::SwitchToClimberMotor() {
+	shifterSolenoid->Set(frc::DoubleSolenoid::Value::kForward);
+	std::cout << "changed to climber!" << shifterSolenoid->Get() << std::endl;
 }
 
 void ElevatorSubsystem::GoToHeight(double inputHeight) {

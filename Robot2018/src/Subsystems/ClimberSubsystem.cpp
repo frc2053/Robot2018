@@ -7,7 +7,6 @@ ClimberSubsystem::ClimberSubsystem() : Subsystem("ClimberSubsystem") {
 	primaryMotor = RobotMap::elevatorClimberSubsystemPrimaryTalon;
 	followerMotor01 = RobotMap::elevatorClimberSubsystemFollower01Talon;
 	followerMotor02 = RobotMap::elevatorClimberSubsystemFollower02Talon;
-	shifterSolenoid = RobotMap::elevatorClimberSubsystemShifterSolenoid;
 	latchSolenoid = RobotMap::climberSubsystemLatchSolenoid;
 	wingSolenoid = RobotMap::climberSubsystemWingSolenoid;
 }
@@ -18,11 +17,6 @@ void ClimberSubsystem::InitDefaultCommand() {
 
 void ClimberSubsystem::SetPrimaryMotor(double power) {
 	primaryMotor->Set(ControlMode::PercentOutput, power);
-}
-
-void ClimberSubsystem::SwitchToClimberMode() {
-	shifterSolenoid->Set(frc::DoubleSolenoid::Value::kForward);
-	primaryMotor->Set(ControlMode::PercentOutput, 0);
 }
 
 void ClimberSubsystem::ReleaseWings() {

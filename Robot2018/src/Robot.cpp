@@ -74,7 +74,7 @@ void Robot::AutonomousInit() {
 	//we need to make sure we are elevator mode
 	Robot::elevatorSubsystem->SwitchToElevatorMotor();
 	//align the wheels straight
-	Robot::swerveSubsystem->CalibrateWheels();
+	//Robot::swerveSubsystem->CalibrateWheels();
 	std::cout << "BACK IN AUTO INIT" << std::endl;
 	//get the auto mode we want to run from the smart dashboard
 	selectedMode.reset(autoChooser.GetSelected());

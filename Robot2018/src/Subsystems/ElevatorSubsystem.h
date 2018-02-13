@@ -15,6 +15,7 @@ public:
 	ElevatorSubsystem();
 	void InitDefaultCommand();
 	void SwitchToElevatorMotor();
+	void SwitchToClimberMotor();
 	void GoToHeight(double inputHeight);
 	int ConvertHeightToTicks(double inputHeight);
 };

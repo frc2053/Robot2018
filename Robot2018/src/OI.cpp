@@ -1,11 +1,14 @@
 #include "OI.h"
 
 #include "Commands/Drive/ZeroYaw.h"
+#include "Commands/Drive/ZeroWheels.h"
 #include "Commands/Elevator/GoToElevatorPosition.h"
 #include "Commands/Climber/RunClimberMotor.h"
 #include "Commands/Intake/IntakeUntilCurrentSpike.h"
 #include "Commands/Climber/DeployWings.h"
 #include "Commands/Groups/SwitchToClimb.h"
+#include "Commands/Climber/ChangeGearbox.h"
+
 
 OI::OI() {
 
@@ -14,12 +17,11 @@ OI::OI() {
 
 	SmartDashboard::PutData("Zero Yaw", new ZeroYaw());
 
+
 	/*operatorJoystick->aButton->WhenPressed(new GoToElevatorPosition(RobotMap::GROUND_POS_FT));
 	operatorJoystick->yButton->WhenPressed(new GoToElevatorPosition(RobotMap::SCALE_POS_FT));
 	operatorJoystick->bButton->WhenPressed(new GoToElevatorPosition(RobotMap::SWITCH_POS_FT));
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 	operatorJoystick->startButton->WhileHeld(new RunClimberMotor(1, 0));
 	operatorJoystick->startButton->WhenReleased(new RunClimberMotor(0, 0));
 
@@ -46,9 +48,9 @@ OI::OI() {
 	//operatorJoystick->selectButton->WhenPressed(new DeployWings());
 	//operatorJoystick->startButton->WhenPressed(new GoToElevatorPosition(6, true));
 
-	operatorJoystick->startButton->WhenPressed(new RunClimberMotor(0, 1));
+	operatorJoystick->startButton->WhenPressed(new ChangeGearbox(true));
 
-	operatorJoystick->startButton->WhenReleased(new RunClimberMotor(0, 0));
+	operatorJoystick->startButton->WhenReleased(new ChangeGearbox(false));
 
 	//CLIMBLING
 	//operatorJoystick->startButton->WhenPressed(new SwitchToClimb());
@@ -63,6 +65,10 @@ OI::OI() {
 	//no way to check if box has completely left the intake
 	//operatorJoystick->GetRightTrigger()->WhileActive(new IntakeUntilCurrentSpike(-1, 0, false));
 	//operatorJoystick->GetRightTrigger()->WhenInactive(new IntakeUntilCurrentSpike(0, 0, false));
+
+	//This is a test to try and cal the wheels on demand
+	operatorJoystick->GetLeftTrigger()->WhenActive(new ZeroWheels()); //Go to Climb Position
+
 }
 
 std::shared_ptr<TigerJoystick> OI::GetDriverJoystick() {

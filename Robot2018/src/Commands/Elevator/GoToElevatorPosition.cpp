@@ -12,7 +12,7 @@ GoToElevatorPosition::GoToElevatorPosition(double inputHeight, bool ifClimbing) 
 void GoToElevatorPosition::Initialize() {
 	if(isClimbing && (Robot::MATCHTIME <= 35))
 	{
-		Robot::climberSubsystem->SwitchToClimberMode();
+		//Robot::climberSubsystem->SwitchToClimberMode();
 	}
 
 	isDone = false;
