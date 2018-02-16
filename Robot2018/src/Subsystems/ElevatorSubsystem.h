@@ -18,6 +18,7 @@ public:
 	void SwitchToClimberMotor();
 	void GoToHeight(double inputHeight);
 	int ConvertHeightToTicks(double inputHeight);
+	void RunElevatorMotor(double speed);
 };
 
 #endif

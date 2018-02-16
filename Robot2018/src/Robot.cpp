@@ -49,6 +49,7 @@ void Robot::RobotInit() {
 	pathGenerated = (Segment*)malloc(trajLength * sizeof(Segment));
 	pathfinder_generate(&candidate, pathGenerated);
 
+
 	//pathFollower = new FollowPath(pathGenerated, trajLength);
 
 	autoChooser.AddDefault("Do Nothing Auto", new DoNothingAuto());
@@ -110,7 +111,7 @@ void Robot::TeleopInit() {
 	if(selectedMode != nullptr) {
 		selectedMode->Cancel();
 	}
-	//Robot::swerveSubsystem->SetDefaultCommand(new DriveCommand());
+	Robot::swerveSubsystem->SetDefaultCommand(new DriveCommand());
 
 	RobotMap::elevatorClimberSubsystemShifterSolenoid->Set(frc::DoubleSolenoid::Value::kForward);
 }

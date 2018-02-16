@@ -33,3 +33,9 @@ int ElevatorSubsystem::ConvertHeightToTicks(double inputHeight) {
 	tickSetpoint = (inputHeight * 61692);//IF FEET
 	return tickSetpoint;
 }
+
+void ElevatorSubsystem::RunElevatorMotor(double speed)
+{
+	primaryMotor->Set(ControlMode::PercentOutput, speed);
+
+}
