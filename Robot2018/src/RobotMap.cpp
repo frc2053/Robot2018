@@ -51,12 +51,12 @@ double RobotMap::K_T;
 void RobotMap::init() {
 	std::cout << "RobotMap is starting!" << std::endl;
 
-	TOP_POSITION_TICKS = 431885; //24000; VALUE TO BE TESTED AND CHANGED
+	TOP_POSITION_TICKS = 129751; //24000; VALUE TO BE TESTED AND CHANGED
 	//FEET
-	GROUND_POS_FT = 0;
-	SCALE_POS_FT = 6.5;
-	SWITCH_POS_FT = 1.75;
-	CLIMBBAR_POS_FT = 7.0;
+	GROUND_POS_FT = -0.6;
+	SCALE_POS_FT = -5.9;
+	SWITCH_POS_FT = -1.75;
+	CLIMBBAR_POS_FT = -7.0;
 	//INCHES - don't question it
 	WHEELBASE_LENGTH = 21;
 	WHEELBASE_WIDTH = 26.249;
@@ -122,7 +122,7 @@ void RobotMap::init() {
 	elevatorClimberSubsystemPrimaryTalon->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, 10);
 	//elevatorClimberSubsystemPrimaryTalon->SetSelectedSensorPosition(TOP_POSITION_TICKS, 0, 10);
 	elevatorClimberSubsystemPrimaryTalon->SetSelectedSensorPosition(0, 0, 10);
-	elevatorClimberSubsystemPrimaryTalon->SetSensorPhase(false);
+	elevatorClimberSubsystemPrimaryTalon->SetSensorPhase(true);
 	elevatorClimberSubsystemPrimaryTalon->SetInverted(true);
 	elevatorClimberSubsystemPrimaryTalon->Config_kP(0, 1, 10);
 	elevatorClimberSubsystemPrimaryTalon->Config_kI(0, 0, 10);

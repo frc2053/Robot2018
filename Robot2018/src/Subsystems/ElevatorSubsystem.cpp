@@ -25,12 +25,15 @@ void ElevatorSubsystem::SwitchToClimberMotor() {
 void ElevatorSubsystem::GoToHeight(double inputHeight) {
 	int ticks = ConvertHeightToTicks(inputHeight);
 	primaryMotor->Set(ControlMode::Position, ticks);
+
+	//primaryMotor->Set(ControlMode::Position, -60000);
+
 }
 
 int ElevatorSubsystem::ConvertHeightToTicks(double inputHeight) {
 	int tickSetpoint = 0;
 	//tickSetpoint = (inputHeight * 5141); //IF INCHES
-	tickSetpoint = (inputHeight * 61692);//IF FEET
+	tickSetpoint = (inputHeight * 20532);//IF FEET
 	return tickSetpoint;
 }
 

@@ -24,7 +24,8 @@ void RunClimberMotor::Initialize() {
 
 void RunClimberMotor::Execute() {
 
-
+	Robot::elevatorSubsystem->RunElevatorMotor(inputSpeed);
+/*
 	if(inputSpeed == 0) {
 		//Robot::climberSubsystem->SetPrimaryMotor(0);
 
@@ -46,7 +47,7 @@ void RunClimberMotor::Execute() {
 				isDone = false;
 			}
 		}
-	}
+	}*/
 }
 
 bool RunClimberMotor::IsFinished() {

@@ -19,8 +19,8 @@ void GoToElevatorPosition::Initialize() {
 }
 
 void GoToElevatorPosition::Execute() {
-	//Robot::elevatorSubsystem->GoToHeight(heightTarget);
-	Robot::elevatorSubsystem->RunElevatorMotor(heightTarget);
+	Robot::elevatorSubsystem->GoToHeight(heightTarget);
+	//Robot::elevatorSubsystem->RunElevatorMotor(heightTarget);
 	isDone = true;
 }
 

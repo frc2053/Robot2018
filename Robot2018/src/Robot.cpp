@@ -111,6 +111,7 @@ void Robot::TeleopInit() {
 	if(selectedMode != nullptr) {
 		selectedMode->Cancel();
 	}
+
 	Robot::swerveSubsystem->SetDefaultCommand(new DriveCommand());
 
 	RobotMap::elevatorClimberSubsystemShifterSolenoid->Set(frc::DoubleSolenoid::Value::kForward);
