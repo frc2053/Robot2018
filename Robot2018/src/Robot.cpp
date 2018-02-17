@@ -1,3 +1,4 @@
+#include <Commands/Groups/EverythingAuto.h>
 #include <Robot.h>
 #include "Commands/Autonomous/DoNothingAuto.h"
 #include "Pathfinder/TestFollower.h"
@@ -6,7 +7,6 @@
 #include "pathfinder.h"
 #include "Commands/Autonomous/FollowPath.h"
 
-#include "Commands/Groups/GoToSwitchAndDropCube.h"
 
 
 std::unique_ptr<OI> Robot::oi;
