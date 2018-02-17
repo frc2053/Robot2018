@@ -6,6 +6,7 @@
 #include "Commands/Drive/DriveCommand.h"
 #include "pathfinder.h"
 #include "Commands/Autonomous/FollowPath.h"
+#include "Commands/Elevator/ZeroElevator.h"
 #include "Commands/Autonomous/GoDistance.h"
 
 
@@ -51,6 +52,8 @@ void Robot::RobotInit() {
 	Waypoint p2 = {12, 0, d2r(0)};
 	points[0] = p1;
 	points[1] = p2;
+
+	SmartDashboard::PutData("Zero Elevator", new ZeroElevator());
 
 	pathfinder_prepare(points, POINT_LENGTH, FIT_HERMITE_CUBIC, PATHFINDER_SAMPLES_HIGH, RobotMap::TIMESTEP, RobotMap::MAX_VEL, RobotMap::MAX_ACCEL, RobotMap::MAX_JERK, &candidate);
 	int trajLength = candidate.length;
