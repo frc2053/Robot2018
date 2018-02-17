@@ -6,6 +6,7 @@
 #include "Commands/Drive/DriveCommand.h"
 #include "pathfinder.h"
 #include "Commands/Autonomous/FollowPath.h"
+#include "Commands/Autonomous/GoDistance.h"
 
 
 
@@ -85,9 +86,15 @@ void Robot::AutonomousInit() {
 	//we need to make sure we are elevator mode
 	Robot::elevatorSubsystem->SwitchToElevatorMotor();
 
-	Command* autoCmd = new EverythingAuto(gameData.at(0), gameData.at(1), leftOrRight.at(0), doScale);
-	autoCmd->Start();
-
+	if(gameData.size() == 3) {
+		Command* autoCmd = new EverythingAuto(gameData.at(0), gameData.at(1), leftOrRight.at(0), doScale);
+		autoCmd->Start();
+	}
+	else {
+		std::cout << "GAME DATA NOT RECEIVED!";
+		Command* fallback = new GoDistance(0, 5);
+		fallback->Start();
+	}
 	//align the wheels straight
 	//Robot::swerveSubsystem->CalibrateWheels();
 	std::cout << "BACK IN AUTO INIT" << std::endl;
