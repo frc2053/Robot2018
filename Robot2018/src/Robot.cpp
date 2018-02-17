@@ -34,7 +34,11 @@ void Robot::RobotInit() {
 	oi.reset(new OI());
 	runOnce = false;
 
-	SmartDashboard::PutBoolean("Is On Right Side", isOnRight);
+	leftOrRight = "L";
+	doScale = true;
+
+	SmartDashboard::PutString("Left or Right", leftOrRight);
+	SmartDashboard::PutBoolean("Do Scale", doScale);
 
 	//calibrate gyro
 	Robot::swerveSubsystem->ZeroYaw();
@@ -75,34 +79,14 @@ void Robot::DisabledPeriodic() {
 }
 
 void Robot::AutonomousInit() {
-	isOnRight = SmartDashboard::GetBoolean("Is On Right Side", false);
+	leftOrRight = SmartDashboard::GetString("Left or Right", "L");
+	doScale = SmartDashboard::GetBoolean("Do Scale", true);
 	std::cout << "Autonomous Init!" << std::endl;
 	//we need to make sure we are elevator mode
 	Robot::elevatorSubsystem->SwitchToElevatorMotor();
 
-	if(gameData.at(0) == "L") {
-		Command* cmd;
-		if(isOnRight) {
-			cmd = new GoToSwitchAndDropCube(true);
-		}
-		else {
-			cmd = new GoToSwitchAndDropCube(false);
-		}
-		cmd->Start();
-	}
-
-	if(gameData.at(0) == "R") {
-		Command* cmd;
-		if(isOnRight) {
-			cmd = new GoToSwitchAndDropCube(false);
-		}
-		else {
-			cmd = new GoToSwitchAndDropCube(true);
-		}
-		cmd->Start();
-	}
-
-
+	Command* autoCmd = new EverythingAuto(gameData.at(0), gameData.at(1), leftOrRight.at(0), doScale);
+	autoCmd->Start();
 
 	//align the wheels straight
 	//Robot::swerveSubsystem->CalibrateWheels();
@@ -110,7 +94,7 @@ void Robot::AutonomousInit() {
 	//get the auto mode we want to run from the smart dashboard
 	selectedMode.reset(autoChooser.GetSelected());
 	if(selectedMode != nullptr) {
-		selectedMode->Start();
+		//selectedMode->Start();
 	}
 
 	std::cout << "STARTING PATHFOLLOWER" << std::endl;

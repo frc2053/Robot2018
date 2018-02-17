@@ -25,7 +25,7 @@ EverythingAuto::EverythingAuto(char switchSide, char scaleSide, char robotSide, 
 					//turn -90 degrees to face scale
 					AddSequential(new DriveCommandAuto(0, 0, 0, .3, -90));
 					//move elevator up
-					AddSequential(new GoToElevatorPosition(RobotMap::SCALE_POS_FT));
+					AddSequential(new GoToElevatorPosition(RobotMap::SCALE_POS_FT, false));
 					//go to scale
 					AddSequential(new GoDistance(0, 4));
 					//poop cube
@@ -61,7 +61,7 @@ EverythingAuto::EverythingAuto(char switchSide, char scaleSide, char robotSide, 
 			if(doScale) {
 				if(scaleSide == 'L') {
 					//strafe back towards left scale
-					AddSequential(new GoDistance(-4));
+					AddSequential(new GoDistance(-4, 0));
 					//turn 180 to face scale
 					AddSequential(new DriveCommandAuto(0, 0, 0, .3, -90));
 					//Elevator Raise

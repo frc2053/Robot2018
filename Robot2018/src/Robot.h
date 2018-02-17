@@ -37,7 +37,8 @@ private:
 	Waypoint points[POINT_LENGTH];
 	static Segment* pathGenerated;
 	static Command* pathFollower;
-	bool isOnRight;
+	std::string leftOrRight;
+	bool doScale;
 };
 
 #endif
