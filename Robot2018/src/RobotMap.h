@@ -57,6 +57,7 @@ public:
 	static double MAX_ACCEL;
 	static double MAX_JERK;
 	static int TICKS_PER_REV;
+	static int TICKS_PER_FOOT_DRIVE;
 	static double WHEEL_CIRCUMFERENCE;
 	static double K_P;
 	static double K_I;

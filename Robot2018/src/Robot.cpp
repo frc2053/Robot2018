@@ -6,6 +6,8 @@
 #include "pathfinder.h"
 #include "Commands/Autonomous/FollowPath.h"
 
+#include "Commands/Groups/GoToSwitchAndDropCube.h"
+
 
 std::unique_ptr<OI> Robot::oi;
 std::unique_ptr<SwerveSubsystem> Robot::swerveSubsystem;
@@ -31,6 +33,8 @@ void Robot::RobotInit() {
 	climberSubsystem.reset(new ClimberSubsystem());
 	oi.reset(new OI());
 	runOnce = false;
+
+	SmartDashboard::PutBoolean("Is On Right Side", isOnRight);
 
 	//calibrate gyro
 	Robot::swerveSubsystem->ZeroYaw();
@@ -71,9 +75,35 @@ void Robot::DisabledPeriodic() {
 }
 
 void Robot::AutonomousInit() {
+	isOnRight = SmartDashboard::GetBoolean("Is On Right Side", false);
 	std::cout << "Autonomous Init!" << std::endl;
 	//we need to make sure we are elevator mode
 	Robot::elevatorSubsystem->SwitchToElevatorMotor();
+
+	if(gameData.at(0) == "L") {
+		Command* cmd;
+		if(isOnRight) {
+			cmd = new GoToSwitchAndDropCube(true);
+		}
+		else {
+			cmd = new GoToSwitchAndDropCube(false);
+		}
+		cmd->Start();
+	}
+
+	if(gameData.at(0) == "R") {
+		Command* cmd;
+		if(isOnRight) {
+			cmd = new GoToSwitchAndDropCube(false);
+		}
+		else {
+			cmd = new GoToSwitchAndDropCube(true);
+		}
+		cmd->Start();
+	}
+
+
+
 	//align the wheels straight
 	//Robot::swerveSubsystem->CalibrateWheels();
 	std::cout << "BACK IN AUTO INIT" << std::endl;

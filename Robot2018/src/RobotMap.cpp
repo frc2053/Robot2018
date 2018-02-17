@@ -40,6 +40,7 @@ double RobotMap::MAX_VEL;
 double RobotMap::MAX_ACCEL;
 double RobotMap::MAX_JERK;
 int RobotMap::TICKS_PER_REV;
+int RobotMap::TICKS_PER_FOOT_DRIVE;
 double RobotMap::WHEEL_CIRCUMFERENCE;
 double RobotMap::K_P;
 double RobotMap::K_I;
@@ -66,6 +67,7 @@ void RobotMap::init() {
 	MAX_ACCEL = 12;
 	MAX_JERK = 60;
 	TICKS_PER_REV = 26214;
+	TICKS_PER_FOOT_DRIVE = 40052;
 	WHEEL_CIRCUMFERENCE = 0.65449867893738;
 	K_P = 1;
 	K_I = 0.0;

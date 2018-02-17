@@ -29,15 +29,15 @@ OI::OI() {
 	operatorJoystick->selectButton->WhenReleased(new RunClimberMotor(0, 0));*/
 
 	//ELEVATOR POSITIONS
-		operatorJoystick->yButton->WhenPressed(new GoToElevatorPosition(RobotMap::SCALE_POS_FT, false));
-		operatorJoystick->aButton->WhenPressed(new GoToElevatorPosition(0, false));
-		operatorJoystick->xButton->WhenPressed(new GoToElevatorPosition(RobotMap::SWITCH_POS_FT, false));
-		operatorJoystick-> bButton->WhenPressed(new GoToElevatorPosition(-5.5, false)); //Go to neutral position for Scale
-	//operatorJoystick->yButton->WhenPressed(new RunClimberMotor(0, -1));
-	//operatorJoystick->yButton->WhenReleased(new RunClimberMotor(0, 0));
+		//operatorJoystick->yButton->WhenPressed(new GoToElevatorPosition(RobotMap::SCALE_POS_FT, false));
+		//operatorJoystick->aButton->WhenPressed(new GoToElevatorPosition(0, false));
+		//operatorJoystick->xButton->WhenPressed(new GoToElevatorPosition(RobotMap::SWITCH_POS_FT, false));
+		//operatorJoystick-> bButton->WhenPressed(new GoToElevatorPosition(-5.5, false)); //Go to neutral position for Scale
+	operatorJoystick->yButton->WhenPressed(new RunClimberMotor(0, -1));
+	operatorJoystick->yButton->WhenReleased(new RunClimberMotor(0, 0));
 
-	//operatorJoystick->aButton->WhenPressed(new RunClimberMotor(0, 1));
-	//operatorJoystick->aButton->WhenReleased(new RunClimberMotor(0, 0));
+	operatorJoystick->aButton->WhenPressed(new RunClimberMotor(0, 1));
+	operatorJoystick->aButton->WhenReleased(new RunClimberMotor(0, 0));
 
 	//operatorJoystick->bButton->WhenPressed(new GoToElevatorPosition(-3.3, false));
 	//operatorJoystick->xButton->WhenPressed(new GoToElevatorPosition(-1, false));
@@ -60,9 +60,9 @@ OI::OI() {
 	//operatorJoystick->selectButton->WhenPressed(new DeployWings());
 	//operatorJoystick->startButton->WhenPressed(new GoToElevatorPosition(6, true));
 
-	operatorJoystick->startButton->WhenPressed(new ChangeGearbox(true));
+	//operatorJoystick->startButton->WhenPressed(new ChangeGearbox(true));
 
-	operatorJoystick->startButton->WhenReleased(new ChangeGearbox(false));
+	//operatorJoystick->startButton->WhenReleased(new ChangeGearbox(false));
 
 	//CLIMBLING
 	//operatorJoystick->startButton->WhenPressed(new SwitchToClimb());

@@ -6,7 +6,7 @@
 
 class IntakeUntilCurrentSpike : public Command {
 public:
-	IntakeUntilCurrentSpike(double speed = 0, double time = 0, bool currentCheck = 0);
+	IntakeUntilCurrentSpike(double time = 0, double speed = 0, bool currentCheck = 0);
 	void Initialize();
 	void Execute();
 	bool IsFinished();

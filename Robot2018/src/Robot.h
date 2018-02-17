@@ -37,6 +37,7 @@ private:
 	Waypoint points[POINT_LENGTH];
 	static Segment* pathGenerated;
 	static Command* pathFollower;
+	bool isOnRight;
 };
 
 #endif
