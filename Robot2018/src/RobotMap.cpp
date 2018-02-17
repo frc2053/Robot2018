@@ -170,16 +170,16 @@ void RobotMap::init() {
 	swerveSubsystemBRRotTalon->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, 10);
 
 	//we set the rotation sensor pos to the pulse width position masked. The masking makes sure we only are from 0 - 4096
-	swerveSubsystemFLRotTalon->SetSelectedSensorPosition(swerveSubsystemFLRotTalon->GetSensorCollection().GetPulseWidthPosition() & 0xFFF, 0, 10);
+	/*swerveSubsystemFLRotTalon->SetSelectedSensorPosition(swerveSubsystemFLRotTalon->GetSensorCollection().GetPulseWidthPosition() & 0xFFF, 0, 10);
 	swerveSubsystemFRRotTalon->SetSelectedSensorPosition(swerveSubsystemFRRotTalon->GetSensorCollection().GetPulseWidthPosition() & 0xFFF, 0, 10);
 	swerveSubsystemBLRotTalon->SetSelectedSensorPosition(swerveSubsystemBLRotTalon->GetSensorCollection().GetPulseWidthPosition() & 0xFFF, 0, 10);
-	swerveSubsystemBRRotTalon->SetSelectedSensorPosition(swerveSubsystemBRRotTalon->GetSensorCollection().GetPulseWidthPosition() & 0xFFF, 0, 10);
+	swerveSubsystemBRRotTalon->SetSelectedSensorPosition(swerveSubsystemBRRotTalon->GetSensorCollection().GetPulseWidthPosition() & 0xFFF, 0, 10);*/
 
 	//Then we zero them out
-	//swerveSubsystemFLRotTalon->SetSelectedSensorPosition(0, 0, 10);
-	//swerveSubsystemFRRotTalon->SetSelectedSensorPosition(0, 0, 10);
-	//swerveSubsystemBLRotTalon->SetSelectedSensorPosition(0, 0, 10);
-	//swerveSubsystemBRRotTalon->SetSelectedSensorPosition(0, 0, 10);
+	swerveSubsystemFLRotTalon->SetSelectedSensorPosition(0, 0, 10);
+	swerveSubsystemFRRotTalon->SetSelectedSensorPosition(0, 0, 10);
+	swerveSubsystemBLRotTalon->SetSelectedSensorPosition(0, 0, 10);
+	swerveSubsystemBRRotTalon->SetSelectedSensorPosition(0, 0, 10);
 
 	//see drive motor explanation above
 	swerveSubsystemFLRotTalon->SetSensorPhase(false);

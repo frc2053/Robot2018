@@ -135,7 +135,8 @@ void Robot::TeleopInit() {
 	if(selectedMode != nullptr) {
 		selectedMode->Cancel();
 	}
-
+	//Robot::swerveSubsystem->CalibrateWheelsSimple();
+	//std::this_thread::sleep_for(std::chrono::seconds(5));
 	Robot::swerveSubsystem->SetDefaultCommand(new DriveCommand());
 
 	RobotMap::elevatorClimberSubsystemShifterSolenoid->Set(frc::DoubleSolenoid::Value::kForward);

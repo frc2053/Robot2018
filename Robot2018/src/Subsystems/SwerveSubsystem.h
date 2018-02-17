@@ -20,6 +20,7 @@ public:
 	bool GetIsRotDoneOverride();
 	void ZeroYaw();
 	void CalibrateWheels();
+	void CalibrateWheelsSimple();
 	int AbsMod(int value, int ticks);
 	int OptimizeRot(int value, int ticks);
 
@@ -36,10 +37,10 @@ private:
 	std::shared_ptr<can::TalonSRX> frontLeftRotationTalon;
 	std::shared_ptr<can::TalonSRX> backRightRotationTalon;
 	std::shared_ptr<can::TalonSRX> backLeftRotationTalon;
-	int FL_CAL = 2158;
-	int BL_CAL = 1128;
-	int FR_CAL = 1193;
-	int BR_CAL = 2747;
+	int FL_CAL = 966;
+	int BL_CAL = 48;
+	int FR_CAL = 2642;
+	int BR_CAL = 1103;
 
 	int TICKS_PER_REV = 4096;
 	int absVal = 0;
