@@ -40,7 +40,7 @@ private:
 	int FL_CAL = 966;
 	int BL_CAL = 48;
 	int FR_CAL = 2642;
-	int BR_CAL = 1103;
+	int BR_CAL = 3372;
 
 	int TICKS_PER_REV = 4096;
 	int absVal = 0;

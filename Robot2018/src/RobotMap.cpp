@@ -176,10 +176,10 @@ void RobotMap::init() {
 	swerveSubsystemBRRotTalon->SetSelectedSensorPosition(swerveSubsystemBRRotTalon->GetSensorCollection().GetPulseWidthPosition() & 0xFFF, 0, 10);*/
 
 	//Then we zero them out
-	swerveSubsystemFLRotTalon->SetSelectedSensorPosition(0, 0, 10);
-	swerveSubsystemFRRotTalon->SetSelectedSensorPosition(0, 0, 10);
-	swerveSubsystemBLRotTalon->SetSelectedSensorPosition(0, 0, 10);
-	swerveSubsystemBRRotTalon->SetSelectedSensorPosition(0, 0, 10);
+	//swerveSubsystemFLRotTalon->SetSelectedSensorPosition(0, 0, 10);
+	//swerveSubsystemFRRotTalon->SetSelectedSensorPosition(0, 0, 10);
+	//swerveSubsystemBLRotTalon->SetSelectedSensorPosition(0, 0, 10);
+	//swerveSubsystemBRRotTalon->SetSelectedSensorPosition(0, 0, 10);
 
 	//see drive motor explanation above
 	swerveSubsystemFLRotTalon->SetSensorPhase(false);

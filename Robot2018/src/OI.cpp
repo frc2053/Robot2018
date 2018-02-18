@@ -29,15 +29,15 @@ OI::OI() {
 	operatorJoystick->selectButton->WhenReleased(new RunClimberMotor(0, 0));*/
 
 	//ELEVATOR POSITIONS
-		//operatorJoystick->yButton->WhenPressed(new GoToElevatorPosition(RobotMap::SCALE_POS_FT, false));
-		//operatorJoystick->aButton->WhenPressed(new GoToElevatorPosition(0, false));
-		//operatorJoystick->xButton->WhenPressed(new GoToElevatorPosition(RobotMap::SWITCH_POS_FT, false));
-		//operatorJoystick-> bButton->WhenPressed(new GoToElevatorPosition(-5.5, false)); //Go to neutral position for Scale
-	operatorJoystick->yButton->WhenPressed(new RunClimberMotor(0, -1));
-	operatorJoystick->yButton->WhenReleased(new RunClimberMotor(0, 0));
+		operatorJoystick->yButton->WhenPressed(new GoToElevatorPosition(RobotMap::SCALE_POS_FT, false));
+		operatorJoystick->aButton->WhenPressed(new GoToElevatorPosition(0, false));
+		operatorJoystick->xButton->WhenPressed(new GoToElevatorPosition(RobotMap::SWITCH_POS_FT, false));
+		operatorJoystick->bButton->WhenPressed(new GoToElevatorPosition(-5.5, false)); //Go to neutral position for Scale
+	//operatorJoystick->yButton->WhenPressed(new RunClimberMotor(0, -1));
+	//operatorJoystick->yButton->WhenReleased(new RunClimberMotor(0, 0));
 
-	operatorJoystick->aButton->WhenPressed(new RunClimberMotor(0, 1));
-	operatorJoystick->aButton->WhenReleased(new RunClimberMotor(0, 0));
+	//operatorJoystick->aButton->WhenPressed(new RunClimberMotor(0, 1));
+	//operatorJoystick->aButton->WhenReleased(new RunClimberMotor(0, 0));
 
 	//operatorJoystick->bButton->WhenPressed(new GoToElevatorPosition(-3.3, false));
 	//operatorJoystick->xButton->WhenPressed(new GoToElevatorPosition(-1, false));
@@ -51,7 +51,7 @@ OI::OI() {
 	operatorJoystick->leftShoulderButton->WhenActive(new IntakeUntilCurrentSpike(0, .6, true));
 	operatorJoystick->leftShoulderButton->WhenInactive(new IntakeUntilCurrentSpike(0, .1, false)); //NOT NECESSARY BUT CAN OVERRIDE IN CASE OF ACCIDENTAL INTAKE BUTTON HIT
 
-	operatorJoystick->rightShoulderButton->WhenActive(new IntakeUntilCurrentSpike(0, -.5, false));
+	operatorJoystick->rightShoulderButton->WhenActive(new IntakeUntilCurrentSpike(0, -1, false));
 	operatorJoystick->rightShoulderButton->WhenInactive(new IntakeUntilCurrentSpike(0, 0, false));
 	//INTAKE/OUTTAKE
 

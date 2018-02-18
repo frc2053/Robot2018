@@ -11,8 +11,8 @@ void ZeroWheels::Initialize() {
 
 void ZeroWheels::Execute() {
 	std::cout << "Hello!" << std::endl;
-	Robot::swerveSubsystem->CalibrateWheels();
-	//Robot::swerveSubsystem->CalibrateWheelsSimple();
+	//Robot::swerveSubsystem->CalibrateWheels();
+	Robot::swerveSubsystem->CalibrateWheelsSimple();
 	isDone = true;
 }
 
