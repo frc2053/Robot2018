@@ -20,7 +20,9 @@ std::unique_ptr<ClimberSubsystem> Robot::climberSubsystem;
 double Robot::MATCHTIME;
 
 Segment* Robot::pathGenerated;
+Segment* Robot::pathGenerated2;
 Command* Robot::pathFollower;
+Command* Robot::pathFollower2;
 
 void Robot::RobotInit() {
 	std::cout << "Robot is starting!" << std::endl;
@@ -49,9 +51,14 @@ void Robot::RobotInit() {
 
 	//generate paths
 	Waypoint p1 = {0, 0, d2r(0)};
-	Waypoint p2 = {12, 0, d2r(0)};
+	Waypoint p2 = {5, 0, d2r(0)};
 	points[0] = p1;
 	points[1] = p2;
+
+	Waypoint p3 = {0, 0, d2r(0)};
+	Waypoint p4 = {5, 0, d2r(0)};
+	points2[0] = p3;
+	points2[1] = p4;
 
 	SmartDashboard::PutData("Zero Elevator", new ZeroElevator());
 
@@ -61,8 +68,14 @@ void Robot::RobotInit() {
 	pathGenerated = (Segment*)malloc(trajLength * sizeof(Segment));
 	pathfinder_generate(&candidate, pathGenerated);
 
+	pathfinder_prepare(points2, POINT_LENGTH, FIT_HERMITE_CUBIC, PATHFINDER_SAMPLES_HIGH, RobotMap::TIMESTEP, RobotMap::MAX_VEL, RobotMap::MAX_ACCEL, RobotMap::MAX_JERK, &candidate2);
+	int trajLength2 = candidate2.length;
+	std::cout << "trajLength: " << trajLength2 << "\n";
+	pathGenerated2 = (Segment*)malloc(trajLength2 * sizeof(Segment));
+	pathfinder_generate(&candidate2, pathGenerated2);
 
-	//pathFollower = new FollowPath(pathGenerated, trajLength);
+	pathFollower2 = new FollowPath(pathGenerated2, trajLength2, 0);
+	pathFollower = new FollowPath(pathGenerated, trajLength, 90);
 
 	autoChooser.AddDefault("Do Nothing Auto", new DoNothingAuto());
 
@@ -83,21 +96,28 @@ void Robot::DisabledPeriodic() {
 }
 
 void Robot::AutonomousInit() {
+	gameData = frc::DriverStation::GetInstance().GetGameSpecificMessage();
+	Robot::swerveSubsystem->CalibrateWheelsSimple();
 	leftOrRight = SmartDashboard::GetString("Left or Right", "L");
 	doScale = SmartDashboard::GetBoolean("Do Scale", true);
 	std::cout << "Autonomous Init!" << std::endl;
 	//we need to make sure we are elevator mode
 	Robot::elevatorSubsystem->SwitchToElevatorMotor();
 
-	if(gameData.size() == 3) {
+	/*if(gameData.size() == 3) {
+		std::cout << "got game data!" << std::endl;
+		std::cout << "gameData 0: " << gameData.at(0) << std::endl;
+		std::cout << "gameData 1: " << gameData.at(1) << std::endl;
+		std::cout << "gameData 2: " << gameData.at(2) << std::endl;
+
 		Command* autoCmd = new EverythingAuto(gameData.at(0), gameData.at(1), leftOrRight.at(0), doScale);
 		autoCmd->Start();
 	}
 	else {
 		std::cout << "GAME DATA NOT RECEIVED!";
-		Command* fallback = new GoDistance(0, 5);
+		Command* fallback = new GoDistance(0, 1);
 		fallback->Start();
-	}
+	}*/
 	//align the wheels straight
 	//Robot::swerveSubsystem->CalibrateWheels();
 	std::cout << "BACK IN AUTO INIT" << std::endl;
@@ -109,7 +129,7 @@ void Robot::AutonomousInit() {
 
 	std::cout << "STARTING PATHFOLLOWER" << std::endl;
 
-	//pathFollower->Start();
+	pathFollower->Start();
 
 	std::cout << "ENDING PATHFOLLOWER" << std::endl;
 
@@ -119,8 +139,11 @@ void Robot::AutonomousPeriodic() {
 
 	//std::cout << "MADE IT TO AUTO PERIODIC" << std::endl;
 
-	//Scheduler::GetInstance()->Run();
+	Scheduler::GetInstance()->Run();
 	bool isFinished = false;
+	if(pathFollower->IsCompleted()) {
+		pathFollower2->Start();
+	}
 	if(!runOnce) {
 	}
 	if(isFinished && !runOnce) {
@@ -135,9 +158,9 @@ void Robot::TeleopInit() {
 	if(selectedMode != nullptr) {
 		selectedMode->Cancel();
 	}
-	Robot::swerveSubsystem->CalibrateWheelsSimple();
+	//Robot::swerveSubsystem->CalibrateWheelsSimple();
 	//std::this_thread::sleep_for(std::chrono::seconds(5));
-	//Robot::swerveSubsystem->SetDefaultCommand(new DriveCommand());
+	Robot::swerveSubsystem->SetDefaultCommand(new DriveCommand());
 
 	RobotMap::elevatorClimberSubsystemShifterSolenoid->Set(frc::DoubleSolenoid::Value::kForward);
 }

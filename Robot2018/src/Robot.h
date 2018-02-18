@@ -34,9 +34,13 @@ private:
 	bool runOnce;
 	static const int POINT_LENGTH = 2;
 	TrajectoryCandidate candidate;
+	TrajectoryCandidate candidate2;
 	Waypoint points[POINT_LENGTH];
+	Waypoint points2[POINT_LENGTH];
 	static Segment* pathGenerated;
 	static Command* pathFollower;
+	static Segment* pathGenerated2;
+	static Command* pathFollower2;
 	std::string leftOrRight;
 	bool doScale;
 };

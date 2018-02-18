@@ -67,7 +67,7 @@ void RobotMap::init() {
 	MAX_ACCEL = 12;
 	MAX_JERK = 60;
 	TICKS_PER_REV = 26214;
-	TICKS_PER_FOOT_DRIVE = 40052;
+	TICKS_PER_FOOT_DRIVE = 3911;
 	WHEEL_CIRCUMFERENCE = 0.65449867893738;
 	K_P = 1;
 	K_I = 0.0;
@@ -158,10 +158,10 @@ void RobotMap::init() {
 	//for the talon PID to work we need to make sure that the sensors are in phase
 	//this means that when we give the motor a positive voltage the encoder ticks MUST go more positive
 	//if this is not set correctly PID will not work at all
-	swerveSubsystemFLDriveTalon->SetSensorPhase(true);
-	swerveSubsystemFRDriveTalon->SetSensorPhase(true);
-	swerveSubsystemBLDriveTalon->SetSensorPhase(true);
-	swerveSubsystemBRDriveTalon->SetSensorPhase(true);
+	swerveSubsystemFLDriveTalon->SetSensorPhase(false);
+	swerveSubsystemFRDriveTalon->SetSensorPhase(false);
+	swerveSubsystemBLDriveTalon->SetSensorPhase(false);
+	swerveSubsystemBRDriveTalon->SetSensorPhase(false);
 
 	//we want to use relative for rotation motors because it is much faster read time
 	swerveSubsystemFLRotTalon->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, 10);

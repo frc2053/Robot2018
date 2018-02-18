@@ -6,7 +6,7 @@
 
 class FollowPath : public frc::Command {
 public:
-	FollowPath(Segment* inputPath, int length);
+	FollowPath(Segment* inputPath, int length, int offset);
 	void Initialize();
 	void Execute();
 	bool IsFinished();
@@ -31,6 +31,7 @@ private:
 	EncoderConfig frconfig;
 	EncoderConfig blconfig;
 	EncoderConfig brconfig;
+	int angleOffset;
 };
 
 #endif

@@ -5,8 +5,14 @@
 #include "../Elevator/GoToElevatorPosition.h"
 EverythingAuto::EverythingAuto(char switchSide, char scaleSide, char robotSide, bool doScale) {
 	//suck in cube
+	std::cout << "help!\n";
+	std::cout << "switchSide: " << switchSide << std::endl;
+	std::cout << "scaleSide: " << scaleSide << std::endl;
+	std::cout << "robotSide: " << robotSide << std::endl;
+
 	AddSequential(new IntakeUntilCurrentSpike(.3, .6, true));
 	if(robotSide == 'L') {
+		std::cout << "left side\n";
 		if(switchSide == 'L') {
 			//go to switch
 			AddSequential(new GoDistance(-10, 3));
@@ -44,6 +50,7 @@ EverythingAuto::EverythingAuto(char switchSide, char scaleSide, char robotSide, 
 			}
 		}
 		if(switchSide == 'R') {
+			std::cout << "switch right\n";
 			//go left
 			AddSequential(new GoDistance(-10, 0));
 			//go forward towards switch
@@ -70,6 +77,7 @@ EverythingAuto::EverythingAuto(char switchSide, char scaleSide, char robotSide, 
 					AddSequential(new IntakeUntilCurrentSpike(.3, .6, true));
 				}
 				if(scaleSide == 'R') {
+					std::cout << "scale right\n";
 					//turn 180 to face scale
 					AddSequential(new DriveCommandAuto(0, 0, 0, .3, -90));
 					//raise elevator
@@ -81,6 +89,7 @@ EverythingAuto::EverythingAuto(char switchSide, char scaleSide, char robotSide, 
 		}
 	}
 	if(robotSide == 'R') {
+		std::cout << "here!\n";
 		if(switchSide == 'L') {
 			//go right past switch
 			AddSequential(new GoDistance(-10, 0));
@@ -122,6 +131,7 @@ EverythingAuto::EverythingAuto(char switchSide, char scaleSide, char robotSide, 
 			}
 		}
 		if(switchSide == 'R') {
+			std::cout << "here!\n";
 			//move right to switch
 			AddSequential(new GoDistance(10, 3));
 			//move to switch height
@@ -144,6 +154,7 @@ EverythingAuto::EverythingAuto(char switchSide, char scaleSide, char robotSide, 
 					AddSequential(new IntakeUntilCurrentSpike(.3, -.5, false));
 				}
 				if(scaleSide == 'R') {
+					std::cout << "here!\n";
 					//turn around to face scale
 					AddSequential(new DriveCommandAuto(0, 0, 0, .4, 90));
 					//go to elevator height
@@ -154,4 +165,5 @@ EverythingAuto::EverythingAuto(char switchSide, char scaleSide, char robotSide, 
 			}
 		}
 	}
+	std::cout << "end!\n";
 }

@@ -1,7 +1,7 @@
 #include "FollowPath.h"
 #include "../../Robot.h"
 
-FollowPath::FollowPath(Segment* inputPath, int length) {
+FollowPath::FollowPath(Segment* inputPath, int length, int offset) {
 
 	std::cout << "MADE IT TO FOLLOWPATH AUTO" << std::endl;
 
@@ -9,6 +9,8 @@ FollowPath::FollowPath(Segment* inputPath, int length) {
 	isDone = false;
 	pathLength = length;
 	pathToFollow = inputPath;
+
+	angleOffset = offset;
 
 	flFollower->last_error = 0;
 	flFollower->segment = 0;
@@ -31,10 +33,11 @@ FollowPath::FollowPath(Segment* inputPath, int length) {
 	blTraj = NULL;
 	brTraj = NULL;
 
-	flconfig = {RobotMap::swerveSubsystemFLDriveTalon->GetSelectedSensorPosition(0), RobotMap::TICKS_PER_REV, RobotMap::WHEEL_CIRCUMFERENCE, RobotMap::K_P, RobotMap::K_I, RobotMap::K_D, RobotMap::K_V, RobotMap::K_A};
-	frconfig = {RobotMap::swerveSubsystemFRDriveTalon->GetSelectedSensorPosition(0), RobotMap::TICKS_PER_REV, RobotMap::WHEEL_CIRCUMFERENCE, RobotMap::K_P, RobotMap::K_I, RobotMap::K_D, RobotMap::K_V, RobotMap::K_A};
-	blconfig = {RobotMap::swerveSubsystemBLDriveTalon->GetSelectedSensorPosition(0), RobotMap::TICKS_PER_REV, RobotMap::WHEEL_CIRCUMFERENCE, RobotMap::K_P, RobotMap::K_I, RobotMap::K_D, RobotMap::K_V, RobotMap::K_A};
-	brconfig = {RobotMap::swerveSubsystemBRDriveTalon->GetSelectedSensorPosition(0), RobotMap::TICKS_PER_REV, RobotMap::WHEEL_CIRCUMFERENCE, RobotMap::K_P, RobotMap::K_I, RobotMap::K_D, RobotMap::K_V, RobotMap::K_A};
+
+	flconfig = {0, RobotMap::TICKS_PER_REV, RobotMap::WHEEL_CIRCUMFERENCE, RobotMap::K_P, RobotMap::K_I, RobotMap::K_D, RobotMap::K_V, RobotMap::K_A};
+	frconfig = {0, RobotMap::TICKS_PER_REV, RobotMap::WHEEL_CIRCUMFERENCE, RobotMap::K_P, RobotMap::K_I, RobotMap::K_D, RobotMap::K_V, RobotMap::K_A};
+	blconfig = {0, RobotMap::TICKS_PER_REV, RobotMap::WHEEL_CIRCUMFERENCE, RobotMap::K_P, RobotMap::K_I, RobotMap::K_D, RobotMap::K_V, RobotMap::K_A};
+	brconfig = {0, RobotMap::TICKS_PER_REV, RobotMap::WHEEL_CIRCUMFERENCE, RobotMap::K_P, RobotMap::K_I, RobotMap::K_D, RobotMap::K_V, RobotMap::K_A};
 
 	flTraj = (Segment*)malloc(length * sizeof(Segment));
 	frTraj = (Segment*)malloc(length * sizeof(Segment));
@@ -72,10 +75,10 @@ void FollowPath::Execute() {
 	double angle_difference = r2d(flFollower->heading) - currentYaw;
 	double turn = RobotMap::K_T * angle_difference;
 
-	Robot::swerveSubsystem->GetSwerveStuff()->GetModules()->at(0).Set(fl + turn, Rotation2D::fromDegrees(desired_headingfl), false);
-	Robot::swerveSubsystem->GetSwerveStuff()->GetModules()->at(1).Set(fr - turn, Rotation2D::fromDegrees(desired_headingfr), false);
-	Robot::swerveSubsystem->GetSwerveStuff()->GetModules()->at(2).Set(bl + turn, Rotation2D::fromDegrees(desired_headingbl), false);
-	Robot::swerveSubsystem->GetSwerveStuff()->GetModules()->at(3).Set(br - turn, Rotation2D::fromDegrees(desired_headingbr), false);
+	Robot::swerveSubsystem->GetSwerveStuff()->GetModules()->at(0).Set(fl, Rotation2D::fromDegrees(desired_headingfl + angleOffset), false);
+	Robot::swerveSubsystem->GetSwerveStuff()->GetModules()->at(1).Set(fr, Rotation2D::fromDegrees(desired_headingfr + angleOffset), false);
+	Robot::swerveSubsystem->GetSwerveStuff()->GetModules()->at(2).Set(bl, Rotation2D::fromDegrees(desired_headingbl + angleOffset), false);
+	Robot::swerveSubsystem->GetSwerveStuff()->GetModules()->at(3).Set(br, Rotation2D::fromDegrees(desired_headingbr + angleOffset), false);
 
 	isDone = flFollower->segment >= pathLength;
 }
