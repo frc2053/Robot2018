@@ -34,10 +34,10 @@ FollowPath::FollowPath(Segment* inputPath, int length, int offset) {
 	brTraj = NULL;
 
 
-	flconfig = {0, RobotMap::TICKS_PER_REV, RobotMap::WHEEL_CIRCUMFERENCE, RobotMap::K_P, RobotMap::K_I, RobotMap::K_D, RobotMap::K_V, RobotMap::K_A};
-	frconfig = {0, RobotMap::TICKS_PER_REV, RobotMap::WHEEL_CIRCUMFERENCE, RobotMap::K_P, RobotMap::K_I, RobotMap::K_D, RobotMap::K_V, RobotMap::K_A};
-	blconfig = {0, RobotMap::TICKS_PER_REV, RobotMap::WHEEL_CIRCUMFERENCE, RobotMap::K_P, RobotMap::K_I, RobotMap::K_D, RobotMap::K_V, RobotMap::K_A};
-	brconfig = {0, RobotMap::TICKS_PER_REV, RobotMap::WHEEL_CIRCUMFERENCE, RobotMap::K_P, RobotMap::K_I, RobotMap::K_D, RobotMap::K_V, RobotMap::K_A};
+	flconfig = {RobotMap::swerveSubsystemFLDriveTalon->GetSelectedSensorPosition(0), RobotMap::TICKS_PER_REV, RobotMap::WHEEL_CIRCUMFERENCE, RobotMap::K_P, RobotMap::K_I, RobotMap::K_D, RobotMap::K_V, RobotMap::K_A};
+	frconfig = {RobotMap::swerveSubsystemFRDriveTalon->GetSelectedSensorPosition(0), RobotMap::TICKS_PER_REV, RobotMap::WHEEL_CIRCUMFERENCE, RobotMap::K_P, RobotMap::K_I, RobotMap::K_D, RobotMap::K_V, RobotMap::K_A};
+	blconfig = {RobotMap::swerveSubsystemBLDriveTalon->GetSelectedSensorPosition(0), RobotMap::TICKS_PER_REV, RobotMap::WHEEL_CIRCUMFERENCE, RobotMap::K_P, RobotMap::K_I, RobotMap::K_D, RobotMap::K_V, RobotMap::K_A};
+	brconfig = {RobotMap::swerveSubsystemBRDriveTalon->GetSelectedSensorPosition(0), RobotMap::TICKS_PER_REV, RobotMap::WHEEL_CIRCUMFERENCE, RobotMap::K_P, RobotMap::K_I, RobotMap::K_D, RobotMap::K_V, RobotMap::K_A};
 
 	flTraj = (Segment*)malloc(length * sizeof(Segment));
 	frTraj = (Segment*)malloc(length * sizeof(Segment));
@@ -67,10 +67,10 @@ void FollowPath::Execute() {
 
 	double currentYaw = Robot::swerveSubsystem->GetAdjYaw();
 
-	double desired_headingfl = r2d(flFollower->heading);
-	double desired_headingfr = r2d(frFollower->heading);
-	double desired_headingbl = r2d(blFollower->heading);
-	double desired_headingbr = r2d(brFollower->heading);
+	//double desired_headingfl = r2d(flFollower->heading);
+	//double desired_headingfr = r2d(frFollower->heading);
+	//double desired_headingbl = r2d(blFollower->heading);
+	//double desired_headingbr = r2d(brFollower->heading);
 
 	double angle_difference = r2d(flFollower->heading) - currentYaw;
 	double turn = RobotMap::K_T * angle_difference;

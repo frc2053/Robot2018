@@ -23,8 +23,9 @@ public:
 	virtual void AutonomousPeriodic();
 	virtual void TeleopInit();
 	virtual void TeleopPeriodic();
+	virtual void TestPeriodic();
 	void LoadChosenPath(std::string switchPathName, std::string scalePathName);
-	std::string Robot::MakeDecision(char switchSide, char scaleSide, char robotSide, bool doScale);
+	std::string MakeDecision(char switchSide, char scaleSide, char robotSide, bool doScale);
 	static double MATCHTIME;
 private:
 	frc::SendableChooser<frc::Command*> autoChooser;
@@ -35,6 +36,10 @@ private:
 	bool doScale;
 	Segment trajToSwitch[1024];
 	Segment trajToScale[1024];
+	Command* cmdSwitch;
+	Command* cmdScale;
+	int lengthOfSwitchTraj;
+	int lengthOfScaleTraj;
 };
 
 #endif

@@ -82,6 +82,9 @@ void Robot::AutonomousInit() {
 
 		std::string toPath = MakeDecision(switchSide, scaleSide, leftOrRight.at(0), doScale);
 		LoadChosenPath(toPath.substr(0, 2), toPath.substr(2, 1));
+		cmdSwitch = new FollowPath(trajToSwitch, lengthOfSwitchTraj, 0);
+
+		cmdScale = new FollowPath(trajToScale, lengthOfScaleTraj, 0);
 	}
 	else {
 		std::cout << "GAME DATA NOT RECEIVED!";
@@ -122,11 +125,11 @@ void Robot::TestPeriodic() {
 
 void Robot::LoadChosenPath(std::string switchPathName, std::string scalePathName) {
 	FILE *switchFile = fopen(switchPathName.c_str(), "r");
-	int lengthSwitch = pathfinder_deserialize_csv(switchFile, trajToSwitch);
+	lengthOfSwitchTraj = pathfinder_deserialize_csv(switchFile, trajToSwitch);
 
 	if(scalePathName != "N") {
 		FILE *scaleFile = fopen(scalePathName.c_str(), "r");
-		int lengthScale = pathfinder_deserialize_csv(scaleFile, trajToScale);
+		lengthOfScaleTraj = pathfinder_deserialize_csv(scaleFile, trajToScale);
 	}
 }
 

@@ -1,6 +1,7 @@
 #include "OI.h"
 
 #include "Commands/Drive/ZeroYaw.h"
+#include "Commands/Elevator/ZeroElevator.h"
 #include "Commands/Drive/ZeroWheels.h"
 #include "Commands/Elevator/GoToElevatorPosition.h"
 #include "Commands/Climber/RunClimberMotor.h"
