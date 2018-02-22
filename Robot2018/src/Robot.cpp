@@ -19,27 +19,20 @@ std::unique_ptr<ClimberSubsystem> Robot::climberSubsystem;
 
 double Robot::MATCHTIME;
 
-Segment* Robot::pathGenerated;
-Segment* Robot::pathGenerated2;
-Command* Robot::pathFollower;
-Command* Robot::pathFollower2;
-
 void Robot::RobotInit() {
 	std::cout << "Robot is starting!" << std::endl;
-	MATCHTIME = 0;
-
 	RobotMap::init();
-	std::cout << "Before follower!" << std::endl;
-	std::cout << "After follower!" << std::endl;
+
+	MATCHTIME = 0;
+	runOnce = false;
+	leftOrRight = "L";
+	doScale = true;
+
 	swerveSubsystem.reset(new SwerveSubsystem());
 	intakeSubsystem.reset(new IntakeSubsystem());
 	elevatorSubsystem.reset(new ElevatorSubsystem());
 	climberSubsystem.reset(new ClimberSubsystem());
 	oi.reset(new OI());
-	runOnce = false;
-
-	leftOrRight = "L";
-	doScale = true;
 
 	SmartDashboard::PutString("Left or Right", leftOrRight);
 	SmartDashboard::PutBoolean("Do Scale", doScale);
@@ -49,41 +42,10 @@ void Robot::RobotInit() {
 	//if we start at an angle other than zero change this in auto
 	Robot::swerveSubsystem->SetAdjYaw(0);
 
-	//generate paths
-	Waypoint p1 = {0, 0, d2r(0)};
-	Waypoint p2 = {5, 0, d2r(0)};
-	points[0] = p1;
-	points[1] = p2;
-
-	Waypoint p3 = {0, 0, d2r(0)};
-	Waypoint p4 = {5, 0, d2r(0)};
-	points2[0] = p3;
-	points2[1] = p4;
-
-	SmartDashboard::PutData("Zero Elevator", new ZeroElevator());
-
-	pathfinder_prepare(points, POINT_LENGTH, FIT_HERMITE_CUBIC, PATHFINDER_SAMPLES_HIGH, RobotMap::TIMESTEP, RobotMap::MAX_VEL, RobotMap::MAX_ACCEL, RobotMap::MAX_JERK, &candidate);
-	int trajLength = candidate.length;
-	std::cout << "trajLength: " << trajLength << "\n";
-	pathGenerated = (Segment*)malloc(trajLength * sizeof(Segment));
-	pathfinder_generate(&candidate, pathGenerated);
-
-	pathfinder_prepare(points2, POINT_LENGTH, FIT_HERMITE_CUBIC, PATHFINDER_SAMPLES_HIGH, RobotMap::TIMESTEP, RobotMap::MAX_VEL, RobotMap::MAX_ACCEL, RobotMap::MAX_JERK, &candidate2);
-	int trajLength2 = candidate2.length;
-	std::cout << "trajLength: " << trajLength2 << "\n";
-	pathGenerated2 = (Segment*)malloc(trajLength2 * sizeof(Segment));
-	pathfinder_generate(&candidate2, pathGenerated2);
-
-	pathFollower2 = new FollowPath(pathGenerated2, trajLength2, 0);
-	pathFollower = new FollowPath(pathGenerated, trajLength, 90);
-
 	autoChooser.AddDefault("Do Nothing Auto", new DoNothingAuto());
 
 	//Make the list of auto options avaliable on the Smart Dash
 	SmartDashboard::PutData("Auto mode chooser", &autoChooser);
-
-	//Robot::swerveSubsystem->CalibrateWheels();
-
 }
 
 void Robot::DisabledInit() {
@@ -92,65 +54,52 @@ void Robot::DisabledInit() {
 
 void Robot::DisabledPeriodic() {
 	Scheduler::GetInstance()->Run();
+	leftOrRight = SmartDashboard::GetString("Left or Right", "L");
+	doScale = SmartDashboard::GetBoolean("Do Scale", true);
 	gameData = frc::DriverStation::GetInstance().GetGameSpecificMessage();
 }
 
 void Robot::AutonomousInit() {
+	std::cout << "Autonomous Init!" << std::endl;
+	//get data to choose correct auto modes
 	gameData = frc::DriverStation::GetInstance().GetGameSpecificMessage();
-	Robot::swerveSubsystem->CalibrateWheelsSimple();
 	leftOrRight = SmartDashboard::GetString("Left or Right", "L");
 	doScale = SmartDashboard::GetBoolean("Do Scale", true);
-	std::cout << "Autonomous Init!" << std::endl;
+
+	//cal wheels
+	Robot::swerveSubsystem->CalibrateWheelsSimple();
 	//we need to make sure we are elevator mode
 	Robot::elevatorSubsystem->SwitchToElevatorMotor();
 
-	/*if(gameData.size() == 3) {
+	if(gameData.size() == 3) {
 		std::cout << "got game data!" << std::endl;
-		std::cout << "gameData 0: " << gameData.at(0) << std::endl;
-		std::cout << "gameData 1: " << gameData.at(1) << std::endl;
-		std::cout << "gameData 2: " << gameData.at(2) << std::endl;
+		char switchSide = gameData.at(0);
+		char scaleSide = gameData.at(1);
+		char oppSwitchSide = gameData.at(2);
+		std::cout << "SWITCH SIDE: " << switchSide << std::endl;
+		std::cout << "SCALE SIDE: " << scaleSide << std::endl;
+		std::cout << "OPPONENT SWITCH SIDE: " << oppSwitchSide << std::endl;
 
-		Command* autoCmd = new EverythingAuto(gameData.at(0), gameData.at(1), leftOrRight.at(0), doScale);
-		autoCmd->Start();
+		std::string toPath = MakeDecision(switchSide, scaleSide, leftOrRight.at(0), doScale);
+		LoadChosenPath(toPath.substr(0, 2), toPath.substr(2, 1));
 	}
 	else {
 		std::cout << "GAME DATA NOT RECEIVED!";
 		Command* fallback = new GoDistance(0, 1);
 		fallback->Start();
-	}*/
-	//align the wheels straight
-	//Robot::swerveSubsystem->CalibrateWheels();
-	std::cout << "BACK IN AUTO INIT" << std::endl;
-	//get the auto mode we want to run from the smart dashboard
-	selectedMode.reset(autoChooser.GetSelected());
-	if(selectedMode != nullptr) {
-		//selectedMode->Start();
 	}
 
-	std::cout << "STARTING PATHFOLLOWER" << std::endl;
+	//get the auto mode we want to run from the smart dashboard
+    //selectedMode.reset(autoChooser.GetSelected());
 
-	pathFollower->Start();
-
-	std::cout << "ENDING PATHFOLLOWER" << std::endl;
-
+	//if(selectedMode != nullptr) {
+	//	selectedMode->Start();
+	//}
 }
 
 void Robot::AutonomousPeriodic() {
-
-	//std::cout << "MADE IT TO AUTO PERIODIC" << std::endl;
-
 	Scheduler::GetInstance()->Run();
-	bool isFinished = false;
-	if(pathFollower->IsCompleted()) {
-		pathFollower2->Start();
-	}
-	if(!runOnce) {
-	}
-	if(isFinished && !runOnce) {
-		std::cout << "Finished first traj! Rotating" << "\n";
-		//Scheduler::GetInstance()->AddCommand(new DriveCommandAuto(0, 0, 0, 1, -90));
-		runOnce = true;
-	}
+	MATCHTIME = DriverStation::GetInstance().GetMatchTime();
 }
 
 void Robot::TeleopInit() {
@@ -158,11 +107,8 @@ void Robot::TeleopInit() {
 	if(selectedMode != nullptr) {
 		selectedMode->Cancel();
 	}
-	//Robot::swerveSubsystem->CalibrateWheelsSimple();
-	//std::this_thread::sleep_for(std::chrono::seconds(5));
-	Robot::swerveSubsystem->SetDefaultCommand(new DriveCommand());
 
-	RobotMap::elevatorClimberSubsystemShifterSolenoid->Set(frc::DoubleSolenoid::Value::kForward);
+	Robot::swerveSubsystem->SetDefaultCommand(new DriveCommand());
 }
 
 void Robot::TeleopPeriodic() {
@@ -172,6 +118,87 @@ void Robot::TeleopPeriodic() {
 
 void Robot::TestPeriodic() {
 
+}
+
+void Robot::LoadChosenPath(std::string switchPathName, std::string scalePathName) {
+	FILE *switchFile = fopen(switchPathName.c_str(), "r");
+	int lengthSwitch = pathfinder_deserialize_csv(switchFile, trajToSwitch);
+
+	if(scalePathName != "N") {
+		FILE *scaleFile = fopen(scalePathName.c_str(), "r");
+		int lengthScale = pathfinder_deserialize_csv(scaleFile, trajToScale);
+	}
+}
+
+std::string Robot::MakeDecision(char switchSide, char scaleSide, char robotSide, bool doScale) {
+	std::string retVal = "";
+	if(robotSide == 'L') {
+		retVal = retVal + "L";
+		if(switchSide == 'L') {
+			retVal = retVal + "L";
+			if(doScale) {
+				if(scaleSide == 'L') {
+					retVal = retVal + "L";
+					return retVal;
+				}
+				if(scaleSide == 'R') {
+					retVal = retVal + "R";
+					return retVal;
+				}
+			}
+			retVal = retVal + "N";
+			return retVal;
+		}
+		if(switchSide == 'R') {
+			retVal = retVal + "R";
+			if(doScale) {
+				if(scaleSide == 'L') {
+					retVal = retVal + "L";
+					return retVal;
+				}
+				if(scaleSide == 'R') {
+					retVal = retVal + "R";
+					return retVal;
+				}
+			}
+			retVal = retVal + "N";
+			return retVal;
+		}
+	}
+	if(robotSide == 'R') {
+		retVal = retVal + "R";
+		if(switchSide == 'L') {
+			retVal = retVal + "L";
+			if(doScale) {
+				if(scaleSide == 'L') {
+					retVal = retVal + "L";
+					return retVal;
+				}
+				if(scaleSide == 'R') {
+					retVal = retVal + "R";
+					return retVal;
+				}
+			}
+			retVal = retVal + "N";
+			return retVal;
+		}
+		if(switchSide == 'R') {
+			retVal = retVal + "R";
+			if(doScale) {
+				if(scaleSide == 'L') {
+					retVal = retVal + "L";
+					return retVal;
+				}
+				if(scaleSide == 'R') {
+					retVal = retVal + "R";
+					return retVal;
+				}
+			}
+			retVal = retVal + "N";
+			return retVal;
+		}
+	}
+	return "NNN";
 }
 
 START_ROBOT_CLASS(Robot);

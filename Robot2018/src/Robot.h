@@ -23,26 +23,18 @@ public:
 	virtual void AutonomousPeriodic();
 	virtual void TeleopInit();
 	virtual void TeleopPeriodic();
-	virtual void TestPeriodic();
-
+	void LoadChosenPath(std::string switchPathName, std::string scalePathName);
+	std::string Robot::MakeDecision(char switchSide, char scaleSide, char robotSide, bool doScale);
 	static double MATCHTIME;
-
 private:
 	frc::SendableChooser<frc::Command*> autoChooser;
 	std::unique_ptr<frc::Command> selectedMode;
 	std::string gameData;
 	bool runOnce;
-	static const int POINT_LENGTH = 2;
-	TrajectoryCandidate candidate;
-	TrajectoryCandidate candidate2;
-	Waypoint points[POINT_LENGTH];
-	Waypoint points2[POINT_LENGTH];
-	static Segment* pathGenerated;
-	static Command* pathFollower;
-	static Segment* pathGenerated2;
-	static Command* pathFollower2;
 	std::string leftOrRight;
 	bool doScale;
+	Segment trajToSwitch[1024];
+	Segment trajToScale[1024];
 };
 
 #endif

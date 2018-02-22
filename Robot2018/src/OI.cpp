@@ -16,6 +16,7 @@ OI::OI() {
 	operatorJoystick.reset(new TigerJoystick(1));
 
 	SmartDashboard::PutData("Zero Yaw", new ZeroYaw());
+	SmartDashboard::PutData("Zero Elevator", new ZeroElevator());
 
 
 	/*operatorJoystick->aButton->WhenPressed(new GoToElevatorPosition(RobotMap::GROUND_POS_FT));
