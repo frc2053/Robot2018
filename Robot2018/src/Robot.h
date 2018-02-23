@@ -38,8 +38,9 @@ private:
 	Segment trajToScale[1024];
 	Command* cmdSwitch;
 	Command* cmdScale;
-	int lengthOfSwitchTraj;
-	int lengthOfScaleTraj;
+	int lengthOfSwitchTraj = 0;
+	int lengthOfScaleTraj = 0;
+	frc::Timer gameDataTimer;
 };
 
 #endif

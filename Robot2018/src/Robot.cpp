@@ -8,6 +8,9 @@
 #include "Commands/Autonomous/FollowPath.h"
 #include "Commands/Elevator/ZeroElevator.h"
 #include "Commands/Autonomous/GoDistance.h"
+#include "Commands/Elevator/GoToElevatorPosition.h"
+#include "Commands/Groups/GrabSecondCube.h"
+#include "Commands/Intake/IntakeUntilCurrentSpike.h"
 
 
 
@@ -46,6 +49,9 @@ void Robot::RobotInit() {
 
 	//Make the list of auto options avaliable on the Smart Dash
 	SmartDashboard::PutData("Auto mode chooser", &autoChooser);
+
+	//timer to check for gameData
+	gameDataTimer.Reset();
 }
 
 void Robot::DisabledInit() {
@@ -61,8 +67,18 @@ void Robot::DisabledPeriodic() {
 
 void Robot::AutonomousInit() {
 	std::cout << "Autonomous Init!" << std::endl;
+	//gameData start timer
+	gameDataTimer.Reset();
+	gameDataTimer.Start();
+
+	//move to switch height
+	Command* toSwitchHeight = new GoToElevatorPosition(RobotMap::SWITCH_POS_FT, false);
+	toSwitchHeight->Start();
+
 	//get data to choose correct auto modes
-	gameData = frc::DriverStation::GetInstance().GetGameSpecificMessage();
+	while(gameData.size() < 3 && gameDataTimer.Get() <= 1) {
+		gameData = frc::DriverStation::GetInstance().GetGameSpecificMessage();
+	}
 	leftOrRight = SmartDashboard::GetString("Left or Right", "L");
 	doScale = SmartDashboard::GetBoolean("Do Scale", true);
 
@@ -83,34 +99,52 @@ void Robot::AutonomousInit() {
 		std::string toPath = MakeDecision(switchSide, scaleSide, leftOrRight.at(0), doScale);
 		LoadChosenPath(toPath.substr(0, 2), toPath.substr(2, 1));
 		cmdSwitch = new FollowPath(trajToSwitch, lengthOfSwitchTraj, 0);
-
 		cmdScale = new FollowPath(trajToScale, lengthOfScaleTraj, 0);
+
+		cmdSwitch->Start();
 	}
 	else {
 		std::cout << "GAME DATA NOT RECEIVED!";
 		Command* fallback = new GoDistance(0, 1);
 		fallback->Start();
 	}
-
-	//get the auto mode we want to run from the smart dashboard
-    //selectedMode.reset(autoChooser.GetSelected());
-
-	//if(selectedMode != nullptr) {
-	//	selectedMode->Start();
-	//}
 }
 
 void Robot::AutonomousPeriodic() {
 	Scheduler::GetInstance()->Run();
 	MATCHTIME = DriverStation::GetInstance().GetMatchTime();
+
+	if(cmdSwitch->IsCompleted()) {
+
+		CommandGroup* grabSecondCube = new GrabSecondCube();
+		grabSecondCube->Start();
+
+		if(lengthOfScaleTraj != 0) {
+			if(!runOnce) {
+				cmdScale->Start();
+				Command* toScaleHeight = new GoToElevatorPosition(RobotMap::SCALE_POS_FT, false);
+				toScaleHeight->Start();
+				runOnce = true;
+			}
+		}
+	}
+
+	if(cmdScale != nullptr) {
+		if(cmdScale->IsCompleted()) {
+			Command* poopCubeScale = new IntakeUntilCurrentSpike(.5, -1, false);
+			poopCubeScale->Start();
+		}
+	}
 }
 
 void Robot::TeleopInit() {
 	std::cout << "Teleop Init!" << std::endl;
-	if(selectedMode != nullptr) {
-		selectedMode->Cancel();
+	if(cmdSwitch != nullptr) {
+		cmdSwitch->Cancel();
 	}
-
+	if(cmdScale != nullptr) {
+		cmdScale->Cancel();
+	}
 	Robot::swerveSubsystem->SetDefaultCommand(new DriveCommand());
 }
 
