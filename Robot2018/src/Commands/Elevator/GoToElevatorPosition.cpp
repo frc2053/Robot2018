@@ -21,7 +21,6 @@ void GoToElevatorPosition::Initialize() {
 void GoToElevatorPosition::Execute() {
 	Robot::elevatorSubsystem->GoToHeight(heightTarget);
 	//Robot::elevatorSubsystem->RunElevatorMotor(heightTarget);
-	int delta = abs(RobotMap::elevatorClimberSubsystemPrimaryTalon->GetSelectedSensorPosition(0) - RobotMap::elevatorClimberSubsystemPrimaryTalon->GetClosedLoopTarget(0));
 	if(RobotMap::elevatorClimberSubsystemPrimaryTalon->GetClosedLoopError(0) < 30) {
 		isDone = true;
 	}

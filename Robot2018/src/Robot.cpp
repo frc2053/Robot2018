@@ -10,6 +10,7 @@
 #include "Commands/Autonomous/GoDistance.h"
 #include "Commands/Elevator/GoToElevatorPosition.h"
 #include "Commands/Groups/GrabSecondCube.h"
+#include "Commands/Elevator/ElevatorControl.h"
 #include "Commands/Intake/IntakeUntilCurrentSpike.h"
 
 
@@ -146,6 +147,7 @@ void Robot::TeleopInit() {
 		cmdScale->Cancel();
 	}
 	Robot::swerveSubsystem->SetDefaultCommand(new DriveCommand());
+	Robot::elevatorSubsystem->SetDefaultCommand(new ElevatorControl());
 }
 
 void Robot::TeleopPeriodic() {
