@@ -58,7 +58,7 @@ OI::OI() {
 	//INTAKE/OUTTAKE
 
 	//CLIMBING
-	operatorJoystick->GetRightTrigger()->WhenActive(new GoToElevatorPosition(7, false)); //Go to Climb Position
+	//operatorJoystick->GetRightTrigger()->WhenActive(new GoToElevatorPosition(7, false)); //Go to Climb Position
 	//operatorJoystick->selectButton->WhenPressed(new DeployWings());
 	//operatorJoystick->startButton->WhenPressed(new GoToElevatorPosition(6, true));
 
@@ -79,9 +79,6 @@ OI::OI() {
 	//no way to check if box has completely left the intake
 	//operatorJoystick->GetRightTrigger()->WhileActive(new IntakeUntilCurrentSpike(-1, 0, false));
 	//operatorJoystick->GetRightTrigger()->WhenInactive(new IntakeUntilCurrentSpike(0, 0, false));
-
-	//This is a test to try and cal the wheels on demand
-	operatorJoystick->GetLeftTrigger()->WhenActive(new ZeroWheels()); //Go to Climb Position
 
 }
 
