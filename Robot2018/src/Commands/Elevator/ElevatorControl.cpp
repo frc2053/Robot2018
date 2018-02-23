@@ -10,7 +10,6 @@
 
 ElevatorControl::ElevatorControl() {
 	Requires(Robot::elevatorSubsystem.get());
-	setpoint = RobotMap::elevatorClimberSubsystemPrimaryTalon->GetSelectedSensorPosition(0);
 }
 
 // Called just before this Command runs the first time
@@ -20,15 +19,7 @@ void ElevatorControl::Initialize() {
 
 // Called repeatedly when this Command is scheduled to run
 void ElevatorControl::Execute() {
-	double joystickVal = Robot::oi->GetOperatorJoystick()->GetLeftYAxis();
-	if(joystickVal > 0) {
-		setpoint = setpoint + 10;
-	}
-
-	if(joystickVal < 0) {
-		setpoint = setpoint - 10;
-	}
-	RobotMap::elevatorClimberSubsystemPrimaryTalon->Set(ControlMode::Position, setpoint);
+	RobotMap::elevatorClimberSubsystemPrimaryTalon->Set(ControlMode::PercentOutput, Robot::oi->GetOperatorJoystick()->GetLeftYAxis());
 }
 
 // Make this return true when this Command no longer needs to run execute()
