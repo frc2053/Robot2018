@@ -9,6 +9,7 @@
 #include "Commands/Climber/DeployWings.h"
 #include "Commands/Groups/SwitchToClimb.h"
 #include "Commands/Climber/ChangeGearbox.h"
+#include "Commands/Elevator/ElevatorControl.h"
 
 
 OI::OI() {
@@ -45,8 +46,6 @@ OI::OI() {
 	//operatorJoystick->xButton->WhenPressed(new GoToElevatorPosition(-1, false));
 	//operatorJoystick->aButton->WhenReleased(new GoToElevatorPosition(0, false));
 
-
-
 	//ELEVATOR POSITIONS
 
 	//INTAKE/OUTTAKE
@@ -62,9 +61,9 @@ OI::OI() {
 	//operatorJoystick->selectButton->WhenPressed(new DeployWings());
 	//operatorJoystick->startButton->WhenPressed(new GoToElevatorPosition(6, true));
 
-	//operatorJoystick->startButton->WhenPressed(new ChangeGearbox(true));
+	operatorJoystick->startButton->WhenPressed(new ChangeGearbox(true));
 
-	//operatorJoystick->startButton->WhenReleased(new ChangeGearbox(false));
+	operatorJoystick->startButton->WhenReleased(new ChangeGearbox(false));
 
 	//CLIMBLING
 	//operatorJoystick->startButton->WhenPressed(new SwitchToClimb());
@@ -77,8 +76,12 @@ OI::OI() {
 	//this is to shoot out the box
 	//we want this to be manual because the driver needs to make sure we push it out all the way
 	//no way to check if box has completely left the intake
-	//operatorJoystick->GetRightTrigger()->WhileActive(new IntakeUntilCurrentSpike(-1, 0, false));
-	//operatorJoystick->GetRightTrigger()->WhenInactive(new IntakeUntilCurrentSpike(0, 0, false));
+	operatorJoystick->GetRightTrigger()->WhileActive(new ElevatorControl());
+	operatorJoystick->GetRightTrigger()->WhenInactive(new ElevatorControl());
+
+	operatorJoystick->selectButton->WhenPressed(new ZeroWheels());
+
+
 
 }
 
