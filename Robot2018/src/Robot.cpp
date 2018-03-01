@@ -117,6 +117,9 @@ void Robot::AutonomousPeriodic() {
 
 	if(cmdSwitch->IsCompleted()) {
 
+		Command* poopCube = new IntakeUntilCurrentSpike(.5, -1, false);
+		poopCube->Start();
+
 		CommandGroup* grabSecondCube = new GrabSecondCube();
 		grabSecondCube->Start();
 
@@ -164,10 +167,12 @@ void Robot::TestPeriodic() {
 void Robot::LoadChosenPath(std::string switchPathName, std::string scalePathName) {
 	FILE *switchFile = fopen(switchPathName.c_str(), "r");
 	lengthOfSwitchTraj = pathfinder_deserialize_csv(switchFile, trajToSwitch);
+	fclose(switchFile);
 
 	if(scalePathName != "N") {
 		FILE *scaleFile = fopen(scalePathName.c_str(), "r");
 		lengthOfScaleTraj = pathfinder_deserialize_csv(scaleFile, trajToScale);
+		fclose(scaleFile);
 	}
 }
 
