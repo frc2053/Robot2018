@@ -21,6 +21,8 @@ std::shared_ptr<can::TalonSRX> RobotMap::swerveSubsystemBRRotTalon;
 std::shared_ptr<frc::DoubleSolenoid> RobotMap::climberSubsystemLatchSolenoid;
 std::shared_ptr<frc::DoubleSolenoid> RobotMap::climberSubsystemWingSolenoid;
 std::shared_ptr<frc::DoubleSolenoid> RobotMap::elevatorClimberSubsystemShifterSolenoid;
+std::shared_ptr<frc::Servo> RobotMap::climberSubsystemStopperServo;
+
 
 std::shared_ptr<AHRS> RobotMap::robotIMU;
 std::shared_ptr<frc::PowerDistributionPanel> RobotMap::powerDistributionPanel;
@@ -136,6 +138,10 @@ void RobotMap::init() {
 
 	elevatorClimberSubsystemFollower02Talon->Set(ControlMode::Follower, 13);
 	elevatorClimberSubsystemFollower02Talon->SetInverted(true);
+
+
+	climberSubsystemStopperServo.reset(new frc::Servo(9));
+
 
 	//makes the drive talons drive the right way
 	swerveSubsystemFLDriveTalon->SetInverted(false);

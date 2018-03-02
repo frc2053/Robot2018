@@ -38,6 +38,7 @@ public:
 	static std::shared_ptr<frc::DoubleSolenoid> climberSubsystemWingSolenoid;
 	static std::shared_ptr<frc::DoubleSolenoid> climberSubsystemLatchSolenoid;
 	static std::shared_ptr<frc::DoubleSolenoid> elevatorClimberSubsystemShifterSolenoid;
+	static std::shared_ptr<frc::Servo> climberSubsystemStopperServo;
 
 	static std::shared_ptr<AHRS> robotIMU;
 	static std::shared_ptr<TigerDrive> tigerDrive;

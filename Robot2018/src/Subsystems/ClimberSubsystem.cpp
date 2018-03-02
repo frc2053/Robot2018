@@ -9,6 +9,7 @@ ClimberSubsystem::ClimberSubsystem() : Subsystem("ClimberSubsystem") {
 	followerMotor02 = RobotMap::elevatorClimberSubsystemFollower02Talon;
 	latchSolenoid = RobotMap::climberSubsystemLatchSolenoid;
 	wingSolenoid = RobotMap::climberSubsystemWingSolenoid;
+	stopperServo = RobotMap::climberSubsystemStopperServo;
 }
 
 void ClimberSubsystem::InitDefaultCommand() {
@@ -35,3 +36,8 @@ void ClimberSubsystem::UnhookLatch() {
 	latchSolenoid->Set(frc::DoubleSolenoid::Value::kReverse);
 }
 
+void ClimberSubsystem::SetStopperServo(double power)
+{
+	//stopperServo->SetAngle(power);
+	stopperServo->Set(power);
+}

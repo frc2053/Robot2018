@@ -10,7 +10,7 @@
 #include "Commands/Groups/SwitchToClimb.h"
 #include "Commands/Climber/ChangeGearbox.h"
 #include "Commands/Elevator/ElevatorControl.h"
-
+#include "Commands/Elevator/BrakeElevator.h"
 
 OI::OI() {
 
@@ -61,9 +61,15 @@ OI::OI() {
 	//operatorJoystick->selectButton->WhenPressed(new DeployWings());
 	//operatorJoystick->startButton->WhenPressed(new GoToElevatorPosition(6, true));
 
-	operatorJoystick->startButton->WhenPressed(new ChangeGearbox(true));
+	operatorJoystick->startButton->WhenPressed(new BrakeElevator(.01));
+	operatorJoystick->startButton->WhenReleased(new BrakeElevator(.99));
 
-	operatorJoystick->startButton->WhenReleased(new ChangeGearbox(false));
+	operatorJoystick->selectButton->WhenPressed(new BrakeElevator(-1));
+	operatorJoystick->selectButton->WhenReleased(new BrakeElevator(0));
+
+
+
+	//operatorJoystick->startButton->WhenReleased(new ChangeGearbox(false));
 
 	//CLIMBLING
 	//operatorJoystick->startButton->WhenPressed(new SwitchToClimb());
@@ -79,7 +85,7 @@ OI::OI() {
 	operatorJoystick->GetRightTrigger()->WhileActive(new ElevatorControl());
 	operatorJoystick->GetRightTrigger()->WhenInactive(new ElevatorControl());
 
-	operatorJoystick->selectButton->WhenPressed(new ZeroWheels());
+	//operatorJoystick->selectButton->WhenPressed(new ZeroWheels());
 
 
 

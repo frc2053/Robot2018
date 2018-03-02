@@ -12,6 +12,7 @@ private:
 	std::shared_ptr<can::TalonSRX> followerMotor02;
 	std::shared_ptr<frc::DoubleSolenoid> latchSolenoid;
 	std::shared_ptr<frc::DoubleSolenoid> wingSolenoid;
+	std::shared_ptr<frc::Servo> stopperServo;
 public:
 	ClimberSubsystem();
 	void InitDefaultCommand();
@@ -20,6 +21,7 @@ public:
 	void UnhookLatch();
 	void HookLatch();
 	void SetPrimaryMotor(double power);
+	void SetStopperServo(double power);
 };
 
 #endif
