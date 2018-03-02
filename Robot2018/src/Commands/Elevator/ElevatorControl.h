@@ -18,6 +18,5 @@ public:
 	void End() override;
 	void Interrupted() override;
 private:
-	int setpoint;
 };
 
