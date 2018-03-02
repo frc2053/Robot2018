@@ -98,7 +98,7 @@ void Robot::AutonomousInit() {
 		std::cout << "OPPONENT SWITCH SIDE: " << oppSwitchSide << std::endl;
 
 		std::string toPath = MakeDecision(switchSide, scaleSide, leftOrRight.at(0), doScale);
-		LoadChosenPath(toPath.substr(0, 2), toPath.substr(2, 1));
+		LoadChosenPath(toPath.substr(0, 2), toPath.substr(1, 1));
 		cmdSwitch = new FollowPath(trajToSwitch, lengthOfSwitchTraj, 0);
 		cmdScale = new FollowPath(trajToScale, lengthOfScaleTraj, 0);
 
@@ -165,11 +165,16 @@ void Robot::TestPeriodic() {
 }
 
 void Robot::LoadChosenPath(std::string switchPathName, std::string scalePathName) {
+	std::string path = "/home/lvuser/";
+	std::string csvEx = ".csv";
+	switchPathName = path + switchPathName + csvEx;
 	FILE *switchFile = fopen(switchPathName.c_str(), "r");
 	lengthOfSwitchTraj = pathfinder_deserialize_csv(switchFile, trajToSwitch);
 	fclose(switchFile);
 
 	if(scalePathName != "N") {
+		scalePathName = scalePathName + "S";
+		scalePathName = path + scalePathName + csvEx;
 		FILE *scaleFile = fopen(scalePathName.c_str(), "r");
 		lengthOfScaleTraj = pathfinder_deserialize_csv(scaleFile, trajToScale);
 		fclose(scaleFile);

@@ -33,10 +33,10 @@ OI::OI() {
 	operatorJoystick->selectButton->WhenReleased(new RunClimberMotor(0, 0));*/
 
 	//ELEVATOR POSITIONS
-		operatorJoystick->yButton->WhenPressed(new GoToElevatorPosition(RobotMap::SCALE_POS_FT, false));
-		operatorJoystick->aButton->WhenPressed(new GoToElevatorPosition(0, false));
-		operatorJoystick->xButton->WhenPressed(new GoToElevatorPosition(RobotMap::SWITCH_POS_FT, false));
-		operatorJoystick->bButton->WhenPressed(new GoToElevatorPosition(-5.5, false)); //Go to neutral position for Scale
+	operatorJoystick->yButton->WhenPressed(new GoToElevatorPosition(RobotMap::SCALE_POS_FT, false));
+	operatorJoystick->aButton->WhenPressed(new GoToElevatorPosition(0, false));
+	operatorJoystick->xButton->WhenPressed(new GoToElevatorPosition(RobotMap::SWITCH_POS_FT, false));
+	operatorJoystick->bButton->WhenPressed(new GoToElevatorPosition(-5.5, false)); //Go to neutral position for Scale
 	//operatorJoystick->yButton->WhenPressed(new RunClimberMotor(0, -1));
 	//operatorJoystick->yButton->WhenReleased(new RunClimberMotor(0, 0));
 
@@ -63,12 +63,12 @@ OI::OI() {
 	//operatorJoystick->startButton->WhenPressed(new GoToElevatorPosition(6, true));
 
 	operatorJoystick->startButton->WhenPressed(new BrakeElevator(.01));
-	operatorJoystick->startButton->WhenReleased(new BrakeElevator(.99));
+	//operatorJoystick->startButton->WhenReleased(new BrakeElevator(.99));
 
-	operatorJoystick->selectButton->WhenPressed(new BrakeElevator(-1));
-	operatorJoystick->selectButton->WhenReleased(new BrakeElevator(0));
+	//operatorJoystick->selectButton->WhenPressed(new BrakeElevator(-1));
+	//operatorJoystick->selectButton->WhenReleased(new BrakeElevator(0));
 
-
+	//oof
 	operatorJoystick->leftStickButton->WhenPressed(new ClimbRoutine());
 
 
@@ -85,8 +85,8 @@ OI::OI() {
 	//this is to shoot out the box
 	//we want this to be manual because the driver needs to make sure we push it out all the way
 	//no way to check if box has completely left the intake
-	operatorJoystick->GetRightTrigger()->WhileActive(new ElevatorControl());
-	operatorJoystick->GetRightTrigger()->WhenInactive(new ElevatorControl());
+	//operatorJoystick->GetRightTrigger()->WhileActive(new ElevatorControl());
+	//operatorJoystick->GetRightTrigger()->WhenInactive(new ElevatorControl());
 
 	//operatorJoystick->selectButton->WhenPressed(new ZeroWheels());
 

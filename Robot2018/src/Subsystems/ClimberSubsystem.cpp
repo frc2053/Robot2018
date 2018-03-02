@@ -38,6 +38,5 @@ void ClimberSubsystem::UnhookLatch() {
 
 void ClimberSubsystem::SetStopperServo(double power)
 {
-	//stopperServo->SetAngle(power);
 	stopperServo->Set(power);
 }
