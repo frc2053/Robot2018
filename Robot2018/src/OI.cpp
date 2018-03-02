@@ -11,6 +11,7 @@
 #include "Commands/Climber/ChangeGearbox.h"
 #include "Commands/Elevator/ElevatorControl.h"
 #include "Commands/Elevator/BrakeElevator.h"
+#include "Commands/Groups/ClimbRoutine.h"
 
 OI::OI() {
 
@@ -67,6 +68,8 @@ OI::OI() {
 	operatorJoystick->selectButton->WhenPressed(new BrakeElevator(-1));
 	operatorJoystick->selectButton->WhenReleased(new BrakeElevator(0));
 
+
+	operatorJoystick->leftStickButton->WhenPressed(new ClimbRoutine());
 
 
 	//operatorJoystick->startButton->WhenReleased(new ChangeGearbox(false));

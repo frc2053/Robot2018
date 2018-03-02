@@ -17,10 +17,10 @@ void DeployWings::Initialize() {
 void DeployWings::Execute() {
 if(Robot::MATCHTIME <= 35)
 {
-	if(currentDirection == 1) {
+	if(currentDirection) {
 		Robot::climberSubsystem->ReleaseWings();
 	}
-	if(currentDirection == 0) {
+	if(currentDirection == false) {
 		Robot::climberSubsystem->RetractWings();
 	}
 	isDone = true;
