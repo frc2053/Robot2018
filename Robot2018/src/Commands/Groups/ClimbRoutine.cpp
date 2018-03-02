@@ -5,5 +5,5 @@
 
 ClimbRoutine::ClimbRoutine() {
 	AddSequential(new ChangeGearbox(true));
-	AddSequential(new DeployWings(true));
+	//AddSequential(new DeployWings(true));
 }

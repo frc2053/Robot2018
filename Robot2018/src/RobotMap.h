@@ -10,8 +10,6 @@
 #include "LiveWindow/LiveWindow.h"
 #include "pathfinder.h"
 
-
-
 using namespace ctre::phoenix::motorcontrol;
 
 class RobotMap {

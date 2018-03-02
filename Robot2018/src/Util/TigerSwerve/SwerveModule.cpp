@@ -47,7 +47,7 @@ void SwerveModule::SetAngle(Rotation2D angle, bool doOptimization) {
 	}
 
 	int setpoint = _angleEncoder->ConvertAngleToSetpoint(angle);
-	std::cout << "setpoint: " << setpoint << std::endl;
+	//std::cout << "setpoint: " << setpoint << std::endl;
 	_rotateController->Set(ControlMode::Position, setpoint);
 
 	//std::cout << "Final Calculated Set Point: " << setpoint << std::endl;

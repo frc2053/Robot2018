@@ -88,7 +88,7 @@ OI::OI() {
 	//operatorJoystick->GetRightTrigger()->WhileActive(new ElevatorControl());
 	//operatorJoystick->GetRightTrigger()->WhenInactive(new ElevatorControl());
 
-	//operatorJoystick->selectButton->WhenPressed(new ZeroWheels());
+	driverJoystick->selectButton->WhenPressed(new ZeroWheels());
 
 
 

@@ -92,15 +92,15 @@ void FollowPath::End() {
 	Robot::swerveSubsystem->GetSwerveStuff()->GetModules()->at(1).Set(0, Rotation2D::fromDegrees(0), true);
 	Robot::swerveSubsystem->GetSwerveStuff()->GetModules()->at(2).Set(0, Rotation2D::fromDegrees(0), true);
 	Robot::swerveSubsystem->GetSwerveStuff()->GetModules()->at(3).Set(0, Rotation2D::fromDegrees(0), true);
-	free(flFollower);
-	free(frFollower);
-	free(blFollower);
-	free(brFollower);
-	free(flTraj);
-	free(frTraj);
-	free(blTraj);
-	free(brTraj);
-	free(pathToFollow);
+	//free(flFollower);
+	//free(frFollower);
+	//free(blFollower);
+	//free(brFollower);
+	//free(flTraj);
+	//free(frTraj);
+	//free(blTraj);
+	//free(brTraj);
+	//free(pathToFollow);
 }
 
 void FollowPath::Interrupted() {

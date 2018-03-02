@@ -34,12 +34,16 @@ private:
 	bool runOnce;
 	std::string leftOrRight;
 	bool doScale;
+
 	Segment trajToSwitch[1024];
 	Segment trajToScale[1024];
+	Segment trajStraight[1024];
 	Command* cmdSwitch;
 	Command* cmdScale;
+	Command* cmdStraight;
 	int lengthOfSwitchTraj = 0;
 	int lengthOfScaleTraj = 0;
+	int lengthOfStraightPath = 0;
 	frc::Timer gameDataTimer;
 };
 

@@ -19,7 +19,9 @@ void ElevatorControl::Initialize() {
 
 // Called repeatedly when this Command is scheduled to run
 void ElevatorControl::Execute() {
-	RobotMap::elevatorClimberSubsystemPrimaryTalon->Set(ControlMode::PercentOutput, Robot::oi->GetOperatorJoystick()->GetLeftYAxis());
+	if(!(Robot::oi->GetOperatorJoystick()->GetLeftYAxis() == 0)) {
+		RobotMap::elevatorClimberSubsystemPrimaryTalon->Set(ControlMode::PercentOutput, Robot::oi->GetOperatorJoystick()->GetLeftYAxis());
+	}
 }
 
 // Make this return true when this Command no longer needs to run execute()

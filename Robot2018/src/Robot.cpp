@@ -14,7 +14,6 @@
 #include "Commands/Intake/IntakeUntilCurrentSpike.h"
 
 
-
 std::unique_ptr<OI> Robot::oi;
 std::unique_ptr<SwerveSubsystem> Robot::swerveSubsystem;
 std::unique_ptr<IntakeSubsystem> Robot::intakeSubsystem;
@@ -88,8 +87,14 @@ void Robot::AutonomousInit() {
 	//we need to make sure we are elevator mode
 	Robot::elevatorSubsystem->SwitchToElevatorMotor();
 
+	std::cout << "GAME DATA NOT RECEIVED!";
+	LoadChosenPath("LL", "LL");
+	cmdStraight = new FollowPath(trajStraight, lengthOfStraightPath, 0);
+	std::cout << "length of straigh path: " << lengthOfStraightPath << "\n";
+	cmdStraight->Start();
+
 	if(gameData.size() == 3) {
-		std::cout << "got game data!" << std::endl;
+		/*std::cout << "got game data!" << std::endl;
 		char switchSide = gameData.at(0);
 		char scaleSide = gameData.at(1);
 		char oppSwitchSide = gameData.at(2);
@@ -97,17 +102,20 @@ void Robot::AutonomousInit() {
 		std::cout << "SCALE SIDE: " << scaleSide << std::endl;
 		std::cout << "OPPONENT SWITCH SIDE: " << oppSwitchSide << std::endl;
 
-		std::string toPath = MakeDecision(switchSide, scaleSide, leftOrRight.at(0), doScale);
-		LoadChosenPath(toPath.substr(0, 2), toPath.substr(1, 1));
+		//std::string toPath = MakeDecision(switchSide, scaleSide, leftOrRight.at(0), doScale);
+		//std::cout << "toPath: " << toPath;
+		//std::cout << "switchPath: " << toPath.substr(0,2) << std::endl;
+		//std::cout << "scalePath: " << toPath;
+		std::string LL = "LL";
+		LoadChosenPath(LL, LL);
+
 		cmdSwitch = new FollowPath(trajToSwitch, lengthOfSwitchTraj, 0);
 		cmdScale = new FollowPath(trajToScale, lengthOfScaleTraj, 0);
 
-		cmdSwitch->Start();
+		cmdSwitch->Start();*/
 	}
 	else {
-		std::cout << "GAME DATA NOT RECEIVED!";
-		Command* fallback = new GoDistance(0, 1);
-		fallback->Start();
+
 	}
 }
 
@@ -115,20 +123,21 @@ void Robot::AutonomousPeriodic() {
 	Scheduler::GetInstance()->Run();
 	MATCHTIME = DriverStation::GetInstance().GetMatchTime();
 
-	if(cmdSwitch->IsCompleted()) {
+	if(cmdSwitch != nullptr) {
+		if(cmdSwitch->IsCompleted()) {
+			Command* poopCube = new IntakeUntilCurrentSpike(.5, -1, false);
+			poopCube->Start();
 
-		Command* poopCube = new IntakeUntilCurrentSpike(.5, -1, false);
-		poopCube->Start();
+			CommandGroup* grabSecondCube = new GrabSecondCube();
+			grabSecondCube->Start();
 
-		CommandGroup* grabSecondCube = new GrabSecondCube();
-		grabSecondCube->Start();
-
-		if(lengthOfScaleTraj != 0) {
-			if(!runOnce) {
-				cmdScale->Start();
-				Command* toScaleHeight = new GoToElevatorPosition(RobotMap::SCALE_POS_FT, false);
-				toScaleHeight->Start();
-				runOnce = true;
+			if(lengthOfScaleTraj != 0) {
+				if(!runOnce) {
+					cmdScale->Start();
+					Command* toScaleHeight = new GoToElevatorPosition(RobotMap::SCALE_POS_FT, false);
+					toScaleHeight->Start();
+					runOnce = true;
+				}
 			}
 		}
 	}
@@ -168,13 +177,22 @@ void Robot::LoadChosenPath(std::string switchPathName, std::string scalePathName
 	std::string path = "/home/lvuser/";
 	std::string csvEx = ".csv";
 	switchPathName = path + switchPathName + csvEx;
+	std::cout << "switchPathName: " << switchPathName << "\n";
 	FILE *switchFile = fopen(switchPathName.c_str(), "r");
+	std::cout << "opened file!" << "\n";
 	lengthOfSwitchTraj = pathfinder_deserialize_csv(switchFile, trajToSwitch);
+	std::cout << "length of switch traj: " << lengthOfSwitchTraj << "\n";
 	fclose(switchFile);
+
+	std::string straightPathPath = path + "S" + csvEx;
+	FILE* straightPath = fopen(straightPathPath.c_str(), "r");
+	lengthOfStraightPath = pathfinder_deserialize_csv(straightPath, trajStraight);
+	fclose(straightPath);
 
 	if(scalePathName != "N") {
 		scalePathName = scalePathName + "S";
 		scalePathName = path + scalePathName + csvEx;
+		std::cout << "scalePathName: " << scalePathName << "\n";
 		FILE *scaleFile = fopen(scalePathName.c_str(), "r");
 		lengthOfScaleTraj = pathfinder_deserialize_csv(scaleFile, trajToScale);
 		fclose(scaleFile);

@@ -129,8 +129,9 @@ void RobotMap::init() {
 	elevatorClimberSubsystemPrimaryTalon->SetSensorPhase(true);
 	elevatorClimberSubsystemPrimaryTalon->SetInverted(true);
 	elevatorClimberSubsystemPrimaryTalon->Config_kP(0, 1, 10);
-	elevatorClimberSubsystemPrimaryTalon->Config_kI(0, 0, 10);
+	elevatorClimberSubsystemPrimaryTalon->Config_kI(0, 0.3, 10);
 	elevatorClimberSubsystemPrimaryTalon->Config_kD(0, 0, 10);
+	elevatorClimberSubsystemPrimaryTalon->ConfigAllowableClosedloopError(0, 700, 10);
 
 	//make the other motor follow the primary one
 	elevatorClimberSubsystemFollower01Talon->Set(ControlMode::Follower, 13);
