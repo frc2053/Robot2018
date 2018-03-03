@@ -21,16 +21,22 @@ private:
 	EncoderFollower* frFollower = (EncoderFollower*)malloc(sizeof(EncoderFollower));
 	EncoderFollower* blFollower = (EncoderFollower*)malloc(sizeof(EncoderFollower));
 	EncoderFollower* brFollower = (EncoderFollower*)malloc(sizeof(EncoderFollower));
+	EncoderFollower* lFollower = (EncoderFollower*) malloc(sizeof(EncoderFollower));
+	EncoderFollower* rFollower = (EncoderFollower*) malloc(sizeof(EncoderFollower));
 	//this holds the modified trajectories for the swerve drive
 	Segment* flTraj;
 	Segment* frTraj;
 	Segment* blTraj;
 	Segment* brTraj;
+	Segment* lTraj;
+	Segment* rTraj;
 	//this holds the encoder info
 	EncoderConfig flconfig;
 	EncoderConfig frconfig;
 	EncoderConfig blconfig;
 	EncoderConfig brconfig;
+	EncoderConfig lconfig;
+	EncoderConfig rconfig;
 	int angleOffset;
 };
 

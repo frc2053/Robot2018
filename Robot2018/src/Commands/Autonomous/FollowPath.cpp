@@ -28,10 +28,21 @@ FollowPath::FollowPath(Segment* inputPath, int length, int offset) {
 	brFollower->segment = 0;
 	brFollower->finished = 0;
 
+	lFollower->last_error = 0;
+	lFollower->segment = 0;
+	lFollower->finished = 0;
+
+	rFollower->last_error = 0;
+	rFollower->segment = 0;
+	rFollower->finished = 0;
+
 	flTraj = NULL;
 	frTraj = NULL;
 	blTraj = NULL;
 	brTraj = NULL;
+
+	lTraj = NULL;
+	rTraj = NULL;
 
 
 	flconfig = {RobotMap::swerveSubsystemFLDriveTalon->GetSelectedSensorPosition(0), RobotMap::TICKS_PER_REV, RobotMap::WHEEL_CIRCUMFERENCE, RobotMap::K_P, RobotMap::K_I, RobotMap::K_D, RobotMap::K_V, RobotMap::K_A};
@@ -39,10 +50,17 @@ FollowPath::FollowPath(Segment* inputPath, int length, int offset) {
 	blconfig = {RobotMap::swerveSubsystemBLDriveTalon->GetSelectedSensorPosition(0), RobotMap::TICKS_PER_REV, RobotMap::WHEEL_CIRCUMFERENCE, RobotMap::K_P, RobotMap::K_I, RobotMap::K_D, RobotMap::K_V, RobotMap::K_A};
 	brconfig = {RobotMap::swerveSubsystemBRDriveTalon->GetSelectedSensorPosition(0), RobotMap::TICKS_PER_REV, RobotMap::WHEEL_CIRCUMFERENCE, RobotMap::K_P, RobotMap::K_I, RobotMap::K_D, RobotMap::K_V, RobotMap::K_A};
 
+	lconfig = {RobotMap::swerveSubsystemBLDriveTalon->GetSelectedSensorPosition(0), RobotMap::TICKS_PER_REV, RobotMap::WHEEL_CIRCUMFERENCE, RobotMap::K_P, RobotMap::K_I, RobotMap::K_D, RobotMap::K_V, RobotMap::K_A};
+	rconfig = {RobotMap::swerveSubsystemBRDriveTalon->GetSelectedSensorPosition(0), RobotMap::TICKS_PER_REV, RobotMap::WHEEL_CIRCUMFERENCE, RobotMap::K_P, RobotMap::K_I, RobotMap::K_D, RobotMap::K_V, RobotMap::K_A};
+
+
 	flTraj = (Segment*)malloc(length * sizeof(Segment));
 	frTraj = (Segment*)malloc(length * sizeof(Segment));
 	blTraj = (Segment*)malloc(length * sizeof(Segment));
 	brTraj = (Segment*)malloc(length * sizeof(Segment));
+
+	lTraj = (Segment*) malloc(length * sizeof(Segment));
+	rTraj = (Segment*) malloc(length * sizeof(Segment));
 
 	pathfinder_modify_swerve(pathToFollow, pathLength, flTraj, frTraj, blTraj, brTraj, RobotMap::WHEELBASE_WIDTH, RobotMap::WHEELBASE_LENGTH, SWERVE_DEFAULT);
 }
@@ -60,10 +78,16 @@ void FollowPath::Execute() {
 	int blCurrentPos = RobotMap::swerveSubsystemBLDriveTalon->GetSelectedSensorPosition(0);
 	int brCurrentPos = RobotMap::swerveSubsystemBRDriveTalon->GetSelectedSensorPosition(0);
 
+	int lCurrentPos = RobotMap::swerveSubsystemBLDriveTalon->GetSelectedSensorPosition(0);
+	int rCurrentPos = RobotMap::swerveSubsystemBRDriveTalon->GetSelectedSensorPosition(0);
+
 	double fl = pathfinder_follow_encoder(flconfig, flFollower, flTraj, pathLength, flCurrentPos);
 	double fr = pathfinder_follow_encoder(frconfig, frFollower, frTraj, pathLength, frCurrentPos);
 	double bl = pathfinder_follow_encoder(blconfig, blFollower, blTraj, pathLength, blCurrentPos);
 	double br = pathfinder_follow_encoder(brconfig, brFollower, brTraj, pathLength, brCurrentPos);
+
+	double l = pathfinder_follow_encoder(lconfig, lFollower, lTraj, pathLength, lCurrentPos);
+	double r = pathfinder_follow_encoder(rconfig, rFollower, rTraj, pathLength, rCurrentPos);
 
 	double currentYaw = Robot::swerveSubsystem->GetAdjYaw();
 
@@ -77,7 +101,7 @@ void FollowPath::Execute() {
 
 	Robot::swerveSubsystem->GetSwerveStuff()->GetModules()->at(0).Set(fl + turn, Rotation2D::fromDegrees(0), false);
 	Robot::swerveSubsystem->GetSwerveStuff()->GetModules()->at(1).Set(fr - turn, Rotation2D::fromDegrees(0), false);
-	Robot::swerveSubsystem->GetSwerveStuff()->GetModules()->at(2).Set(bl - turn, Rotation2D::fromDegrees(0), false);
+	Robot::swerveSubsystem->GetSwerveStuff()->GetModules()->at(2).Set(bl + turn, Rotation2D::fromDegrees(0), false);
 	Robot::swerveSubsystem->GetSwerveStuff()->GetModules()->at(3).Set(br - turn, Rotation2D::fromDegrees(0), false);
 
 	isDone = flFollower->segment >= pathLength;
@@ -95,13 +119,25 @@ void FollowPath::End() {
 	//free(flFollower);
 	//free(frFollower);
 	//free(blFollower);
-	//free(brFollower);
+
 	//free(flTraj);
 	//free(frTraj);
 	//free(blTraj);
 	//free(brTraj);
 	//free(pathToFollow);
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 void FollowPath::Interrupted() {
 
