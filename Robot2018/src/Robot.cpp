@@ -28,8 +28,10 @@ void Robot::RobotInit() {
 
 	MATCHTIME = 0;
 	runOnce = false;
-	leftOrRight = "L";
+	leftOrRight = false; //false is left, true is right
 	doScale = true;
+	LoR = "L";
+	justStraight = false;
 
 	swerveSubsystem.reset(new SwerveSubsystem());
 	intakeSubsystem.reset(new IntakeSubsystem());
@@ -37,8 +39,9 @@ void Robot::RobotInit() {
 	climberSubsystem.reset(new ClimberSubsystem());
 	oi.reset(new OI());
 
-	SmartDashboard::PutString("Left or Right", leftOrRight);
+	SmartDashboard::PutBoolean("Left (False) or Right (True)", leftOrRight);
 	SmartDashboard::PutBoolean("Do Scale", doScale);
+	SmartDashboard::PutBoolean("Just Straight", justStraight);
 
 	//calibrate gyro
 	Robot::swerveSubsystem->ZeroYaw();
@@ -60,7 +63,7 @@ void Robot::DisabledInit() {
 
 void Robot::DisabledPeriodic() {
 	Scheduler::GetInstance()->Run();
-	leftOrRight = SmartDashboard::GetString("Left or Right", "L");
+	leftOrRight = SmartDashboard::GetBoolean("Left (False) or Right (True)", false);
 	doScale = SmartDashboard::GetBoolean("Do Scale", true);
 	gameData = frc::DriverStation::GetInstance().GetGameSpecificMessage();
 }
@@ -79,7 +82,14 @@ void Robot::AutonomousInit() {
 	while(gameData.size() < 3 && gameDataTimer.Get() <= 1) {
 		gameData = frc::DriverStation::GetInstance().GetGameSpecificMessage();
 	}
-	leftOrRight = SmartDashboard::GetString("Left or Right", "L");
+	leftOrRight = SmartDashboard::GetBoolean("Left (False) or Right (True)", false);
+	justStraight = SmartDashboard::GetBoolean("Just Straight", false);
+	if(leftOrRight == true) {
+		LoR = "R";
+	}
+	else {
+		LoR = "L";
+	}
 	doScale = SmartDashboard::GetBoolean("Do Scale", true);
 
 	//cal wheels
@@ -87,9 +97,16 @@ void Robot::AutonomousInit() {
 	//we need to make sure we are elevator mode
 	Robot::elevatorSubsystem->SwitchToElevatorMotor();
 
-
-
-	if(gameData.size() == 3) {
+	if(!(gameData.size() == 3) || (justStraight == true)) {
+		std::cout << "GAME DATA NOT RECEIVED!";
+		std::string straightPathPath = "/home/lvuser/S.csv";
+		FILE* straightPath = fopen(straightPathPath.c_str(), "r");
+		lengthOfStraightPath = pathfinder_deserialize_csv(straightPath, trajStraight);
+		fclose(straightPath);	cmdStraight = new FollowPath(trajStraight, lengthOfStraightPath, 0);
+		std::cout << "length of straigh path: " << lengthOfStraightPath << "\n";
+		cmdStraight->Start();
+	}
+	else {
 		std::cout << "got game data!" << std::endl;
 		char switchSide = gameData.at(0);
 		char scaleSide = gameData.at(1);
@@ -97,9 +114,9 @@ void Robot::AutonomousInit() {
 		std::cout << "SWITCH SIDE: " << switchSide << "\n";
 		std::cout << "SCALE SIDE: " << scaleSide << "\n";
 		std::cout << "OPPONENT SWITCH SIDE: " << oppSwitchSide << "\n";
-		std::cout << "LEFT OR RIGHT: " << leftOrRight.at(0) << "\n";
+		std::cout << "LEFT OR RIGHT: " << LoR << "\n";
 
-		std::string toPath = MakeDecision(switchSide, scaleSide, leftOrRight.at(0), doScale);
+		std::string toPath = MakeDecision(switchSide, scaleSide, LoR.at(0), doScale);
 		std::cout << "toPath: " << toPath;
 		std::cout << "switchPath: " << toPath.substr(0,2) << "\n";
 		std::cout << "scalePath: " << toPath.substr(1,2) << "\n";
@@ -108,17 +125,8 @@ void Robot::AutonomousInit() {
 		cmdSwitch = new FollowPath(trajToSwitch, lengthOfSwitchTraj, 0);
 		cmdScale = new FollowPath(trajToScale, lengthOfScaleTraj, 0);
 
+		std::this_thread::sleep_for(std::chrono::seconds(8));
 		cmdSwitch->Start();
-
-	}
-	else {
-		std::cout << "GAME DATA NOT RECEIVED!";
-		std::string straightPathPath = "/home/lvuser/S.csv";
-		FILE* straightPath = fopen(straightPathPath.c_str(), "r");
-		lengthOfStraightPath = pathfinder_deserialize_csv(straightPath, trajStraight);
-		fclose(straightPath);	cmdStraight = new FollowPath(trajStraight, lengthOfStraightPath, 0);
-		std::cout << "length of straigh path: " << lengthOfStraightPath << "\n";
-		cmdStraight->Start();
 	}
 }
 

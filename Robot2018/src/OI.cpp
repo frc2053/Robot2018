@@ -12,12 +12,14 @@
 #include "Commands/Elevator/ElevatorControl.h"
 #include "Commands/Elevator/BrakeElevator.h"
 #include "Commands/Groups/ClimbRoutine.h"
+#include "Commands/Test/CWTest.h"
 
 OI::OI() {
 
 	driverJoystick.reset(new TigerJoystick(0));
 	operatorJoystick.reset(new TigerJoystick(1));
 
+	SmartDashboard::PutData("CW Test", new CWTest());
 	SmartDashboard::PutData("Zero Yaw", new ZeroYaw());
 	SmartDashboard::PutData("Zero Elevator", new ZeroElevator());
 
@@ -53,7 +55,7 @@ OI::OI() {
 	operatorJoystick->leftShoulderButton->WhenActive(new IntakeUntilCurrentSpike(0, .6, true));
 	operatorJoystick->leftShoulderButton->WhenInactive(new IntakeUntilCurrentSpike(0, .1, false)); //NOT NECESSARY BUT CAN OVERRIDE IN CASE OF ACCIDENTAL INTAKE BUTTON HIT
 
-	operatorJoystick->rightShoulderButton->WhenActive(new IntakeUntilCurrentSpike(0, -1, false));
+	operatorJoystick->rightShoulderButton->WhenActive(new IntakeUntilCurrentSpike(0, -.7, false));
 	operatorJoystick->rightShoulderButton->WhenInactive(new IntakeUntilCurrentSpike(0, 0, false));
 	//INTAKE/OUTTAKE
 

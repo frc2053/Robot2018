@@ -32,8 +32,10 @@ private:
 	std::unique_ptr<frc::Command> selectedMode;
 	std::string gameData;
 	bool runOnce;
-	std::string leftOrRight;
+	bool leftOrRight;
+	std::string LoR;
 	bool doScale;
+	bool justStraight;
 
 	Segment trajToSwitch[1024];
 	Segment trajToScale[1024];

@@ -58,7 +58,7 @@ void RobotMap::init() {
 	//FEET
 	GROUND_POS_FT = -0.6;
 	SCALE_POS_FT = -5.9;
-	SWITCH_POS_FT = -1.75;
+	SWITCH_POS_FT = -2;
 	CLIMBBAR_POS_FT = -7.0;
 	//INCHES - don't question it
 	WHEELBASE_LENGTH = 21;
@@ -71,7 +71,7 @@ void RobotMap::init() {
 	TICKS_PER_REV = 26214;
 	TICKS_PER_FOOT_DRIVE = 3911;
 	WHEEL_CIRCUMFERENCE = 0.65449867893738;
-	K_P = 1;
+	K_P = 1.0;
 	K_I = 0.0;
 	K_D = .15;
 	K_V = .06;
@@ -128,9 +128,9 @@ void RobotMap::init() {
 	elevatorClimberSubsystemPrimaryTalon->SetSelectedSensorPosition(0, 0, 10);
 	elevatorClimberSubsystemPrimaryTalon->SetSensorPhase(true);
 	elevatorClimberSubsystemPrimaryTalon->SetInverted(true);
-	elevatorClimberSubsystemPrimaryTalon->Config_kP(0, 1, 10);
-	elevatorClimberSubsystemPrimaryTalon->Config_kI(0, .3, 10);
-	elevatorClimberSubsystemPrimaryTalon->Config_kD(0, .5, 10);
+	elevatorClimberSubsystemPrimaryTalon->Config_kP(0, .8, 10);
+	elevatorClimberSubsystemPrimaryTalon->Config_kI(0, .8, 10);
+	elevatorClimberSubsystemPrimaryTalon->Config_kD(0, 1.5, 10);
 	elevatorClimberSubsystemPrimaryTalon->ConfigAllowableClosedloopError(0, 700, 10);
 
 	//make the other motor follow the primary one
@@ -170,6 +170,13 @@ void RobotMap::init() {
 	swerveSubsystemBLDriveTalon->SetSensorPhase(false);
 	swerveSubsystemBRDriveTalon->SetSensorPhase(false);
 
+	swerveSubsystemFLDriveTalon->ConfigOpenloopRamp(0.4, 10);
+	swerveSubsystemFRDriveTalon->ConfigOpenloopRamp(0.4, 10);
+	swerveSubsystemBLDriveTalon->ConfigOpenloopRamp(0.4, 10);
+	swerveSubsystemBRDriveTalon->ConfigOpenloopRamp(0.4, 10);
+
+
+
 	//we want to use relative for rotation motors because it is much faster read time
 	swerveSubsystemFLRotTalon->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, 10);
 	swerveSubsystemFRRotTalon->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, 10);
@@ -201,33 +208,33 @@ void RobotMap::init() {
 	swerveSubsystemBRRotTalon->SetInverted(true);
 
 	//PIDS
-	swerveSubsystemFLRotTalon->Config_kP(0, 5, 10);
+	swerveSubsystemFLRotTalon->Config_kP(0, 5.5, 10);
 	swerveSubsystemFLRotTalon->Config_kI(0, 0, 10);
-	swerveSubsystemFLRotTalon->Config_kD(0, .2, 10);
+	swerveSubsystemFLRotTalon->Config_kD(0, 0, 10);
 
-	swerveSubsystemFRRotTalon->Config_kP(0, 5, 10);
+	swerveSubsystemFRRotTalon->Config_kP(0, 5.5, 10);
 	swerveSubsystemFRRotTalon->Config_kI(0, 0, 10);
-	swerveSubsystemFRRotTalon->Config_kD(0, .2, 10);
+	swerveSubsystemFRRotTalon->Config_kD(0, 0, 10);
 
-	swerveSubsystemBLRotTalon->Config_kP(0, 5, 10);
+	swerveSubsystemBLRotTalon->Config_kP(0, 5.5, 10);
 	swerveSubsystemBLRotTalon->Config_kI(0, 0, 10);
-	swerveSubsystemBLRotTalon->Config_kD(0, .2, 10);
+	swerveSubsystemBLRotTalon->Config_kD(0, 0, 10);
 
-	swerveSubsystemBRRotTalon->Config_kP(0, 5, 10);
+	swerveSubsystemBRRotTalon->Config_kP(0, 5.5, 10);
 	swerveSubsystemBRRotTalon->Config_kI(0, 0, 10);
-	swerveSubsystemBRRotTalon->Config_kD(0, .2, 10);
+	swerveSubsystemBRRotTalon->Config_kD(0, 0, 10);
 
 	//Rotation motors are too strong so we limit them to around half total output
-	swerveSubsystemFLRotTalon->ConfigPeakOutputForward(.416, 10);
-	swerveSubsystemFRRotTalon->ConfigPeakOutputForward(.416, 10);
-	swerveSubsystemBLRotTalon->ConfigPeakOutputForward(.416, 10);
-	swerveSubsystemBRRotTalon->ConfigPeakOutputForward(.416, 10);
+	swerveSubsystemFLRotTalon->ConfigPeakOutputForward(.5, 10); //.416
+	swerveSubsystemFRRotTalon->ConfigPeakOutputForward(.5, 10);
+	swerveSubsystemBLRotTalon->ConfigPeakOutputForward(.5, 10);
+	swerveSubsystemBRRotTalon->ConfigPeakOutputForward(.5, 10);
 
 	//same as above except in reverse
-	swerveSubsystemFLRotTalon->ConfigPeakOutputReverse(-.416, 10);
-	swerveSubsystemFRRotTalon->ConfigPeakOutputReverse(-.416, 10);
-	swerveSubsystemBLRotTalon->ConfigPeakOutputReverse(-.416, 10);
-	swerveSubsystemBRRotTalon->ConfigPeakOutputReverse(-.416, 10);
+	swerveSubsystemFLRotTalon->ConfigPeakOutputReverse(-.5, 10); //-.416
+	swerveSubsystemFRRotTalon->ConfigPeakOutputReverse(-.5, 10);
+	swerveSubsystemBLRotTalon->ConfigPeakOutputReverse(-.5, 10);
+	swerveSubsystemBRRotTalon->ConfigPeakOutputReverse(-.5, 10);
 
 	//Tolerance for PID
 	swerveSubsystemFLRotTalon->ConfigAllowableClosedloopError(0, 5, 10);
