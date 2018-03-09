@@ -225,16 +225,16 @@ void RobotMap::init() {
 	swerveSubsystemBRRotTalon->Config_kD(0, 0, 10);
 
 	//Rotation motors are too strong so we limit them to around half total output
-	swerveSubsystemFLRotTalon->ConfigPeakOutputForward(.5, 10); //.416
-	swerveSubsystemFRRotTalon->ConfigPeakOutputForward(.5, 10);
-	swerveSubsystemBLRotTalon->ConfigPeakOutputForward(.5, 10);
-	swerveSubsystemBRRotTalon->ConfigPeakOutputForward(.5, 10);
+	swerveSubsystemFLRotTalon->ConfigPeakOutputForward(1.0, 10); //.416
+	swerveSubsystemFRRotTalon->ConfigPeakOutputForward(1.0, 10);
+	swerveSubsystemBLRotTalon->ConfigPeakOutputForward(1.0, 10);
+	swerveSubsystemBRRotTalon->ConfigPeakOutputForward(1.0, 10);
 
 	//same as above except in reverse
-	swerveSubsystemFLRotTalon->ConfigPeakOutputReverse(-.5, 10); //-.416
-	swerveSubsystemFRRotTalon->ConfigPeakOutputReverse(-.5, 10);
-	swerveSubsystemBLRotTalon->ConfigPeakOutputReverse(-.5, 10);
-	swerveSubsystemBRRotTalon->ConfigPeakOutputReverse(-.5, 10);
+	swerveSubsystemFLRotTalon->ConfigPeakOutputReverse(-1.0, 10); //-.416
+	swerveSubsystemFRRotTalon->ConfigPeakOutputReverse(-1.0, 10);
+	swerveSubsystemBLRotTalon->ConfigPeakOutputReverse(-1.0, 10);
+	swerveSubsystemBRRotTalon->ConfigPeakOutputReverse(-1.0, 10);
 
 	//Tolerance for PID
 	swerveSubsystemFLRotTalon->ConfigAllowableClosedloopError(0, 5, 10);

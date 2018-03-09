@@ -169,7 +169,7 @@ void Robot::TeleopInit() {
 	if(cmdScale != nullptr) {
 		cmdScale->Cancel();
 	}
-	//Robot::swerveSubsystem->CalibrateWheelsSimple();
+	Robot::swerveSubsystem->CalibrateWheelsSimple();
 
 	Robot::swerveSubsystem->SetDefaultCommand(new DriveCommand());
 	Robot::elevatorSubsystem->SetDefaultCommand(new ElevatorControl());
