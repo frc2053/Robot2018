@@ -3,7 +3,7 @@
 
 FollowPath::FollowPath(Segment* inputPath, int length, int offset) {
 
-	std::cout << "MADE IT TO FOLLOWPATH AUTO" << std::endl;
+	//std::cout << "MADE IT TO FOLLOWPATH AUTO" << std::endl;
 
 	Requires(Robot::swerveSubsystem.get());
 	isDone = false;

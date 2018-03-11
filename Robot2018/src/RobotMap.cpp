@@ -208,21 +208,21 @@ void RobotMap::init() {
 	swerveSubsystemBRRotTalon->SetInverted(true);
 
 	//PIDS
-	swerveSubsystemFLRotTalon->Config_kP(0, 5.5, 10);
+	swerveSubsystemFLRotTalon->Config_kP(0, 12, 10);
 	swerveSubsystemFLRotTalon->Config_kI(0, 0, 10);
-	swerveSubsystemFLRotTalon->Config_kD(0, 0, 10);
+	swerveSubsystemFLRotTalon->Config_kD(0, 120, 10);
 
-	swerveSubsystemFRRotTalon->Config_kP(0, 5.5, 10);
+	swerveSubsystemFRRotTalon->Config_kP(0, 12, 10);
 	swerveSubsystemFRRotTalon->Config_kI(0, 0, 10);
-	swerveSubsystemFRRotTalon->Config_kD(0, 0, 10);
+	swerveSubsystemFRRotTalon->Config_kD(0, 120, 10);
 
-	swerveSubsystemBLRotTalon->Config_kP(0, 5.5, 10);
+	swerveSubsystemBLRotTalon->Config_kP(0, 12, 10);
 	swerveSubsystemBLRotTalon->Config_kI(0, 0, 10);
-	swerveSubsystemBLRotTalon->Config_kD(0, 0, 10);
+	swerveSubsystemBLRotTalon->Config_kD(0, 120, 10);
 
-	swerveSubsystemBRRotTalon->Config_kP(0, 5.5, 10);
+	swerveSubsystemBRRotTalon->Config_kP(0, 12, 10);
 	swerveSubsystemBRRotTalon->Config_kI(0, 0, 10);
-	swerveSubsystemBRRotTalon->Config_kD(0, 0, 10);
+	swerveSubsystemBRRotTalon->Config_kD(0, 120, 10);
 
 	//Rotation motors are too strong so we limit them to around half total output
 	swerveSubsystemFLRotTalon->ConfigPeakOutputForward(1.0, 10); //.416

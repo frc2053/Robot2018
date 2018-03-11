@@ -37,10 +37,10 @@ private:
 	std::shared_ptr<can::TalonSRX> frontLeftRotationTalon;
 	std::shared_ptr<can::TalonSRX> backRightRotationTalon;
 	std::shared_ptr<can::TalonSRX> backLeftRotationTalon;
-	int FL_CAL = 79;
-	int BL_CAL = 2397;
-	int FR_CAL = 1639;
-	int BR_CAL = 527;
+	int FL_CAL = 285;
+	int BL_CAL = 2366;
+	int FR_CAL = 2229;
+	int BR_CAL = 461;
 
 
 	int TICKS_PER_REV = 4096;
