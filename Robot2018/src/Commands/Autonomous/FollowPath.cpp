@@ -86,8 +86,8 @@ void FollowPath::Execute() {
 	double bl = pathfinder_follow_encoder(blconfig, blFollower, blTraj, pathLength, blCurrentPos);
 	double br = pathfinder_follow_encoder(brconfig, brFollower, brTraj, pathLength, brCurrentPos);
 
-	double l = pathfinder_follow_encoder(lconfig, lFollower, lTraj, pathLength, lCurrentPos);
-	double r = pathfinder_follow_encoder(rconfig, rFollower, rTraj, pathLength, rCurrentPos);
+	//double l = pathfinder_follow_encoder(lconfig, lFollower, lTraj, pathLength, lCurrentPos);
+	//double r = pathfinder_follow_encoder(rconfig, rFollower, rTraj, pathLength, rCurrentPos);
 
 	double currentYaw = Robot::swerveSubsystem->GetAdjYaw();
 
