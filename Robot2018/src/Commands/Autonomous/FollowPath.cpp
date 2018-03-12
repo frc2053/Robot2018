@@ -70,7 +70,7 @@ void FollowPath::Initialize() {
 }
 
 void FollowPath::Execute() {
-	std::cout << "MADE IT TO FOLLOWPATH AUTO" << std::endl;
+	//std::cout << "MADE IT TO FOLLOWPATH AUTO" << std::endl;
 
 
 	int flCurrentPos = RobotMap::swerveSubsystemFLDriveTalon->GetSelectedSensorPosition(0);
