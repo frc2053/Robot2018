@@ -86,23 +86,23 @@ void FollowPath::Execute() {
 	double bl = pathfinder_follow_encoder(blconfig, blFollower, blTraj, pathLength, blCurrentPos);
 	double br = pathfinder_follow_encoder(brconfig, brFollower, brTraj, pathLength, brCurrentPos);
 
-	double l = pathfinder_follow_encoder(lconfig, lFollower, lTraj, pathLength, lCurrentPos);
-	double r = pathfinder_follow_encoder(rconfig, rFollower, rTraj, pathLength, rCurrentPos);
+	//double l = pathfinder_follow_encoder(lconfig, lFollower, lTraj, pathLength, lCurrentPos);
+	//double r = pathfinder_follow_encoder(rconfig, rFollower, rTraj, pathLength, rCurrentPos);
 
 	double currentYaw = Robot::swerveSubsystem->GetAdjYaw();
 
-	//double desired_headingfl = r2d(flFollower->heading);
-	//double desired_headingfr = r2d(frFollower->heading);
-	//double desired_headingbl = r2d(blFollower->heading);
-	//double desired_headingbr = r2d(brFollower->heading);
+	double desired_headingfl = r2d(flFollower->heading);
+	double desired_headingfr = r2d(frFollower->heading);
+	double desired_headingbl = r2d(blFollower->heading);
+	double desired_headingbr = r2d(brFollower->heading);
 
 	double angle_difference = r2d(flFollower->heading) - currentYaw;
 	double turn = RobotMap::K_T * angle_difference;
 
-	Robot::swerveSubsystem->GetSwerveStuff()->GetModules()->at(0).Set(fl + turn, Rotation2D::fromDegrees(0), false);
-	Robot::swerveSubsystem->GetSwerveStuff()->GetModules()->at(1).Set(fr - turn, Rotation2D::fromDegrees(0), false);
-	Robot::swerveSubsystem->GetSwerveStuff()->GetModules()->at(2).Set(bl + turn, Rotation2D::fromDegrees(0), false);
-	Robot::swerveSubsystem->GetSwerveStuff()->GetModules()->at(3).Set(br - turn, Rotation2D::fromDegrees(0), false);
+	Robot::swerveSubsystem->GetSwerveStuff()->GetModules()->at(0).Set(fl, Rotation2D::fromDegrees(desired_headingfl), false);
+	Robot::swerveSubsystem->GetSwerveStuff()->GetModules()->at(1).Set(fr, Rotation2D::fromDegrees(desired_headingfr), false);
+	Robot::swerveSubsystem->GetSwerveStuff()->GetModules()->at(2).Set(bl, Rotation2D::fromDegrees(desired_headingbl), false);
+	Robot::swerveSubsystem->GetSwerveStuff()->GetModules()->at(3).Set(br, Rotation2D::fromDegrees(desired_headingbr), false);
 
 	isDone = flFollower->segment >= pathLength;
 }
