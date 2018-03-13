@@ -25,11 +25,13 @@ public:
 	virtual void TeleopPeriodic();
 	virtual void TestPeriodic();
 	void LoadChosenPath(std::string switchPathName, std::string scalePathName);
+	void LoadScaleOnlyPath(std::string scalePathName);
 	std::string MakeDecision(char switchSide, char scaleSide, char robotSide, bool doScale);
+	std::string MakeDecisionScale(char scaleSide, char robotSide);
 	static double MATCHTIME;
 private:
-	frc::SendableChooser<frc::Command*> autoChooser;
-	std::unique_ptr<frc::Command> selectedMode;
+	frc::SendableChooser<std::string> autoChooser;
+	std::string selectedMode;
 	std::string gameData;
 	bool runOnce;
 	bool leftOrRight;

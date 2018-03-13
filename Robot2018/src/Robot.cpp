@@ -48,7 +48,9 @@ void Robot::RobotInit() {
 	//if we start at an angle other than zero change this in auto
 	Robot::swerveSubsystem->SetAdjYaw(0);
 
-	autoChooser.AddDefault("Do Nothing Auto", new DoNothingAuto());
+	autoChooser.AddDefault("Switch", "Switch");
+	autoChooser.AddObject("Scale", "Scale");
+
 
 	//Make the list of auto options avaliable on the Smart Dash
 	SmartDashboard::PutData("Auto mode chooser", &autoChooser);
@@ -73,6 +75,8 @@ void Robot::AutonomousInit() {
 	//gameData start timer
 	gameDataTimer.Reset();
 	gameDataTimer.Start();
+
+	selectedMode = (std::string) autoChooser.GetSelected();
 
 	//move to switch height
 	Command* toSwitchHeight = new GoToElevatorPosition(RobotMap::SWITCH_POS_FT, false);
@@ -118,8 +122,6 @@ void Robot::AutonomousInit() {
 		std::cout << "Straight Pathfinder Trajectory Points: " << lengthOfStraightPath << "\n";
 		cmdStraight->Start();
 	}
-
-
 	else {
 		if(gameData.size() == 3) {
 		std::cout << "Game Data Correct Length" << std::endl;
@@ -133,23 +135,34 @@ void Robot::AutonomousInit() {
 		std::cout << "SCALE SIDE: " << scaleSide << std::endl;;
 		std::cout << "OPPONENT SWITCH SIDE: " << oppSwitchSide << std::endl;;
 
-		std::string toPath = MakeDecision(switchSide, scaleSide, LoR.at(0), doScale);
+		if(selectedMode == "Switch") {
+			std::string toPath = MakeDecision(switchSide, scaleSide, LoR.at(0), doScale);
 
-		std::cout << "toPath: " << toPath << std::endl;
-		std::cout << "switchPath: " << toPath.substr(0,2) << std::endl;
-		std::cout << "scalePath: " << toPath.substr(1,2) << std::endl;
-		LoadChosenPath(toPath.substr(0,2), toPath.substr(1,2));
+			std::cout << "toPath: " << toPath << std::endl;
+			std::cout << "switchPath: " << toPath.substr(0,2) << std::endl;
+			std::cout << "scalePath: " << toPath.substr(1,2) << std::endl;
+			LoadChosenPath(toPath.substr(0,2), toPath.substr(1,2));
 
-		cmdSwitch = new FollowPath(trajToSwitch, lengthOfSwitchTraj, 0);
-		std::cout << "Switch Pathfinder Trajectory Points: " << lengthOfSwitchTraj << std::endl;
+			cmdSwitch = new FollowPath(trajToSwitch, lengthOfSwitchTraj, 0);
+			std::cout << "Switch Pathfinder Trajectory Points: " << lengthOfSwitchTraj << std::endl;
 
-		cmdScale = new FollowPath(trajToScale, lengthOfScaleTraj, 0);
-		std::cout << "Scale Pathfinder Trajectory Points: " << lengthOfScaleTraj << std::endl;
+			cmdScale = new FollowPath(trajToScale, lengthOfScaleTraj, 0);
+			std::cout << "Scale Pathfinder Trajectory Points: " << lengthOfScaleTraj << std::endl;
 
-		//MAKE THIS USER INPUT FROM DASH
-		//std::this_thread::sleep_for(std::chrono::seconds(8));
+			//MAKE THIS USER INPUT FROM DASH
+			//std::this_thread::sleep_for(std::chrono::seconds(8));
 
-		cmdSwitch->Start();
+			cmdSwitch->Start();
+		}
+		if(selectedMode == "Scale") {
+			std::string toPath = MakeDecisionScale(scaleSide, LoR.at(0));
+			LoadScaleOnlyPath(toPath);
+			cmdScale = new FollowPath(trajToSwitch, lengthOfScaleTraj, 0);
+			cmdScale->Start();
+
+			Command* toScaleHeight = new GoToElevatorPosition(RobotMap::SCALE_POS_FT, false);
+			toScaleHeight->Start();
+		}
 	}
 }
 
@@ -216,6 +229,17 @@ void Robot::TestPeriodic() {
 
 }
 
+void Robot::LoadScaleOnlyPath(std::string scalePathName) {
+	std::string path = "/home/lvuser/";
+	std::string csvEx = ".csv";
+	scalePathName = path + scalePathName + csvEx;
+	std::cout << "scale path name: " << scalePathName << std::endl;
+
+	FILE *scaleFile = fopen(scalePathName.c_str(), "r");
+	lengthOfScaleTraj = pathfinder_deserialize_csv(scaleFile, trajToScale);
+	fclose(scaleFile);
+}
+
 void Robot::LoadChosenPath(std::string switchPathName, std::string scalePathName) {
 	std::string path = "/home/lvuser/";
 	std::string csvEx = ".csv";
@@ -245,8 +269,6 @@ void Robot::LoadChosenPath(std::string switchPathName, std::string scalePathName
 
 		fclose(scaleFile);
 	}
-
-
 }
 
 std::string Robot::MakeDecision(char switchSide, char scaleSide, char robotSide, bool doScale) {
@@ -349,6 +371,24 @@ std::string Robot::MakeDecision(char switchSide, char scaleSide, char robotSide,
 	}
 	std::cout << "Decision: " << retVal << std::endl;
 	return "NNN";
+}
+
+std::string Robot::MakeDecisionScale(char scaleSide, char robotSide) {
+	std::string retVal = "NN";
+	std::string combined = "" + robotSide + scaleSide;
+	if(combined == "LL") {
+		retVal = "SFLL"; //SCALE FIRST FROM LEFT TO LEFT
+	}
+	if(combined == "LR") {
+		retVal = "SFLR";
+	}
+	if(combined == "RR") {
+		retVal = "SFRR";
+	}
+	if(combined == "RL") {
+		retVal = "SFRL";
+	}
+	return retVal;
 }
 
 START_ROBOT_CLASS(Robot);
