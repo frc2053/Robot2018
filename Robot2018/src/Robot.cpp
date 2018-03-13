@@ -95,7 +95,7 @@ void Robot::AutonomousInit() {
 
 	justStraight = SmartDashboard::GetBoolean("Just Straight", false);
 	doScale = SmartDashboard::GetBoolean("Do Scale", true);
-
+	doScale = false;
 	//cal wheels
 	//Robot::swerveSubsystem->CalibrateWheelsSimple();
 
@@ -230,7 +230,11 @@ void Robot::LoadChosenPath(std::string switchPathName, std::string scalePathName
 
 	fclose(switchFile);
 
-	if(scalePathName != "N") {
+	std::string temp = scalePathName.substr(1,1);
+
+	std::cout << "TempScale: " <<  temp << std::endl;
+
+	if(temp != "N") {
 		scalePathName = scalePathName + "S";
 		scalePathName = path + scalePathName + csvEx;
 		std::cout << "scalePathName: " << scalePathName << std::endl;
