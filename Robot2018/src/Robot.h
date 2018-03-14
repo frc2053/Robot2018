@@ -36,6 +36,7 @@ private:
 	bool runOnce;
 	bool leftOrRight;
 	std::string LoR;
+	int timeToWait;
 	bool doScale;
 	bool justStraight;
 
