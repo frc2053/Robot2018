@@ -55,7 +55,6 @@ void Robot::RobotInit() {
 	autoChooser.AddObject("Switch Side", "Switch Side");
 	autoChooser.AddObject("Switch Front", "Switch Front");
 
-
 	//Make the list of auto options avaliable on the Smart Dash
 	SmartDashboard::PutData("Auto mode chooser", &autoChooser);
 
@@ -104,7 +103,7 @@ void Robot::AutonomousInit() {
 
 	justStraight = SmartDashboard::GetBoolean("Just Straight", false);
 	doScale = SmartDashboard::GetBoolean("Do Scale", true);
-
+	doScale = false;
 	//cal wheels
 	//Robot::swerveSubsystem->CalibrateWheelsSimple();
 
@@ -127,9 +126,11 @@ void Robot::AutonomousInit() {
 		std::cout << "Straight Pathfinder Trajectory Points: " << lengthOfStraightPath << "\n";
 		cmdStraight->Start();
 	}
+
+
 	else {
 		if(gameData.size() == 3) {
-		std::cout << "Game Data Correct Length" << std::endl;
+			std::cout << "Game Data Correct Length" << std::endl;
 		}
 
 		char switchSide = gameData.at(0);
@@ -269,7 +270,11 @@ void Robot::LoadChosenPath(std::string switchPathName, std::string scalePathName
 
 	fclose(switchFile);
 
-	if(scalePathName != "N") {
+	std::string temp = scalePathName.substr(1,1);
+
+	std::cout << "TempScale: " <<  temp << std::endl;
+
+	if(temp != "N") {
 		scalePathName = scalePathName + "S";
 		scalePathName = path + scalePathName + csvEx;
 		std::cout << "scalePathName: " << scalePathName << std::endl;
