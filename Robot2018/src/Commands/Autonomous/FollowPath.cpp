@@ -99,10 +99,10 @@ void FollowPath::Execute() {
 	double angle_difference = r2d(flFollower->heading) - currentYaw;
 	double turn = RobotMap::K_T * angle_difference;
 
-	Robot::swerveSubsystem->GetSwerveStuff()->GetModules()->at(0).Set(fl, Rotation2D::fromDegrees(desired_headingfl + 90), false);
-	Robot::swerveSubsystem->GetSwerveStuff()->GetModules()->at(1).Set(fr, Rotation2D::fromDegrees(desired_headingfr + 90), false);
-	Robot::swerveSubsystem->GetSwerveStuff()->GetModules()->at(2).Set(bl, Rotation2D::fromDegrees(desired_headingbl + 90), false);
-	Robot::swerveSubsystem->GetSwerveStuff()->GetModules()->at(3).Set(br, Rotation2D::fromDegrees(desired_headingbr + 90), false);
+	Robot::swerveSubsystem->GetSwerveStuff()->GetModules()->at(0).Set(fl, Rotation2D::fromDegrees(desired_headingfl), false);
+	Robot::swerveSubsystem->GetSwerveStuff()->GetModules()->at(1).Set(fr, Rotation2D::fromDegrees(desired_headingfr), false);
+	Robot::swerveSubsystem->GetSwerveStuff()->GetModules()->at(2).Set(bl, Rotation2D::fromDegrees(desired_headingbl), false);
+	Robot::swerveSubsystem->GetSwerveStuff()->GetModules()->at(3).Set(br, Rotation2D::fromDegrees(desired_headingbr), false);
 
 	isDone = flFollower->segment >= pathLength;
 }

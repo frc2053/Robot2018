@@ -409,6 +409,7 @@ std::string Robot::MakeDecisionScale(char scaleSide, char robotSide) {
 	if(combined == "RL") {
 		retVal = "SFRL";
 	}
+	std::cout << "MakeDecisionScale: " << retVal << std::endl;
 	return retVal;
 }
 
