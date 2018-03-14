@@ -50,14 +50,14 @@ void Robot::RobotInit() {
 	//if we start at an angle other than zero change this in auto
 	Robot::swerveSubsystem->SetAdjYaw(0);
 
-<<<<<<< HEAD
+
 	//autoChooser.AddDefault("Do Nothing Auto", new DoNothingAuto());
-=======
+
 	autoChooser.AddDefault("Switch Back", "Switch Back");
 	autoChooser.AddObject("Scale", "Scale");
 	autoChooser.AddObject("Switch Side", "Switch Side");
 	autoChooser.AddObject("Switch Front", "Switch Front");
->>>>>>> a8e51de0e47a865d261c43dec6cfaacabe68417f
+
 
 	//Make the list of auto options avaliable on the Smart Dash
 	SmartDashboard::PutData("Auto mode chooser", &autoChooser);
@@ -86,6 +86,9 @@ void Robot::AutonomousInit() {
 
 	timeToWait = SmartDashboard::GetNumber("Time to Wait", 0);
 	selectedMode = (std::string) autoChooser.GetSelected();
+
+	//test for auto modes  - also need to reset back in teleop
+	//Robot::swerveSubsystem->SetAdjYaw(90);
 
 	//move to switch height
 	Command* toSwitchHeight = new GoToElevatorPosition(RobotMap::SWITCH_POS_FT, false);
@@ -234,6 +237,12 @@ void Robot::TeleopInit() {
 	if(cmdScale != nullptr) {
 		cmdScale->Cancel();
 	}
+
+	//test for auto modes  - also need to reset back in teleop
+	//i think this should add in the negative of auto to the current - not a fixed position
+	//will have to check
+	//or rotate to a known position first then reset?  might be hard if stuck on a wall
+	//Robot::swerveSubsystem->SetAdjYaw(0);
 
 	Robot::swerveSubsystem->CalibrateWheelsSimple();
 
