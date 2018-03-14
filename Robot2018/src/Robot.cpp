@@ -160,9 +160,9 @@ void Robot::AutonomousInit() {
 			}
 
 			std::cout << "toPath: " << toPath << std::endl;
-			std::cout << "switchPath: " << toPath.substr(0,3) << std::endl;
-			std::cout << "scalePath: " << toPath.substr(2,2) << std::endl;
-			LoadChosenPath(toPath.substr(0,3), toPath.substr(2,2));
+			std::cout << "switchPath: " << toPath.substr(0,2) << std::endl;
+			std::cout << "scalePath: " << toPath.substr(1,2) << std::endl;
+			LoadChosenPath(toPath.substr(0,2), toPath.substr(1,2));
 
 			cmdSwitch = new FollowPath(trajToSwitch, lengthOfSwitchTraj, 0);
 			std::cout << "Switch Pathfinder Trajectory Points: " << lengthOfSwitchTraj << std::endl;
