@@ -32,6 +32,7 @@ void Robot::RobotInit() {
 	doScale = true;
 	LoR = "L";
 	justStraight = false;
+	timeToWait = 0;
 
 	swerveSubsystem.reset(new SwerveSubsystem());
 	intakeSubsystem.reset(new IntakeSubsystem());
@@ -42,14 +43,17 @@ void Robot::RobotInit() {
 	SmartDashboard::PutBoolean("Left (False) or Right (True)", leftOrRight);
 	SmartDashboard::PutBoolean("Do Scale", doScale);
 	SmartDashboard::PutBoolean("Just Straight", justStraight);
+	SmartDashboard::PutNumber("Time to Wait", timeToWait);
 
 	//calibrate gyro
 	Robot::swerveSubsystem->ZeroYaw();
 	//if we start at an angle other than zero change this in auto
 	Robot::swerveSubsystem->SetAdjYaw(0);
 
-	autoChooser.AddDefault("Switch", "Switch");
+	autoChooser.AddDefault("Switch Back", "Switch Back");
 	autoChooser.AddObject("Scale", "Scale");
+	autoChooser.AddObject("Switch Side", "Switch Side");
+	autoChooser.AddObject("Switch Front", "Switch Front");
 
 
 	//Make the list of auto options avaliable on the Smart Dash
@@ -76,6 +80,7 @@ void Robot::AutonomousInit() {
 	gameDataTimer.Reset();
 	gameDataTimer.Start();
 
+	timeToWait = SmartDashboard::GetNumber("Time to Wait", 0);
 	selectedMode = (std::string) autoChooser.GetSelected();
 
 	//move to switch height
@@ -135,13 +140,23 @@ void Robot::AutonomousInit() {
 		std::cout << "SCALE SIDE: " << scaleSide << std::endl;;
 		std::cout << "OPPONENT SWITCH SIDE: " << oppSwitchSide << std::endl;;
 
-		if(selectedMode == "Switch") {
+		if(selectedMode == "Switch Back" || selectedMode == "Switch Side" || selectedMode == "Switch Front") {
 			std::string toPath = MakeDecision(switchSide, scaleSide, LoR.at(0), doScale);
 
+			if(selectedMode == "Switch Back") {
+				toPath = "B" + toPath;
+			}
+			if(selectedMode == "Switch Front") {
+				toPath = "F" + toPath;
+			}
+			if(selectedMode == "Switch Side") {
+				toPath = "S" + toPath;
+			}
+
 			std::cout << "toPath: " << toPath << std::endl;
-			std::cout << "switchPath: " << toPath.substr(0,2) << std::endl;
-			std::cout << "scalePath: " << toPath.substr(1,2) << std::endl;
-			LoadChosenPath(toPath.substr(0,2), toPath.substr(1,2));
+			std::cout << "switchPath: " << toPath.substr(0,3) << std::endl;
+			std::cout << "scalePath: " << toPath.substr(1,3) << std::endl;
+			LoadChosenPath(toPath.substr(0,3), toPath.substr(1,3));
 
 			cmdSwitch = new FollowPath(trajToSwitch, lengthOfSwitchTraj, 0);
 			std::cout << "Switch Pathfinder Trajectory Points: " << lengthOfSwitchTraj << std::endl;
@@ -150,7 +165,7 @@ void Robot::AutonomousInit() {
 			std::cout << "Scale Pathfinder Trajectory Points: " << lengthOfScaleTraj << std::endl;
 
 			//MAKE THIS USER INPUT FROM DASH
-			//std::this_thread::sleep_for(std::chrono::seconds(8));
+			std::this_thread::sleep_for(std::chrono::seconds(timeToWait));
 
 			cmdSwitch->Start();
 		}
