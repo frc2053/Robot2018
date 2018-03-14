@@ -48,10 +48,11 @@ void Robot::RobotInit() {
 	//if we start at an angle other than zero change this in auto
 	Robot::swerveSubsystem->SetAdjYaw(0);
 
-	autoChooser.AddDefault("Do Nothing Auto", new DoNothingAuto());
+	//autoChooser.AddDefault("Do Nothing Auto", new DoNothingAuto());
 
 	//Make the list of auto options avaliable on the Smart Dash
 	SmartDashboard::PutData("Auto mode chooser", &autoChooser);
+
 
 	//timer to check for gameData
 	gameDataTimer.Reset();

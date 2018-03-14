@@ -74,9 +74,9 @@ void RobotMap::init() {
 	K_P = 1.0;
 	K_I = 0.0;
 	K_D = .15;
-	K_V = .06;
-	K_A = 0.0856;
-	K_T = .35;
+	K_V = .06; //.06
+	K_A = 0.856; //.0856
+	K_T = .35; //.35
 
 	LiveWindow::GetInstance()->DisableAllTelemetry();
 
