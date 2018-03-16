@@ -113,7 +113,7 @@ void Robot::AutonomousInit() {
 	doScale = SmartDashboard::GetBoolean("Do Scale", true);
 	doScale = false;
 	//cal wheels
-	//Robot::swerveSubsystem->CalibrateWheelsSimple();
+	Robot::swerveSubsystem->CalibrateWheelsSimple();
 
 	//we need to make sure we are elevator mode
 	Robot::elevatorSubsystem->SwitchToElevatorMotor();
