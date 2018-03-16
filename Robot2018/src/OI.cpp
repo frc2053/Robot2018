@@ -52,10 +52,10 @@ OI::OI() {
 	//ELEVATOR POSITIONS
 
 	//INTAKE/OUTTAKE
-	operatorJoystick->leftShoulderButton->WhenActive(new IntakeUntilCurrentSpike(0, .6, true));
-	operatorJoystick->leftShoulderButton->WhenInactive(new IntakeUntilCurrentSpike(0, .1, false)); //NOT NECESSARY BUT CAN OVERRIDE IN CASE OF ACCIDENTAL INTAKE BUTTON HIT
+	operatorJoystick->leftShoulderButton->WhenActive(new IntakeUntilCurrentSpike(0, 1.0, true));
+	operatorJoystick->leftShoulderButton->WhenInactive(new IntakeUntilCurrentSpike(0, .2, false)); //NOT NECESSARY BUT CAN OVERRIDE IN CASE OF ACCIDENTAL INTAKE BUTTON HIT
 
-	operatorJoystick->rightShoulderButton->WhenActive(new IntakeUntilCurrentSpike(0, -.7, false));
+	operatorJoystick->rightShoulderButton->WhenActive(new IntakeUntilCurrentSpike(0, -1.0, false));
 	operatorJoystick->rightShoulderButton->WhenInactive(new IntakeUntilCurrentSpike(0, 0, false));
 	//INTAKE/OUTTAKE
 

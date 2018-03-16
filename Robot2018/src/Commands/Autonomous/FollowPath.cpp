@@ -96,7 +96,7 @@ void FollowPath::Execute() {
 	double desired_headingbl = r2d(blFollower->heading+90);
 	double desired_headingbr = r2d(brFollower->heading+90);
 
-	double angle_difference = r2d(flFollower->heading+90) - currentYaw;
+	double angle_difference = r2d(flFollower->heading) - currentYaw;
 	double turn = RobotMap::K_T * angle_difference;
 
 	Robot::swerveSubsystem->GetSwerveStuff()->GetModules()->at(0).Set(fl, Rotation2D::fromDegrees(desired_headingfl), false);
