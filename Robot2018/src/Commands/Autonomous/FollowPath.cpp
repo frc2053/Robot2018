@@ -5,6 +5,7 @@ FollowPath::FollowPath(Segment* inputPath, int length, int offset) {
 
 	//std::cout << "MADE IT TO FOLLOWPATH AUTO" << std::endl;
 
+
 	Requires(Robot::swerveSubsystem.get());
 	isDone = false;
 	pathLength = length;
@@ -91,10 +92,10 @@ void FollowPath::Execute() {
 
 	double currentYaw = Robot::swerveSubsystem->GetAdjYaw();
 
-	double desired_headingfl = r2d(flFollower->heading)+0; //change +num to starting angle in degrees
-	double desired_headingfr = r2d(frFollower->heading)+0;
-	double desired_headingbl = r2d(blFollower->heading)+0;
-	double desired_headingbr = r2d(brFollower->heading)+0;
+	double desired_headingfl = r2d(flFollower->heading)+ angleOffset;
+	double desired_headingfr = r2d(frFollower->heading)+ angleOffset;
+	double desired_headingbl = r2d(blFollower->heading)+ angleOffset;
+	double desired_headingbr = r2d(brFollower->heading)+ angleOffset;
 
 	double angle_difference = r2d(flFollower->heading) - currentYaw;
 	double turn = RobotMap::K_T * angle_difference;

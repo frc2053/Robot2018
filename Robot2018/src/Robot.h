@@ -28,6 +28,7 @@ public:
 	void LoadScaleOnlyPath(std::string scalePathName);
 	std::string MakeDecision(char switchSide, char scaleSide, char robotSide, bool doScale);
 	std::string MakeDecisionScale(char scaleSide, char robotSide);
+	int FigureOutWhatAngleTheRobotProbablyStartedAtOnTheField(char robotSide, bool doStraight, bool doSwitch, char SwitchApproach, bool doScale);
 	static double MATCHTIME;
 private:
 	frc::SendableChooser<std::string> autoChooser;
@@ -38,7 +39,11 @@ private:
 	std::string LoR;
 	int timeToWait;
 	bool doScale;
+	bool doSwitch;
 	bool justStraight;
+	int OffsetAngle;
+	std::string switchApproach;
+	char switchApproachchar;
 
 	Segment trajToSwitch[1024];
 	Segment trajToScale[1024];

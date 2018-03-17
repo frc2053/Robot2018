@@ -30,9 +30,12 @@ void Robot::RobotInit() {
 	runOnce = false;
 	leftOrRight = false; //false is left, true is right
 	doScale = true;
+	doSwitch = true;
 	LoR = "L";
 	justStraight = false;
 	timeToWait = 0;
+	OffsetAngle = 0;
+	switchApproach = "";
 
 	swerveSubsystem.reset(new SwerveSubsystem());
 	intakeSubsystem.reset(new IntakeSubsystem());
@@ -42,6 +45,7 @@ void Robot::RobotInit() {
 
 	SmartDashboard::PutBoolean("Left (False) or Right (True)", leftOrRight);
 	SmartDashboard::PutBoolean("Do Scale", doScale);
+	SmartDashboard::PutBoolean("Do Switch", doSwitch);
 	SmartDashboard::PutBoolean("Just Straight", justStraight);
 	SmartDashboard::PutNumber("Time to Wait", timeToWait);
 
@@ -130,7 +134,11 @@ void Robot::AutonomousInit() {
 		std::string straightPathPath = "/home/lvuser/S.csv";
 		FILE* straightPath = fopen(straightPathPath.c_str(), "r");
 		lengthOfStraightPath = pathfinder_deserialize_csv(straightPath, trajStraight);
-		fclose(straightPath);	cmdStraight = new FollowPath(trajStraight, lengthOfStraightPath, 0);
+		fclose(straightPath);
+		//load straight path and get length, robot starts at 0 degrees forward
+	//really this should be smarter because it could have strated sideways and then will go sideways - bad
+		cmdStraight = new FollowPath(trajStraight, lengthOfStraightPath, 0);
+
 		std::cout << "Straight Pathfinder Trajectory Points: " << lengthOfStraightPath << "\n";
 		cmdStraight->Start();
 	}
@@ -153,19 +161,26 @@ void Robot::AutonomousInit() {
 			std::string toPath = MakeDecision(switchSide, scaleSide, LoR.at(0), doScale);
 
 			if(selectedMode == "Switch Back") {
-				toPath = "B" + toPath;
+				switchApproach = "B";
 			}
 			if(selectedMode == "Switch Front") {
-				toPath = "F" + toPath;
+				switchApproach = "F";
 			}
 			if(selectedMode == "Switch Side") {
-				toPath = "S" + toPath;
+				switchApproach = "S";
 			}
+
+			toPath = switchApproach + toPath;
 
 			std::cout << "toPath: " << toPath << std::endl;
 			std::cout << "switchPath: " << toPath.substr(0,2) << std::endl;
 			std::cout << "scalePath: " << toPath.substr(1,2) << std::endl;
 			LoadChosenPath(toPath.substr(0,2), toPath.substr(1,2));
+
+			//switchApproachchar =  switchApproach.substr(0, 0); NOT WORKING
+
+			//OffsetAngle = FigureOutWhatAngleTheRobotProbablyStartedAtOnTheField((char) LoR, justStraight, doSwitch, switchApproachchar, doScale);
+
 
 			cmdSwitch = new FollowPath(trajToSwitch, lengthOfSwitchTraj, 0);
 			std::cout << "Switch Pathfinder Trajectory Points: " << lengthOfSwitchTraj << std::endl;
@@ -181,7 +196,8 @@ void Robot::AutonomousInit() {
 		if(selectedMode == "Scale") {
 			std::string toPath = MakeDecisionScale(scaleSide, LoR.at(0));
 			LoadScaleOnlyPath(toPath);
-			cmdScale = new FollowPath(trajToSwitch, lengthOfScaleTraj, 0);
+			// that was trajtoSwitch and I change it to scale because it seemed like a cut and paste
+			cmdScale = new FollowPath(trajToScale, lengthOfScaleTraj, 0);
 			cmdScale->Start();
 
 			Command* toScaleHeight = new GoToElevatorPosition(RobotMap::SCALE_POS_FT, false);
@@ -303,12 +319,15 @@ void Robot::LoadChosenPath(std::string switchPathName, std::string scalePathName
 
 std::string Robot::MakeDecision(char switchSide, char scaleSide, char robotSide, bool doScale) {
 	std::string retVal = "";
+
 	if(robotSide == 'L') {
 		std::cout << ".robotSide L" << std::endl;
 		retVal = retVal + "L";
+
 		if(switchSide == 'L') {
 			std::cout << ".switchSide L" << std::endl;
 			retVal = retVal + "L";
+
 			if(doScale) {
 				std::cout << ".doScale true" << std::endl;
 				if(scaleSide == 'L') {
@@ -419,6 +438,56 @@ std::string Robot::MakeDecisionScale(char scaleSide, char robotSide) {
 		retVal = "SFRL";
 	}
 	std::cout << "MakeDecisionScale: " << retVal << std::endl;
+	return retVal;
+}
+
+int Robot::FigureOutWhatAngleTheRobotProbablyStartedAtOnTheField(char robotSide, bool doStraight, bool doSwitch, char SwitchApproach, bool doScale) {
+
+	int retVal = 0;
+
+
+	if(doStraight) {
+		retVal = 0;
+	}
+	else {
+
+		if(doSwitch) {
+			if (SwitchApproach == 'F') { //front switch approch
+				retVal = 0;
+			}
+
+			if (SwitchApproach == 'B') { //back switch approach
+				retVal = 180;
+			}
+
+			if (SwitchApproach == 'S') { //side switch approach
+				if (robotSide == 'L') {
+					retVal = -90;
+				}
+				else {
+					if (robotSide == 'R') {
+						retVal = 90;
+					}
+
+				}
+
+			}
+		else  {
+			if (doScale) {
+				if (robotSide == 'L') {
+							retVal = -90;
+						}
+				else {
+					if (robotSide == 'R')
+								retVal = 90;
+						}
+			}
+		}
+
+	}
+	}
+
+
 	return retVal;
 }
 
