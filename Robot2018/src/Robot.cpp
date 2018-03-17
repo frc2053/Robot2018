@@ -28,7 +28,6 @@ void Robot::RobotInit() {
 
 	MATCHTIME = 0;
 	runOnce = false;
-	leftOrRight = false; //false is left, true is right
 	doScale = true;
 	doSwitch = true;
 	LoR = "L";
@@ -43,10 +42,10 @@ void Robot::RobotInit() {
 	climberSubsystem.reset(new ClimberSubsystem());
 	oi.reset(new OI());
 
-	SmartDashboard::PutBoolean("Left (False) or Right (True)", leftOrRight);
 	SmartDashboard::PutBoolean("Do Scale", doScale);
 	SmartDashboard::PutBoolean("Do Switch", doSwitch);
 	SmartDashboard::PutBoolean("Just Straight", justStraight);
+
 	SmartDashboard::PutNumber("Time to Wait", timeToWait);
 
 	//calibrate gyro
@@ -57,14 +56,18 @@ void Robot::RobotInit() {
 
 	//autoChooser.AddDefault("Do Nothing Auto", new DoNothingAuto());
 
-	autoChooser.AddDefault("Switch Back", "Switch Back");
-	autoChooser.AddObject("Scale", "Scale");
-	autoChooser.AddObject("Switch Side", "Switch Side");
-	autoChooser.AddObject("Switch Front", "Switch Front");
+	autoChooser.AddDefault("Switch Back", "B");
+	autoChooser.AddObject("Scale", "scale");
+	autoChooser.AddObject("Switch Side", "S");
+	autoChooser.AddObject("Switch Front", "F");
 
+	robotPosChooser.AddDefault("Left", "L");
+	robotPosChooser.AddObject("Right", "R");
+	robotPosChooser.AddObject("Center", "C");
 
 	//Make the list of auto options avaliable on the Smart Dash
 	SmartDashboard::PutData("Auto mode chooser", &autoChooser);
+	SmartDashboard::PutData("Robot Position Chooser", &robotPosChooser);
 
 
 	//timer to check for gameData
@@ -90,6 +93,7 @@ void Robot::AutonomousInit() {
 
 	timeToWait = SmartDashboard::GetNumber("Time to Wait", 0);
 	selectedMode = (std::string) autoChooser.GetSelected();
+	LoR = (std::string) robotPosChooser.GetSelected();
 
 	//test for auto modes  - also need to reset back in teleop
 	//Robot::swerveSubsystem->SetAdjYaw(90);
@@ -104,13 +108,7 @@ void Robot::AutonomousInit() {
 	}
 	std::cout << "Got Game Data from FMS." << std::endl;
 
-	leftOrRight = SmartDashboard::GetBoolean("Left (False) or Right (True)", false);
-	if(leftOrRight == true) {
-		LoR = "R";
-	}
-	else {
-		LoR = "L";
-	}
+
 	std::cout << "Robot Start Field Position: " << LoR << std::endl;
 
 	justStraight = SmartDashboard::GetBoolean("Just Straight", false);
@@ -136,7 +134,7 @@ void Robot::AutonomousInit() {
 		lengthOfStraightPath = pathfinder_deserialize_csv(straightPath, trajStraight);
 		fclose(straightPath);
 		//load straight path and get length, robot starts at 0 degrees forward
-	//really this should be smarter because it could have strated sideways and then will go sideways - bad
+	    //really this should be smarter because it could have strated sideways and then will go sideways - bad
 		cmdStraight = new FollowPath(trajStraight, lengthOfStraightPath, 0);
 
 		std::cout << "Straight Pathfinder Trajectory Points: " << lengthOfStraightPath << "\n";
@@ -157,35 +155,23 @@ void Robot::AutonomousInit() {
 		std::cout << "SCALE SIDE: " << scaleSide << std::endl;;
 		std::cout << "OPPONENT SWITCH SIDE: " << oppSwitchSide << std::endl;;
 
-		if(selectedMode == "Switch Back" || selectedMode == "Switch Side" || selectedMode == "Switch Front") {
-			std::string toPath = MakeDecision(switchSide, scaleSide, LoR.at(0), doScale);
-
-			if(selectedMode == "Switch Back") {
-				switchApproach = "B";
-			}
-			if(selectedMode == "Switch Front") {
-				switchApproach = "F";
-			}
-			if(selectedMode == "Switch Side") {
-				switchApproach = "S";
-			}
-
-			toPath = switchApproach + toPath;
+		if(selectedMode == "B" || selectedMode == "F" || selectedMode == "S") {
+			std::string toPath = MakeDecision(selectedMode.at(0), LoR.at(0), switchSide);
 
 			std::cout << "toPath: " << toPath << std::endl;
 			std::cout << "switchPath: " << toPath.substr(0,2) << std::endl;
 			std::cout << "scalePath: " << toPath.substr(1,2) << std::endl;
-			LoadChosenPath(toPath.substr(0,2), toPath.substr(1,2));
+			LoadChosenPath(toPath, "");
 
 			//switchApproachchar =  switchApproach.substr(0, 0); NOT WORKING
 
-			//OffsetAngle = FigureOutWhatAngleTheRobotProbablyStartedAtOnTheField((char) LoR, justStraight, doSwitch, switchApproachchar, doScale);
+			OffsetAngle = FigureOutWhatAngleTheRobotProbablyStartedAtOnTheField(LoR.at(0), justStraight, doSwitch, switchApproachchar, doScale);
 
 
-			cmdSwitch = new FollowPath(trajToSwitch, lengthOfSwitchTraj, 0);
+			cmdSwitch = new FollowPath(trajToSwitch, lengthOfSwitchTraj, OffsetAngle);
 			std::cout << "Switch Pathfinder Trajectory Points: " << lengthOfSwitchTraj << std::endl;
 
-			cmdScale = new FollowPath(trajToScale, lengthOfScaleTraj, 0);
+			cmdScale = new FollowPath(trajToScale, lengthOfScaleTraj, OffsetAngle);
 			std::cout << "Scale Pathfinder Trajectory Points: " << lengthOfScaleTraj << std::endl;
 
 			//MAKE THIS USER INPUT FROM DASH
@@ -193,7 +179,7 @@ void Robot::AutonomousInit() {
 
 			cmdSwitch->Start();
 		}
-		if(selectedMode == "Scale") {
+		if(selectedMode == "scale") {
 			std::string toPath = MakeDecisionScale(scaleSide, LoR.at(0));
 			LoadScaleOnlyPath(toPath);
 			// that was trajtoSwitch and I change it to scale because it seemed like a cut and paste
@@ -300,12 +286,7 @@ void Robot::LoadChosenPath(std::string switchPathName, std::string scalePathName
 
 	fclose(switchFile);
 
-	std::string temp = scalePathName.substr(1,1);
-
-	std::cout << "TempScale: " <<  temp << std::endl;
-
-	if(temp != "N") {
-		scalePathName = scalePathName + "S";
+	if(scalePathName != "") {
 		scalePathName = path + scalePathName + csvEx;
 		std::cout << "scalePathName: " << scalePathName << std::endl;
 
@@ -317,131 +298,20 @@ void Robot::LoadChosenPath(std::string switchPathName, std::string scalePathName
 	}
 }
 
-std::string Robot::MakeDecision(char switchSide, char scaleSide, char robotSide, bool doScale) {
+std::string Robot::MakeDecision(char sideOfSwitch, char robotSide, char switchSide) {
 	std::string retVal = "";
-
-	if(robotSide == 'L') {
-		std::cout << ".robotSide L" << std::endl;
-		retVal = retVal + "L";
-
-		if(switchSide == 'L') {
-			std::cout << ".switchSide L" << std::endl;
-			retVal = retVal + "L";
-
-			if(doScale) {
-				std::cout << ".doScale true" << std::endl;
-				if(scaleSide == 'L') {
-					std::cout << ".scaleSide L" << std::endl;
-					retVal = retVal + "L";
-					std::cout << "Decision: " << retVal << std::endl;
-					return retVal;
-				}
-				if(scaleSide == 'R') {
-					std::cout << ".scaleSide R" << std::endl;
-					retVal = retVal + "R";
-					std::cout << "Decision: " << retVal << std::endl;
-					return retVal;
-				}
-			}
-			retVal = retVal + "N";
-			std::cout << "Decision: " << retVal << std::endl;
-			return retVal;
-		}
-		if(switchSide == 'R') {
-			std::cout << ".switchSide R" << std::endl;
-			retVal = retVal + "R";
-			if(doScale) {
-				std::cout << ".doScale true" << std::endl;
-				if(scaleSide == 'L') {
-					std::cout << ".scaleSide L" << std::endl;
-					retVal = retVal + "L";
-					std::cout << "Decision: " << retVal << std::endl;
-					return retVal;
-				}
-				if(scaleSide == 'R') {
-					std::cout << ".scaleSide R" << std::endl;
-					retVal = retVal + "R";
-					std::cout << "Decision: " << retVal << std::endl;
-					return retVal;
-				}
-			}
-			retVal = retVal + "N";
-			std::cout << "Decision: " << retVal << std::endl;
-			return retVal;
-		}
-	}
-	if(robotSide == 'R') {
-		std::cout << ".robotSide R" << std::endl;
-		retVal = retVal + "R";
-		if(switchSide == 'L') {
-			std::cout << ".switchSide R" << std::endl;
-			retVal = retVal + "L";
-			if(doScale) {
-				std::cout << ".doSwitch true" << std::endl;
-				if(scaleSide == 'L') {
-					std::cout << ".scaleSide L" << std::endl;
-					retVal = retVal + "L";
-					std::cout << "Decision: " << retVal << std::endl;
-					return retVal;
-				}
-				if(scaleSide == 'R') {
-					std::cout << ".scaleSide R" << std::endl;
-					retVal = retVal + "R";
-					std::cout << "Decision: " << retVal << std::endl;
-					return retVal;
-				}
-			}
-			retVal = retVal + "N";
-			std::cout << "Decision: " << retVal << std::endl;
-			return retVal;
-		}
-		if(switchSide == 'R') {
-			std::cout << ".switchSide R" << std::endl;
-			retVal = retVal + "R";
-			if(doScale) {
-				std::cout << ".doScale true" << std::endl;
-				if(scaleSide == 'L') {
-					std::cout << ".scaleSide L" << std::endl;
-					retVal = retVal + "L";
-					std::cout << "Decision: " << retVal << std::endl;
-					return retVal;
-				}
-				if(scaleSide == 'R') {
-					std::cout << ".scaleSide R" << std::endl;
-					retVal = retVal + "R";
-					std::cout << "Decision: " << retVal << std::endl;
-					return retVal;
-				}
-			}
-			retVal = retVal + "N";
-			std::cout << "Decision: " << retVal << std::endl;
-			return retVal;
-		}
-	}
-	std::cout << "Decision: " << retVal << std::endl;
-	return "NNN";
+	retVal = "" + sideOfSwitch + robotSide + switchSide;
+	return retVal;
 }
 
 std::string Robot::MakeDecisionScale(char scaleSide, char robotSide) {
-	std::string retVal = "NN";
-	std::string combined = "" + robotSide + scaleSide;
-	if(combined == "LL") {
-		retVal = "SFLL"; //SCALE FIRST FROM LEFT TO LEFT
-	}
-	if(combined == "LR") {
-		retVal = "SFLR";
-	}
-	if(combined == "RR") {
-		retVal = "SFRR";
-	}
-	if(combined == "RL") {
-		retVal = "SFRL";
-	}
+	std::string retVal = "";
+	std::string combined = "scale" + robotSide + scaleSide;
 	std::cout << "MakeDecisionScale: " << retVal << std::endl;
 	return retVal;
 }
 
-int Robot::FigureOutWhatAngleTheRobotProbablyStartedAtOnTheField(char robotSide, bool doStraight, bool doSwitch, char SwitchApproach, bool doScale) {
+int Robot::FigureOutWhatAngleTheRobotProbablyStartedAtOnTheField(char robotSide, bool doStraight, bool doSwitch, char switchApproach, bool doScale) {
 
 	int retVal = 0;
 
@@ -452,15 +322,15 @@ int Robot::FigureOutWhatAngleTheRobotProbablyStartedAtOnTheField(char robotSide,
 	else {
 
 		if(doSwitch) {
-			if (SwitchApproach == 'F') { //front switch approch
+			if (switchApproach == 'F') { //front switch approch
 				retVal = 0;
 			}
 
-			if (SwitchApproach == 'B') { //back switch approach
+			if (switchApproach == 'B') { //back switch approach
 				retVal = 180;
 			}
 
-			if (SwitchApproach == 'S') { //side switch approach
+			if (switchApproach == 'S') { //side switch approach
 				if (robotSide == 'L') {
 					retVal = -90;
 				}

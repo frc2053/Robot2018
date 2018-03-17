@@ -26,12 +26,13 @@ public:
 	virtual void TestPeriodic();
 	void LoadChosenPath(std::string switchPathName, std::string scalePathName);
 	void LoadScaleOnlyPath(std::string scalePathName);
-	std::string MakeDecision(char switchSide, char scaleSide, char robotSide, bool doScale);
+	std::string MakeDecision(char sideOfSwitch, char robotSide, char switchSide);
 	std::string MakeDecisionScale(char scaleSide, char robotSide);
 	int FigureOutWhatAngleTheRobotProbablyStartedAtOnTheField(char robotSide, bool doStraight, bool doSwitch, char SwitchApproach, bool doScale);
 	static double MATCHTIME;
 private:
 	frc::SendableChooser<std::string> autoChooser;
+	frc::SendableChooser<std::string> robotPosChooser;
 	std::string selectedMode;
 	std::string gameData;
 	bool runOnce;
