@@ -1,6 +1,6 @@
 #include "TigerDrive.h"
 #include "WPILib.h"
-
+#include <iostream>
 
 TigerDrive::TigerDrive(AHRS* imuP)
 {
@@ -32,6 +32,7 @@ double TigerDrive::CalculateRotationValue(double angleToRotateTo, double speedMu
 	else {
 		speed = 0;
 	}
+	std::cout << "speed: " << speed << "\n";
 	return speed;
 }
 

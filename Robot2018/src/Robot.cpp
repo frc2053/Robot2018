@@ -91,7 +91,16 @@ void Robot::AutonomousInit() {
 	gameDataTimer.Reset();
 	gameDataTimer.Start();
 
-	timeToWait = SmartDashboard::GetNumber("Time to Wait", 0);
+	Command* goDist1 = new GoDistance(14, 0);
+	goDist1->Start();
+
+	//Command* goDist2 = new GoDistance(0, 5);
+	//goDist2->Start();
+
+	//Command* rotate = new DriveCommandAuto(0, 0, 0, 1, 90);
+	//rotate->Start();
+
+	/*timeToWait = SmartDashboard::GetNumber("Time to Wait", 0);
 	selectedMode = (std::string) autoChooser.GetSelected();
 	LoR = (std::string) robotPosChooser.GetSelected();
 
@@ -140,8 +149,6 @@ void Robot::AutonomousInit() {
 		std::cout << "Straight Pathfinder Trajectory Points: " << lengthOfStraightPath << "\n";
 		cmdStraight->Start();
 	}
-
-
 	else {
 		if(gameData.size() == 3) {
 			std::cout << "Game Data Correct Length" << std::endl;
@@ -159,8 +166,8 @@ void Robot::AutonomousInit() {
 			std::string toPath = MakeDecision(selectedMode.at(0), LoR.at(0), switchSide);
 
 			std::cout << "toPath: " << toPath << std::endl;
-			std::cout << "switchPath: " << toPath.substr(0,2) << std::endl;
-			std::cout << "scalePath: " << toPath.substr(1,2) << std::endl;
+			//std::cout << "switchPath: " << toPath.substr(0,2) << std::endl;
+			//std::cout << "scalePath: " << toPath.substr(1,2) << std::endl;
 			LoadChosenPath(toPath, "");
 
 			//switchApproachchar =  switchApproach.substr(0, 0); NOT WORKING
@@ -189,7 +196,7 @@ void Robot::AutonomousInit() {
 			Command* toScaleHeight = new GoToElevatorPosition(RobotMap::SCALE_POS_FT, false);
 			toScaleHeight->Start();
 		}
-	}
+	}*/
 }
 
 void Robot::AutonomousPeriodic() {
@@ -201,16 +208,16 @@ void Robot::AutonomousPeriodic() {
 	if(cmdSwitch != nullptr) {
 		if(cmdSwitch->IsCompleted()) {
 
-			//std::cout << "Switch Cube Pooper" << std::endl;
+			std::cout << "Switch Cube Pooper" << std::endl;
 			Command* poopCube = new IntakeUntilCurrentSpike(.5, -1, false);
 			poopCube->Start();
 
-			//std::cout << "Retrieve Another Cube" << std::endl;
+			std::cout << "Retrieve Another Cube" << std::endl;
 			CommandGroup* grabSecondCube = new GrabSecondCube();
 			grabSecondCube->Start();
 
 			if(lengthOfScaleTraj != 0) {
-				//std::cout << "Scale Trajectory Exists" << std::endl;
+				std::cout << "Scale Trajectory Exists" << std::endl;
 				if(!runOnce) {
 					std::cout << "Going to Scale" << std::endl;
 					cmdScale->Start();
@@ -224,7 +231,7 @@ void Robot::AutonomousPeriodic() {
 
 	if(cmdScale != nullptr) {
 		if(cmdScale->IsCompleted()) {
-			//std::cout << "Scale Cube Pooper" << std::endl;
+			std::cout << "Scale Cube Pooper" << std::endl;
 			Command* poopCubeScale = new IntakeUntilCurrentSpike(.5, -1, false);
 			poopCubeScale->Start();
 		}
@@ -299,9 +306,7 @@ void Robot::LoadChosenPath(std::string switchPathName, std::string scalePathName
 }
 
 std::string Robot::MakeDecision(char sideOfSwitch, char robotSide, char switchSide) {
-	std::string retVal = "";
-	retVal = "" + sideOfSwitch + robotSide + switchSide;
-	return retVal;
+	return std::string() + sideOfSwitch + robotSide + switchSide;
 }
 
 std::string Robot::MakeDecisionScale(char scaleSide, char robotSide) {

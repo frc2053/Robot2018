@@ -69,13 +69,13 @@ void RobotMap::init() {
 	MAX_ACCEL = 12;
 	MAX_JERK = 60;
 	TICKS_PER_REV = 26214;
-	TICKS_PER_FOOT_DRIVE = 3911;
+	TICKS_PER_FOOT_DRIVE = 37000;
 	WHEEL_CIRCUMFERENCE = 0.65449867893738;
 	K_P = 1.0;
 	K_I = 0.0;
 	K_D = .15;
 	K_V = .06; //.06
-	K_A = 0.856; //.0856
+	K_A = .0856;
 	K_T = .35; //.35
 
 	LiveWindow::GetInstance()->DisableAllTelemetry();
@@ -165,10 +165,10 @@ void RobotMap::init() {
 	//for the talon PID to work we need to make sure that the sensors are in phase
 	//this means that when we give the motor a positive voltage the encoder ticks MUST go more positive
 	//if this is not set correctly PID will not work at all
-	swerveSubsystemFLDriveTalon->SetSensorPhase(false);
-	swerveSubsystemFRDriveTalon->SetSensorPhase(false);
-	swerveSubsystemBLDriveTalon->SetSensorPhase(false);
-	swerveSubsystemBRDriveTalon->SetSensorPhase(false);
+	swerveSubsystemFLDriveTalon->SetSensorPhase(true);
+	swerveSubsystemFRDriveTalon->SetSensorPhase(true);
+	swerveSubsystemBLDriveTalon->SetSensorPhase(true);
+	swerveSubsystemBRDriveTalon->SetSensorPhase(true);
 
 	swerveSubsystemFLDriveTalon->ConfigOpenloopRamp(0.4, 10);
 	swerveSubsystemFRDriveTalon->ConfigOpenloopRamp(0.4, 10);

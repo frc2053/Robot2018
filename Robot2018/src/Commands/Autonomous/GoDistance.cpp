@@ -35,7 +35,7 @@ GoDistance::GoDistance(double Xdistance, double Ydistance) {
 	RobotMap::swerveSubsystemBRDriveTalon->ConfigAllowableClosedloopError(0, 325, 0);
 
 	deltaDistance = sqrt(pow(_xDistance, 2) + pow(_yDistance, 2));
-	angleForWheel = std::atan2(_xDistance, _yDistance);
+	angleForWheel = std::atan2(_yDistance, _xDistance);
 	ticks = ConvertFeetToTicks(deltaDistance);
 }
 
@@ -45,16 +45,16 @@ void GoDistance::Initialize() {
 
 void GoDistance::Execute() {
 	for(int i = 0; i < modules->size(); i++) {
-		modules->at(i).SetAngle(Rotation2D::fromDegrees(angleForWheel), true);
+		modules->at(i).SetAngle(Rotation2D::fromRadians(angleForWheel), true);
 	}
 
 	std::cout << "ticks: "<< ticks << std::endl;
 	std::cout << "angle: " << angleForWheel << std::endl;
-	RobotMap::swerveSubsystemFLDriveTalon->Set(ControlMode::Position, 38000);
-	RobotMap::swerveSubsystemFRDriveTalon->Set(ControlMode::Position, 38000);
-	RobotMap::swerveSubsystemBLDriveTalon->Set(ControlMode::Position, 38000);
-	RobotMap::swerveSubsystemBRDriveTalon->Set(ControlMode::Position, 38000);
-	isDone = true;
+	RobotMap::swerveSubsystemFLDriveTalon->Set(ControlMode::Position, ticks);
+	RobotMap::swerveSubsystemFRDriveTalon->Set(ControlMode::Position, ticks);
+	RobotMap::swerveSubsystemBLDriveTalon->Set(ControlMode::Position, ticks);
+	RobotMap::swerveSubsystemBRDriveTalon->Set(ControlMode::Position, ticks);
+	isDone = RobotMap::swerveSubsystemFLDriveTalon->GetClosedLoopError(0) < 325;
 }
 
 bool GoDistance::IsFinished() {
@@ -65,7 +65,7 @@ void GoDistance::End() {
 }
 
 void GoDistance::Interrupted() {
-
+	std::cout << "interupted!\n";
 }
 
 int GoDistance::ConvertFeetToTicks(double feet) {
