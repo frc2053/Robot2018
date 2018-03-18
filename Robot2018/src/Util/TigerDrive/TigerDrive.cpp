@@ -32,7 +32,7 @@ double TigerDrive::CalculateRotationValue(double angleToRotateTo, double speedMu
 	else {
 		speed = 0;
 	}
-	std::cout << "speed: " << speed << "\n";
+	//std::cout << "speed: " << speed << "\n";
 	return speed;
 }
 

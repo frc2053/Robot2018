@@ -12,6 +12,7 @@
 #include "Commands/Groups/GrabSecondCube.h"
 #include "Commands/Elevator/ElevatorControl.h"
 #include "Commands/Intake/IntakeUntilCurrentSpike.h"
+#include "Commands/Groups/TestSequence.h"
 
 
 std::unique_ptr<OI> Robot::oi;
@@ -28,6 +29,7 @@ void Robot::RobotInit() {
 
 	MATCHTIME = 0;
 	runOnce = false;
+	runOnceScale = false;
 	doScale = true;
 	doSwitch = true;
 	LoR = "L";
@@ -79,6 +81,7 @@ void Robot::DisabledInit() {
 }
 
 void Robot::DisabledPeriodic() {
+	SmartDashboard::PutData("Scheduler", Scheduler::GetInstance());
 	Scheduler::GetInstance()->Run();
 	leftOrRight = SmartDashboard::GetBoolean("Left (False) or Right (True)", false);
 	doScale = SmartDashboard::GetBoolean("Do Scale", true);
@@ -91,8 +94,8 @@ void Robot::AutonomousInit() {
 	gameDataTimer.Reset();
 	gameDataTimer.Start();
 
-	Command* goDist1 = new GoDistance(14, 0);
-	goDist1->Start();
+	//Command* goDist1 = new TestSequence();
+	//goDist1->Start();
 
 	//Command* goDist2 = new GoDistance(0, 5);
 	//goDist2->Start();
@@ -100,7 +103,7 @@ void Robot::AutonomousInit() {
 	//Command* rotate = new DriveCommandAuto(0, 0, 0, 1, 90);
 	//rotate->Start();
 
-	/*timeToWait = SmartDashboard::GetNumber("Time to Wait", 0);
+	timeToWait = SmartDashboard::GetNumber("Time to Wait", 0);
 	selectedMode = (std::string) autoChooser.GetSelected();
 	LoR = (std::string) robotPosChooser.GetSelected();
 
@@ -162,7 +165,7 @@ void Robot::AutonomousInit() {
 		std::cout << "SCALE SIDE: " << scaleSide << std::endl;;
 		std::cout << "OPPONENT SWITCH SIDE: " << oppSwitchSide << std::endl;;
 
-		if(selectedMode == "B" || selectedMode == "F" || selectedMode == "S") {
+		if((selectedMode == "B" || selectedMode == "F" || selectedMode == "S") && (!(selectedMode == "scale"))) {
 			std::string toPath = MakeDecision(selectedMode.at(0), LoR.at(0), switchSide);
 
 			std::cout << "toPath: " << toPath << std::endl;
@@ -175,10 +178,10 @@ void Robot::AutonomousInit() {
 			OffsetAngle = FigureOutWhatAngleTheRobotProbablyStartedAtOnTheField(LoR.at(0), justStraight, doSwitch, switchApproachchar, doScale);
 
 
-			cmdSwitch = new FollowPath(trajToSwitch, lengthOfSwitchTraj, OffsetAngle);
+			cmdSwitch = new FollowPath(trajToSwitch, lengthOfSwitchTraj, -90);
 			std::cout << "Switch Pathfinder Trajectory Points: " << lengthOfSwitchTraj << std::endl;
 
-			cmdScale = new FollowPath(trajToScale, lengthOfScaleTraj, OffsetAngle);
+			cmdScale = new FollowPath(trajToScale, lengthOfScaleTraj, -90);
 			std::cout << "Scale Pathfinder Trajectory Points: " << lengthOfScaleTraj << std::endl;
 
 			//MAKE THIS USER INPUT FROM DASH
@@ -187,7 +190,9 @@ void Robot::AutonomousInit() {
 			cmdSwitch->Start();
 		}
 		if(selectedMode == "scale") {
+			std::cout << "scale mode selected!\n";
 			std::string toPath = MakeDecisionScale(scaleSide, LoR.at(0));
+			std::cout << "scale path: " << toPath << "\n";
 			LoadScaleOnlyPath(toPath);
 			// that was trajtoSwitch and I change it to scale because it seemed like a cut and paste
 			cmdScale = new FollowPath(trajToScale, lengthOfScaleTraj, 0);
@@ -196,7 +201,7 @@ void Robot::AutonomousInit() {
 			Command* toScaleHeight = new GoToElevatorPosition(RobotMap::SCALE_POS_FT, false);
 			toScaleHeight->Start();
 		}
-	}*/
+	}
 }
 
 void Robot::AutonomousPeriodic() {
@@ -207,6 +212,12 @@ void Robot::AutonomousPeriodic() {
 
 	if(cmdSwitch != nullptr) {
 		if(cmdSwitch->IsCompleted()) {
+			cmdSwitch->Cancel();
+			/*if(!runOnce) {
+				Command* rot = new DriveCommandAuto(0, 0, 0, 1, 90);
+				rot->Start();
+				runOnce = true;
+			}*/
 
 			std::cout << "Switch Cube Pooper" << std::endl;
 			Command* poopCube = new IntakeUntilCurrentSpike(.5, -1, false);
@@ -218,7 +229,7 @@ void Robot::AutonomousPeriodic() {
 
 			if(lengthOfScaleTraj != 0) {
 				std::cout << "Scale Trajectory Exists" << std::endl;
-				if(!runOnce) {
+				if(!runOnceScale) {
 					std::cout << "Going to Scale" << std::endl;
 					cmdScale->Start();
 					Command* toScaleHeight = new GoToElevatorPosition(RobotMap::SCALE_POS_FT, false);
@@ -231,6 +242,7 @@ void Robot::AutonomousPeriodic() {
 
 	if(cmdScale != nullptr) {
 		if(cmdScale->IsCompleted()) {
+			cmdScale->Cancel();
 			std::cout << "Scale Cube Pooper" << std::endl;
 			Command* poopCubeScale = new IntakeUntilCurrentSpike(.5, -1, false);
 			poopCubeScale->Start();
@@ -310,10 +322,12 @@ std::string Robot::MakeDecision(char sideOfSwitch, char robotSide, char switchSi
 }
 
 std::string Robot::MakeDecisionScale(char scaleSide, char robotSide) {
-	std::string retVal = "";
-	std::string combined = "scale" + robotSide + scaleSide;
-	std::cout << "MakeDecisionScale: " << retVal << std::endl;
-	return retVal;
+	std::string _robotSide, _scaleSide;
+	_robotSide.push_back(robotSide);
+	_scaleSide.push_back(scaleSide);
+	std::string combined = "scale" + _robotSide + _scaleSide;
+	std::cout << "MakeDecisionScale: " << combined << std::endl;
+	return combined;
 }
 
 int Robot::FigureOutWhatAngleTheRobotProbablyStartedAtOnTheField(char robotSide, bool doStraight, bool doSwitch, char switchApproach, bool doScale) {

@@ -3,6 +3,7 @@
 #include <Commands/Command.h>
 
 #include "../../Util/TigerSwerve/SwerveModule.h"
+#include "Timer.h"
 
 class GoDistance : public frc::Command {
 public:
@@ -19,6 +20,7 @@ private:
 	double deltaDistance;
 	double angleForWheel;
 	int ticks;
+	bool started;
 	std::shared_ptr<std::vector<SwerveModule>> modules;
 };
 

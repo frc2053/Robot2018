@@ -43,6 +43,7 @@ private:
 	bool doSwitch;
 	bool justStraight;
 	int OffsetAngle;
+	bool runOnceScale;
 	std::string switchApproach;
 	char switchApproachchar;
 

@@ -30,16 +30,18 @@ void DriveCommandAuto::Execute()
 	RobotMap::tigerDrive->rotateController->SetSetpoint(inputAngle);
 	adjustedYaw = Robot::swerveSubsystem->GetAdjYaw();
 	isRotDone = Robot::swerveSubsystem->GetIsRotDone();
-	finalAutoRot = Robot::swerveSubsystem->CalculateRotValue(inputAngle, .75);
+	finalAutoRot = Robot::swerveSubsystem->CalculateRotValue(inputAngle, 1);
 
 	if(isRotDone)
 	{
-		Robot::swerveSubsystem->SwerveDrive(inputSide, inputFow, 0, adjustedYaw);
+		std::cout << "AUTO: side: " << inputSide << " fow: " << -inputFow << " rot: " << -finalAutoRot << " yaw: " << adjustedYaw << "\n";
+		Robot::swerveSubsystem->SwerveDrive(inputSide, -inputFow, -finalAutoRot, adjustedYaw);
 	}
 	else
 	{
-		std::cout << "finalAutoRot: " << finalAutoRot << "\n";
-		Robot::swerveSubsystem->SwerveDrive(inputSide, inputFow, finalAutoRot, adjustedYaw);
+		std::cout << "finalAutoRot: " << -finalAutoRot << "\n";
+		std::cout << "AUTO: side: " << inputSide << " fow: " << -inputFow << " rot: " << -finalAutoRot << " yaw: " << adjustedYaw << "\n";
+		Robot::swerveSubsystem->SwerveDrive(inputSide, -inputFow, -finalAutoRot, adjustedYaw);
 	}
 
 	if((timeCurrent >= timeTarget)) {
@@ -47,7 +49,7 @@ void DriveCommandAuto::Execute()
 		isDone = true;
 	}
 	else {
-		Robot::swerveSubsystem->SwerveDrive(inputSide, inputFow, finalAutoRot, adjustedYaw);
+		Robot::swerveSubsystem->SwerveDrive(inputSide, -inputFow, -finalAutoRot, adjustedYaw);
 		isDone = false;
 	}
 }

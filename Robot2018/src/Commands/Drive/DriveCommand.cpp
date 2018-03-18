@@ -123,6 +123,7 @@ void DriveCommand::CallToSwerveDrive() {
 	if(rotAxis == 0)
 	{
 		Robot::swerveSubsystem->SetIsRotDoneOverride(false);
+		std::cout << "TELE: side: " << xAxis << " fow: " << -yAxis << " rot: " << -rotAxis << " yaw: " << currentYaw << "\n";
 		Robot::swerveSubsystem->SwerveDrive(xAxis, -yAxis, -finalRotVal, currentYaw);
 	}
 	else
@@ -130,6 +131,7 @@ void DriveCommand::CallToSwerveDrive() {
 		Robot::swerveSubsystem->SetIsRotDoneOverride(true);
 		Robot::swerveSubsystem->SetIsRotDone(true);
 		Robot::swerveSubsystem->SetTimesThroughLoop(0);
+		std::cout << "TELE: side: " << xAxis << " fow: " << -yAxis << " rot: " << -rotAxis << " yaw: " << currentYaw << "\n";
 		Robot::swerveSubsystem->SwerveDrive(xAxis, -yAxis, -rotAxis, currentYaw);
 	}
 }
