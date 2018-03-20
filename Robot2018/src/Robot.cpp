@@ -178,11 +178,11 @@ void Robot::AutonomousInit() {
 			OffsetAngle = FigureOutWhatAngleTheRobotProbablyStartedAtOnTheField(LoR.at(0), justStraight, doSwitch, switchApproachchar, doScale);
 
 
-			cmdSwitch = new FollowPath(trajToSwitch, lengthOfSwitchTraj, -90);
+			cmdSwitch = new FollowPath(trajToSwitch, lengthOfSwitchTraj, OffsetAngle);
 			std::cout << "Switch Pathfinder Trajectory Points: " << lengthOfSwitchTraj << std::endl;
 
-			cmdScale = new FollowPath(trajToScale, lengthOfScaleTraj, -90);
-			std::cout << "Scale Pathfinder Trajectory Points: " << lengthOfScaleTraj << std::endl;
+			//cmdScale = new FollowPath(trajToScale, lengthOfScaleTraj, OffsetAngle);
+			//::cout << "Scale Pathfinder Trajectory Points: " << lengthOfScaleTraj << std::endl;
 
 			//MAKE THIS USER INPUT FROM DASH
 			std::this_thread::sleep_for(std::chrono::seconds(timeToWait));
@@ -197,9 +197,6 @@ void Robot::AutonomousInit() {
 			// that was trajtoSwitch and I change it to scale because it seemed like a cut and paste
 			cmdScale = new FollowPath(trajToScale, lengthOfScaleTraj, 0);
 			cmdScale->Start();
-
-			Command* toScaleHeight = new GoToElevatorPosition(RobotMap::SCALE_POS_FT, false);
-			toScaleHeight->Start();
 		}
 	}
 }
@@ -223,11 +220,11 @@ void Robot::AutonomousPeriodic() {
 			Command* poopCube = new IntakeUntilCurrentSpike(.5, -1, false);
 			poopCube->Start();
 
-			std::cout << "Retrieve Another Cube" << std::endl;
-			CommandGroup* grabSecondCube = new GrabSecondCube();
-			grabSecondCube->Start();
+			//std::cout << "Retrieve Another Cube" << std::endl;
+			//CommandGroup* grabSecondCube = new GrabSecondCube();
+			//grabSecondCube->Start();
 
-			if(lengthOfScaleTraj != 0) {
+			/*if(lengthOfScaleTraj != 0) {
 				std::cout << "Scale Trajectory Exists" << std::endl;
 				if(!runOnceScale) {
 					std::cout << "Going to Scale" << std::endl;
@@ -236,12 +233,14 @@ void Robot::AutonomousPeriodic() {
 					toScaleHeight->Start();
 					runOnce = true;
 				}
-			}
+			}*/
 		}
 	}
 
 	if(cmdScale != nullptr) {
 		if(cmdScale->IsCompleted()) {
+			Command* toScaleHeight = new GoToElevatorPosition(RobotMap::SCALE_POS_FT, false);
+			toScaleHeight->Start();
 			cmdScale->Cancel();
 			std::cout << "Scale Cube Pooper" << std::endl;
 			Command* poopCubeScale = new IntakeUntilCurrentSpike(.5, -1, false);
@@ -265,7 +264,7 @@ void Robot::TeleopInit() {
 	//or rotate to a known position first then reset?  might be hard if stuck on a wall
 	//Robot::swerveSubsystem->SetAdjYaw(0);
 
-	Robot::swerveSubsystem->CalibrateWheelsSimple();
+	//Robot::swerveSubsystem->CalibrateWheelsSimple();
 
 	Robot::swerveSubsystem->SetDefaultCommand(new DriveCommand());
 	Robot::elevatorSubsystem->SetDefaultCommand(new ElevatorControl());
