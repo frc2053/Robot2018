@@ -13,6 +13,8 @@
 #include "Commands/Elevator/ElevatorControl.h"
 #include "Commands/Intake/IntakeUntilCurrentSpike.h"
 #include "Commands/Groups/TestSequence.h"
+#include "Commands/Autonomous/RotateAndPoop.h"
+#include "Commands/Autonomous/GoToHeightAndPoop.h"
 
 
 std::unique_ptr<OI> Robot::oi;
@@ -178,7 +180,7 @@ void Robot::AutonomousInit() {
 			OffsetAngle = FigureOutWhatAngleTheRobotProbablyStartedAtOnTheField(LoR.at(0), justStraight, doSwitch, switchApproachchar, doScale);
 
 
-			cmdSwitch = new FollowPath(trajToSwitch, lengthOfSwitchTraj, OffsetAngle);
+			cmdSwitch = new FollowPath(trajToSwitch, lengthOfSwitchTraj, 0);
 			std::cout << "Switch Pathfinder Trajectory Points: " << lengthOfSwitchTraj << std::endl;
 
 			//cmdScale = new FollowPath(trajToScale, lengthOfScaleTraj, OffsetAngle);
@@ -210,15 +212,21 @@ void Robot::AutonomousPeriodic() {
 	if(cmdSwitch != nullptr) {
 		if(cmdSwitch->IsCompleted()) {
 			cmdSwitch->Cancel();
-			/*if(!runOnce) {
-				Command* rot = new DriveCommandAuto(0, 0, 0, 1, 90);
-				rot->Start();
-				runOnce = true;
-			}*/
-
-			std::cout << "Switch Cube Pooper" << std::endl;
-			Command* poopCube = new IntakeUntilCurrentSpike(.5, -1, false);
-			poopCube->Start();
+			if(!runOnce) {
+				std::cout << "Rotate and Switch Cube Pooper" << std::endl;
+				if(gameData.at(0) == 'L' && selectedMode == "S") {
+					CommandGroup* rotAndPoop = new RotateAndPoop(.5, 90);
+					rotAndPoop->Start();
+				}
+				if(gameData.at(0) == 'R' && selectedMode == "S") {
+					CommandGroup* rotAndPoop = new RotateAndPoop(.5, -90);
+					rotAndPoop->Start();
+				}
+				if(selectedMode == "F") {
+					CommandGroup* rotAndPoop = new RotateAndPoop(.5, 0);
+					rotAndPoop->Start();
+				}
+			}
 
 			//std::cout << "Retrieve Another Cube" << std::endl;
 			//CommandGroup* grabSecondCube = new GrabSecondCube();
@@ -239,12 +247,10 @@ void Robot::AutonomousPeriodic() {
 
 	if(cmdScale != nullptr) {
 		if(cmdScale->IsCompleted()) {
-			Command* toScaleHeight = new GoToElevatorPosition(RobotMap::SCALE_POS_FT, false);
-			toScaleHeight->Start();
 			cmdScale->Cancel();
 			std::cout << "Scale Cube Pooper" << std::endl;
-			Command* poopCubeScale = new IntakeUntilCurrentSpike(.5, -1, false);
-			poopCubeScale->Start();
+			CommandGroup* scaleAndPoop = new GoToHeightAndPoop(RobotMap::SCALE_POS_FT);
+			scaleAndPoop->Start();
 		}
 	}
 }

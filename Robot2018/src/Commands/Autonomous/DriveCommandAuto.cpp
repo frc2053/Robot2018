@@ -62,10 +62,10 @@ bool DriveCommandAuto::IsFinished()
 void DriveCommandAuto::End()
 {
 	timer->Stop();
-	Robot::swerveSubsystem->SwerveDrive(0,0,0,0);
+	//Robot::swerveSubsystem->SwerveDrive(0,0,0,0);
 }
 
 void DriveCommandAuto::Interrupted()
 {
-	Robot::swerveSubsystem->SwerveDrive(0,0,0,0);
+	//Robot::swerveSubsystem->SwerveDrive(0,0,0,0);
 }
