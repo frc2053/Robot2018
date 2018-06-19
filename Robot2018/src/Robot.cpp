@@ -15,6 +15,8 @@
 #include "Commands/Groups/TestSequence.h"
 #include "Commands/Autonomous/RotateAndPoop.h"
 #include "Commands/Autonomous/GoToHeightAndPoop.h"
+#include "Commands/Groups/ClimbRoutine.h"
+#include "Commands/Climber/ChangeGearbox.h"
 
 
 std::unique_ptr<OI> Robot::oi;
@@ -46,11 +48,14 @@ void Robot::RobotInit() {
 	climberSubsystem.reset(new ClimberSubsystem());
 	oi.reset(new OI());
 
+	poopTimer.Reset();
+
+
 	SmartDashboard::PutBoolean("Do Scale", doScale);
 	SmartDashboard::PutBoolean("Do Switch", doSwitch);
 	SmartDashboard::PutBoolean("Just Straight", justStraight);
 
-	SmartDashboard::PutNumber("Time to Wait", timeToWait);
+	SmartDashboard::PutNumber("Time to Wait", 0);
 
 	//calibrate gyro
 	Robot::swerveSubsystem->ZeroYaw();
@@ -72,8 +77,6 @@ void Robot::RobotInit() {
 	//Make the list of auto options avaliable on the Smart Dash
 	SmartDashboard::PutData("Auto mode chooser", &autoChooser);
 	SmartDashboard::PutData("Robot Position Chooser", &robotPosChooser);
-
-
 	//timer to check for gameData
 	gameDataTimer.Reset();
 }
@@ -85,7 +88,6 @@ void Robot::DisabledInit() {
 void Robot::DisabledPeriodic() {
 	SmartDashboard::PutData("Scheduler", Scheduler::GetInstance());
 	Scheduler::GetInstance()->Run();
-	leftOrRight = SmartDashboard::GetBoolean("Left (False) or Right (True)", false);
 	doScale = SmartDashboard::GetBoolean("Do Scale", true);
 	gameData = frc::DriverStation::GetInstance().GetGameSpecificMessage();
 }
@@ -95,6 +97,9 @@ void Robot::AutonomousInit() {
 	//gameData start timer
 	gameDataTimer.Reset();
 	gameDataTimer.Start();
+
+	Robot::climberSubsystem->RetractWings();
+	RobotMap::elevatorClimberSubsystemShifterSolenoid->Set(frc::DoubleSolenoid::kForward);
 
 	//Command* goDist1 = new TestSequence();
 	//goDist1->Start();
@@ -116,6 +121,9 @@ void Robot::AutonomousInit() {
 	Command* toSwitchHeight = new GoToElevatorPosition(RobotMap::SWITCH_POS_FT, false);
 	toSwitchHeight->Start();
 
+	holdCube = new IntakeUntilCurrentSpike(15, .2, false);
+	holdCube->Start();
+
 	//get data to choose correct auto modes
 	while(gameData.size() < 3 && gameDataTimer.Get() <= 1) {
 		gameData = frc::DriverStation::GetInstance().GetGameSpecificMessage();
@@ -132,7 +140,7 @@ void Robot::AutonomousInit() {
 	Robot::swerveSubsystem->CalibrateWheelsSimple();
 
 	//we need to make sure we are elevator mode
-	Robot::elevatorSubsystem->SwitchToElevatorMotor();
+	//Robot::elevatorSubsystem->SwitchToElevatorMotor();
 
 	if(!(gameData.size() == 3) || (justStraight == true)) {
 		if(justStraight == true) {
@@ -152,6 +160,8 @@ void Robot::AutonomousInit() {
 		cmdStraight = new FollowPath(trajStraight, lengthOfStraightPath, 0);
 
 		std::cout << "Straight Pathfinder Trajectory Points: " << lengthOfStraightPath << "\n";
+		std::this_thread::sleep_for(std::chrono::seconds(timeToWait));
+
 		cmdStraight->Start();
 	}
 	else {
@@ -187,6 +197,7 @@ void Robot::AutonomousInit() {
 			//::cout << "Scale Pathfinder Trajectory Points: " << lengthOfScaleTraj << std::endl;
 
 			//MAKE THIS USER INPUT FROM DASH
+			std::cout << "time to wait: " << timeToWait << "\n";
 			std::this_thread::sleep_for(std::chrono::seconds(timeToWait));
 
 			cmdSwitch->Start();
@@ -198,6 +209,9 @@ void Robot::AutonomousInit() {
 			LoadScaleOnlyPath(toPath);
 			// that was trajtoSwitch and I change it to scale because it seemed like a cut and paste
 			cmdScale = new FollowPath(trajToScale, lengthOfScaleTraj, 0);
+
+			std::this_thread::sleep_for(std::chrono::seconds(timeToWait));
+
 			cmdScale->Start();
 		}
 	}
@@ -212,20 +226,25 @@ void Robot::AutonomousPeriodic() {
 	if(cmdSwitch != nullptr) {
 		if(cmdSwitch->IsCompleted()) {
 			cmdSwitch->Cancel();
+			holdCube->Cancel();
 			if(!runOnce) {
 				std::cout << "Rotate and Switch Cube Pooper" << std::endl;
 				if(gameData.at(0) == 'L' && selectedMode == "S") {
+					std::cout << "Left Poop!\n";
 					CommandGroup* rotAndPoop = new RotateAndPoop(.5, 90);
 					rotAndPoop->Start();
 				}
 				if(gameData.at(0) == 'R' && selectedMode == "S") {
+					std::cout << "Right Poop!\n";
 					CommandGroup* rotAndPoop = new RotateAndPoop(.5, -90);
 					rotAndPoop->Start();
 				}
 				if(selectedMode == "F") {
+					std::cout << "Front Poop!\n";
 					CommandGroup* rotAndPoop = new RotateAndPoop(.5, 0);
 					rotAndPoop->Start();
 				}
+				runOnce = true;
 			}
 
 			//std::cout << "Retrieve Another Cube" << std::endl;
@@ -247,10 +266,16 @@ void Robot::AutonomousPeriodic() {
 
 	if(cmdScale != nullptr) {
 		if(cmdScale->IsCompleted()) {
+			poopTimer.Start();
 			cmdScale->Cancel();
+			holdCube->Cancel();
 			std::cout << "Scale Cube Pooper" << std::endl;
 			CommandGroup* scaleAndPoop = new GoToHeightAndPoop(RobotMap::SCALE_POS_FT);
 			scaleAndPoop->Start();
+			if(poopTimer.Get() >= 1.5) {
+				Command* poop = new IntakeUntilCurrentSpike(.5, -1, false);
+				poop->Start();
+			}
 		}
 	}
 }

@@ -13,10 +13,10 @@ void HookLatch::Initialize() {
 
 void HookLatch::Execute() {
 	if(currentDirection == 1) {
-		Robot::climberSubsystem->HookLatch();
+		//Robot::climberSubsystem->HookLatch();
 	}
 	if(currentDirection == 0) {
-		Robot::climberSubsystem->UnhookLatch();
+		//Robot::climberSubsystem->UnhookLatch();
 	}
 	isDone = true;
 }

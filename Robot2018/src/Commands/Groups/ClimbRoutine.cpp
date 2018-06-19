@@ -3,7 +3,7 @@
 #include "../Climber/ChangeGearbox.h"
 #include "../Climber/DeployWings.h"
 
-ClimbRoutine::ClimbRoutine() {
-	AddSequential(new ChangeGearbox(true));
-	//AddSequential(new DeployWings(true));
+ClimbRoutine::ClimbRoutine(bool gearbox, bool wings) {
+	AddSequential(new ChangeGearbox(gearbox));
+	AddSequential(new DeployWings(wings));
 }

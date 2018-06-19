@@ -4,9 +4,11 @@
 ChangeGearbox::ChangeGearbox(bool inputMode) {
 	Requires(Robot::elevatorSubsystem.get());
 	mode = inputMode;
+	isDone = false;
 }
 
 void ChangeGearbox::Initialize() {
+	isDone = false;
 }
 
 void ChangeGearbox::Execute() {
@@ -16,10 +18,11 @@ void ChangeGearbox::Execute() {
 	else {
 		Robot::elevatorSubsystem->SwitchToElevatorMotor();
 	}
+	isDone = true;
 }
 
 bool ChangeGearbox::IsFinished() {
-	return true;
+	return isDone;
 }
 
 void ChangeGearbox::End() {

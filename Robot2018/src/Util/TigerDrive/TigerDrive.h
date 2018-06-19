@@ -7,11 +7,11 @@
 class TigerDrive : public frc::PIDOutput
 {
 private:
-	const double K_P = .058;
+	const double K_P = .03;
 	const double K_I = 0.0;
 	const double K_D = .1;
 	const double K_F = 0.0;
-	const double ANGLE_TOLERANCE = 2;
+	const double ANGLE_TOLERANCE = 3;
 	const int OVERSHOOT_TIMEOUT = 5;
 
 	bool tooFarCW;

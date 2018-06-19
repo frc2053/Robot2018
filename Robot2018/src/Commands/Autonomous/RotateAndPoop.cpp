@@ -10,6 +10,7 @@
 #include "../Intake/IntakeUntilCurrentSpike.h"
 
 RotateAndPoop::RotateAndPoop(float time, float angle) {
+	std::cout << "MADE IT TO ROTANDPOOP" << std::endl;
 	AddSequential(new DriveCommandAuto(0, 0, 0, time, angle));
-	AddSequential(new IntakeUntilCurrentSpike(.5, -1, false));
+	AddSequential(new IntakeUntilCurrentSpike(0, -1, false));
 }

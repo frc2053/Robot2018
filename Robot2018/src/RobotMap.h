@@ -15,6 +15,7 @@ using namespace ctre::phoenix::motorcontrol;
 class RobotMap {
 public:
 	static void init();
+	static void resetTalons(std::vector<std::shared_ptr<can::TalonSRX>>);
 
 	static std::shared_ptr<can::TalonSRX> intakeSubsystemLeftMotor;
 	static std::shared_ptr<can::TalonSRX> intakeSubsystemRightMotor;
@@ -34,15 +35,17 @@ public:
 	static std::shared_ptr<can::TalonSRX> swerveSubsystemBRRotTalon;
 
 	static std::shared_ptr<frc::DoubleSolenoid> climberSubsystemWingSolenoid;
-	static std::shared_ptr<frc::DoubleSolenoid> climberSubsystemLatchSolenoid;
+	static std::shared_ptr<frc::DoubleSolenoid> climberSubsystemWing02Solenoid;
 	static std::shared_ptr<frc::DoubleSolenoid> elevatorClimberSubsystemShifterSolenoid;
 	static std::shared_ptr<frc::Servo> climberSubsystemStopperServo;
 
 	static std::shared_ptr<AHRS> robotIMU;
 	static std::shared_ptr<TigerDrive> tigerDrive;
 	static std::vector<std::shared_ptr<can::TalonSRX>> talonVector;
+	static std::vector<std::shared_ptr<can::TalonSRX>> allTalons;
 	static std::shared_ptr<frc::PowerDistributionPanel> powerDistributionPanel;
 	static std::shared_ptr<TigerSwerve> tigerSwerve;
+
 
 	static int TOP_POSITION_TICKS;
 	static double GROUND_POS_FT;

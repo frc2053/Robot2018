@@ -7,8 +7,8 @@ ClimberSubsystem::ClimberSubsystem() : Subsystem("ClimberSubsystem") {
 	primaryMotor = RobotMap::elevatorClimberSubsystemPrimaryTalon;
 	followerMotor01 = RobotMap::elevatorClimberSubsystemFollower01Talon;
 	followerMotor02 = RobotMap::elevatorClimberSubsystemFollower02Talon;
-	latchSolenoid = RobotMap::climberSubsystemLatchSolenoid;
 	wingSolenoid = RobotMap::climberSubsystemWingSolenoid;
+	wingSolenoid2 = RobotMap::climberSubsystemWing02Solenoid;
 	stopperServo = RobotMap::climberSubsystemStopperServo;
 }
 
@@ -22,19 +22,21 @@ void ClimberSubsystem::SetPrimaryMotor(double power) {
 
 void ClimberSubsystem::ReleaseWings() {
 	wingSolenoid->Set(frc::DoubleSolenoid::Value::kForward);
+	wingSolenoid2->Set(frc::DoubleSolenoid::Value::kForward);
 }
 
 void ClimberSubsystem::RetractWings() {
 	wingSolenoid->Set(frc::DoubleSolenoid::Value::kReverse);
+	wingSolenoid2->Set(frc::DoubleSolenoid::Value::kReverse);
 }
 
-void ClimberSubsystem::HookLatch() {
+/*void ClimberSubsystem::HookLatch() {
 	latchSolenoid->Set(frc::DoubleSolenoid::Value::kForward);
 }
 
 void ClimberSubsystem::UnhookLatch() {
 	latchSolenoid->Set(frc::DoubleSolenoid::Value::kReverse);
-}
+}*/
 
 void ClimberSubsystem::SetStopperServo(double power)
 {

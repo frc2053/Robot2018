@@ -46,12 +46,14 @@ private:
 	bool runOnceScale;
 	std::string switchApproach;
 	char switchApproachchar;
+	frc::Timer poopTimer;
 
 	Segment trajToSwitch[1024];
 	Segment trajToScale[1024];
 	Segment trajStraight[1024];
 	Command* cmdSwitch;
 	Command* cmdScale;
+	Command* holdCube;
 	Command* cmdStraight;
 	int lengthOfSwitchTraj = 0;
 	int lengthOfScaleTraj = 0;

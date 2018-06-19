@@ -22,6 +22,10 @@ OI::OI() {
 	SmartDashboard::PutData("CW Test", new CWTest());
 	SmartDashboard::PutData("Zero Yaw", new ZeroYaw());
 	SmartDashboard::PutData("Zero Elevator", new ZeroElevator());
+	SmartDashboard::PutData("Wings Deploy", new DeployWings(true));
+	SmartDashboard::PutData("Wings Retract", new DeployWings(false));
+	SmartDashboard::PutData("Shift High", new ChangeGearbox(true));
+	SmartDashboard::PutData("Shift Low", new ChangeGearbox(false));
 
 
 	/*operatorJoystick->aButton->WhenPressed(new GoToElevatorPosition(RobotMap::GROUND_POS_FT));
@@ -36,7 +40,7 @@ OI::OI() {
 
 	//ELEVATOR POSITIONS
 	operatorJoystick->yButton->WhenPressed(new GoToElevatorPosition(RobotMap::SCALE_POS_FT, false));
-	operatorJoystick->aButton->WhenPressed(new GoToElevatorPosition(0, false));
+	operatorJoystick->aButton->WhenPressed(new GoToElevatorPosition(-0.1, false));
 	operatorJoystick->xButton->WhenPressed(new GoToElevatorPosition(RobotMap::SWITCH_POS_FT, false));
 	operatorJoystick->bButton->WhenPressed(new GoToElevatorPosition(-5.5, false)); //Go to neutral position for Scale
 	//operatorJoystick->yButton->WhenPressed(new RunClimberMotor(0, -1));
@@ -55,7 +59,7 @@ OI::OI() {
 	operatorJoystick->leftShoulderButton->WhenActive(new IntakeUntilCurrentSpike(0, 1.0, true));
 	operatorJoystick->leftShoulderButton->WhenInactive(new IntakeUntilCurrentSpike(0, .2, false)); //NOT NECESSARY BUT CAN OVERRIDE IN CASE OF ACCIDENTAL INTAKE BUTTON HIT
 
-	operatorJoystick->rightShoulderButton->WhenActive(new IntakeUntilCurrentSpike(0, -1.0, false));
+	operatorJoystick->rightShoulderButton->WhenActive(new IntakeUntilCurrentSpike(0, -.7, false));
 	operatorJoystick->rightShoulderButton->WhenInactive(new IntakeUntilCurrentSpike(0, 0, false));
 	//INTAKE/OUTTAKE
 
@@ -64,14 +68,15 @@ OI::OI() {
 	//operatorJoystick->selectButton->WhenPressed(new DeployWings());
 	//operatorJoystick->startButton->WhenPressed(new GoToElevatorPosition(6, true));
 
-	operatorJoystick->startButton->WhenPressed(new BrakeElevator(.01));
+	driverJoystick->startButton->WhenPressed(new BrakeElevator(.01));
+	driverJoystick->selectButton->WhenPressed(new BrakeElevator(.99));
 	//operatorJoystick->startButton->WhenReleased(new BrakeElevator(.99));
 
 	//operatorJoystick->selectButton->WhenPressed(new BrakeElevator(-1));
 	//operatorJoystick->selectButton->WhenReleased(new BrakeElevator(0));
 
 	//oof
-	operatorJoystick->leftStickButton->WhenPressed(new ClimbRoutine());
+	operatorJoystick->leftStickButton->WhenPressed(new ClimbRoutine(false, true));
 
 
 	//operatorJoystick->startButton->WhenReleased(new ChangeGearbox(false));
@@ -90,7 +95,7 @@ OI::OI() {
 	//operatorJoystick->GetRightTrigger()->WhileActive(new ElevatorControl());
 	//operatorJoystick->GetRightTrigger()->WhenInactive(new ElevatorControl());
 
-	driverJoystick->selectButton->WhenPressed(new ZeroWheels());
+	//driverJoystick->selectButton->WhenPressed(new ZeroWheels());
 
 
 

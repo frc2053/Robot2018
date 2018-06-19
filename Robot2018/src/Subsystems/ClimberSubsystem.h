@@ -10,8 +10,8 @@ private:
 	std::shared_ptr<can::TalonSRX> primaryMotor;
 	std::shared_ptr<can::TalonSRX> followerMotor01;
 	std::shared_ptr<can::TalonSRX> followerMotor02;
-	std::shared_ptr<frc::DoubleSolenoid> latchSolenoid;
 	std::shared_ptr<frc::DoubleSolenoid> wingSolenoid;
+	std::shared_ptr<frc::DoubleSolenoid> wingSolenoid2;
 	std::shared_ptr<frc::Servo> stopperServo;
 public:
 	ClimberSubsystem();

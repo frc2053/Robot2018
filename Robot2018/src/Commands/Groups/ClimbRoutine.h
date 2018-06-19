@@ -4,6 +4,6 @@
 
 class ClimbRoutine : public frc::CommandGroup {
 public:
-	ClimbRoutine();
+	ClimbRoutine(bool gearbox, bool wings);
 };
 

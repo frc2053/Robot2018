@@ -12,5 +12,5 @@
 
 GoToHeightAndPoop::GoToHeightAndPoop(double height) {
 	AddSequential(new GoToElevatorPosition(height, false));
-	AddSequential(new IntakeUntilCurrentSpike(.5, -1, false));
+	//AddSequential(new IntakeUntilCurrentSpike(.5, -1, false));
 }

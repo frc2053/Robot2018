@@ -18,7 +18,7 @@ std::shared_ptr<can::TalonSRX> RobotMap::swerveSubsystemFRRotTalon;
 std::shared_ptr<can::TalonSRX> RobotMap::swerveSubsystemBLRotTalon;
 std::shared_ptr<can::TalonSRX> RobotMap::swerveSubsystemBRRotTalon;
 
-std::shared_ptr<frc::DoubleSolenoid> RobotMap::climberSubsystemLatchSolenoid;
+std::shared_ptr<frc::DoubleSolenoid> RobotMap::climberSubsystemWing02Solenoid;
 std::shared_ptr<frc::DoubleSolenoid> RobotMap::climberSubsystemWingSolenoid;
 std::shared_ptr<frc::DoubleSolenoid> RobotMap::elevatorClimberSubsystemShifterSolenoid;
 std::shared_ptr<frc::Servo> RobotMap::climberSubsystemStopperServo;
@@ -29,6 +29,7 @@ std::shared_ptr<frc::PowerDistributionPanel> RobotMap::powerDistributionPanel;
 std::shared_ptr<TigerDrive> RobotMap::tigerDrive;
 std::shared_ptr<TigerSwerve> RobotMap::tigerSwerve;
 std::vector<std::shared_ptr<can::TalonSRX>> RobotMap::talonVector;
+std::vector<std::shared_ptr<can::TalonSRX>> RobotMap::allTalons;
 
 int RobotMap::TOP_POSITION_TICKS;
 double RobotMap::GROUND_POS_FT;
@@ -100,9 +101,25 @@ void RobotMap::init() {
 	swerveSubsystemBLRotTalon.reset(new can::TalonSRX(8));
 	swerveSubsystemBRRotTalon.reset(new can::TalonSRX(9));
 
-	climberSubsystemLatchSolenoid.reset(new frc::DoubleSolenoid(4, 5));
+	climberSubsystemWing02Solenoid.reset(new frc::DoubleSolenoid(4, 5));
 	climberSubsystemWingSolenoid.reset(new frc::DoubleSolenoid(2, 3));
 	elevatorClimberSubsystemShifterSolenoid.reset(new frc::DoubleSolenoid(0, 1));
+
+	allTalons.push_back(intakeSubsystemLeftMotor);
+	allTalons.push_back(intakeSubsystemRightMotor);
+	allTalons.push_back(elevatorClimberSubsystemPrimaryTalon);
+	allTalons.push_back(elevatorClimberSubsystemFollower01Talon);
+	allTalons.push_back(elevatorClimberSubsystemFollower02Talon);
+	allTalons.push_back(swerveSubsystemFLDriveTalon);
+	allTalons.push_back(swerveSubsystemFRDriveTalon);
+	allTalons.push_back(swerveSubsystemBLDriveTalon);
+	allTalons.push_back(swerveSubsystemBRDriveTalon);
+	allTalons.push_back(swerveSubsystemFLRotTalon);
+	allTalons.push_back(swerveSubsystemFRRotTalon);
+	allTalons.push_back(swerveSubsystemBLRotTalon);
+	allTalons.push_back(swerveSubsystemBRRotTalon);
+
+	RobotMap::resetTalons(allTalons);
 
 	talonVector.push_back(swerveSubsystemFLDriveTalon);
 	talonVector.push_back(swerveSubsystemFRDriveTalon);
@@ -140,6 +157,10 @@ void RobotMap::init() {
 	elevatorClimberSubsystemFollower02Talon->Set(ControlMode::Follower, 13);
 	elevatorClimberSubsystemFollower02Talon->SetInverted(true);
 
+
+	elevatorClimberSubsystemFollower01Talon->ConfigVoltageCompSaturation(0, 10);
+	elevatorClimberSubsystemFollower02Talon->ConfigVoltageCompSaturation(0, 10);
+	elevatorClimberSubsystemPrimaryTalon->ConfigVoltageCompSaturation(0, 10);
 
 	climberSubsystemStopperServo.reset(new frc::Servo(9));
 
@@ -254,3 +275,46 @@ void RobotMap::init() {
 	swerveSubsystemBRRotTalon->ConfigPeakCurrentLimit(0, 10);
 }
 
+void RobotMap::resetTalons(std::vector<std::shared_ptr<can::TalonSRX>> allTalons) {
+	for(int i = 0; i < allTalons.size(); i++) {
+		std::shared_ptr<can::TalonSRX> currentTalon = allTalons.at(i);
+		currentTalon->SetInverted(false);
+		currentTalon->Set(ControlMode::PercentOutput, 0);
+		currentTalon->ConfigOpenloopRamp(0, 0);
+		currentTalon->ConfigClosedloopRamp(0, 0);
+		currentTalon->ConfigNominalOutputForward(0, 0);
+		currentTalon->ConfigNominalOutputReverse(0, 0);
+		currentTalon->ConfigPeakOutputForward(1, 0);
+		currentTalon->ConfigPeakOutputReverse(-1, 0);
+		currentTalon->ConfigNeutralDeadband(0.04, 0);
+		currentTalon->ConfigVoltageCompSaturation(0, 0);
+		currentTalon->ConfigVoltageMeasurementFilter(32, 0);
+		currentTalon->ConfigSelectedFeedbackSensor(FeedbackDevice::QuadEncoder, 0, 0);
+		currentTalon->ConfigSensorTerm(SensorTerm::SensorTerm_Diff0, FeedbackDevice::QuadEncoder, 0);
+		currentTalon->ConfigSensorTerm(SensorTerm::SensorTerm_Diff1, FeedbackDevice::QuadEncoder, 0);
+		currentTalon->ConfigSensorTerm(SensorTerm::SensorTerm_Sum0, FeedbackDevice::QuadEncoder, 0);
+		currentTalon->ConfigSensorTerm(SensorTerm::SensorTerm_Sum1, FeedbackDevice::QuadEncoder, 0);
+		currentTalon->ConfigVelocityMeasurementPeriod(VelocityMeasPeriod::Period_100Ms, 0);
+		currentTalon->ConfigVelocityMeasurementWindow(64, 0);
+		currentTalon->ConfigForwardLimitSwitchSource(LimitSwitchSource::LimitSwitchSource_Deactivated, LimitSwitchNormal::LimitSwitchNormal_NormallyOpen, 0);
+		currentTalon->ConfigReverseLimitSwitchSource(LimitSwitchSource::LimitSwitchSource_Deactivated, LimitSwitchNormal::LimitSwitchNormal_NormallyOpen, 0);
+		currentTalon->ConfigForwardSoftLimitThreshold(0, 0);
+		currentTalon->ConfigReverseSoftLimitThreshold(0, 0);
+		currentTalon->ConfigForwardSoftLimitEnable(false, 0);
+		currentTalon->ConfigReverseSoftLimitEnable(false, 0);
+		currentTalon->Config_kP(0, 0, 0);
+		currentTalon->Config_kI(0 ,0 ,0);
+		currentTalon->Config_kD(0, 0, 0);
+		currentTalon->Config_kF(0, 0, 0);
+		currentTalon->Config_IntegralZone(0, 0, 0);
+		currentTalon->ConfigAllowableClosedloopError(0, 0, 0);
+		currentTalon->ConfigMaxIntegralAccumulator(0, 0, 0);
+		currentTalon->ConfigMotionCruiseVelocity(0, 0);
+		currentTalon->ConfigMotionAcceleration(0, 0);
+		currentTalon->ConfigMotionProfileTrajectoryPeriod(0, 0);
+		currentTalon->ConfigSetCustomParam(0, 0, 0);
+		currentTalon->ConfigPeakCurrentLimit(0, 0);
+		currentTalon->ConfigPeakCurrentDuration(10, 0);
+		currentTalon->ConfigContinuousCurrentLimit(0, 0);
+	}
+}

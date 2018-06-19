@@ -12,5 +12,6 @@ public:
 	void Interrupted() override;
 private:
 	bool mode;
+	bool isDone;
 };
 

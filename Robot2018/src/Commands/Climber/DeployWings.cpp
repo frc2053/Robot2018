@@ -15,8 +15,6 @@ void DeployWings::Initialize() {
 // Make this return true when this Command no longer needs to run execute()
 
 void DeployWings::Execute() {
-if(Robot::MATCHTIME <= 35)
-{
 	if(currentDirection) {
 		Robot::climberSubsystem->ReleaseWings();
 	}
@@ -24,7 +22,6 @@ if(Robot::MATCHTIME <= 35)
 		Robot::climberSubsystem->RetractWings();
 	}
 	isDone = true;
-}
 }
 
 bool DeployWings::IsFinished() {
