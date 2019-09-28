@@ -45,6 +45,11 @@ void RobotMap::init() {
 	//allTalons.push_back(swerveSubsystemBLRotTalon);
 	//allTalons.push_back(swerveSubsystemBRRotTalon);
 
+	swerveSubsystemFLDriveSpark->RestoreFactoryDefaults();
+	//swerveSubsystemFRDriveSpark->RestoreFactoryDefaults();
+	//swerveSubsystemBLDriveSpark->RestoreFactoryDefaults();
+	//swerveSubsystemBRDriveSpark->RestoreFactoryDefaults();
+
 	RobotMap::resetTalons(allTalons);
 
 	sparkVector.push_back(swerveSubsystemFLDriveSpark);
