@@ -12,19 +12,19 @@ TigerSwerve::TigerSwerve(std::vector<std::shared_ptr<can::TalonSRX>>& talons, st
 	modules.reset(new std::vector<SwerveModule>());
 
 	frontLeftDrive = sparks.at(0);
-	frontRightDrive = sparks.at(1);
-	backLeftDrive = sparks.at(2);
-	backRightDrive = sparks.at(3);
+	//frontRightDrive = sparks.at(1);
+	//backLeftDrive = sparks.at(2);
+	//backRightDrive = sparks.at(3);
 
 	frontLeftRot = talons.at(0);
-	frontRightRot = talons.at(1);
-	backLeftRot = talons.at(2);
-	backRightRot = talons.at(3);
+	//frontRightRot = talons.at(1);
+	//backLeftRot = talons.at(2);
+	//backRightRot = talons.at(3);
 
 	modules->push_back(SwerveModule(frontLeftDrive, frontLeftRot));
-	modules->push_back(SwerveModule(frontRightDrive, frontRightRot));
-	modules->push_back(SwerveModule(backLeftDrive, backLeftRot));
-	modules->push_back(SwerveModule(backRightDrive, backRightRot));
+	//modules->push_back(SwerveModule(frontRightDrive, frontRightRot));
+	//modules->push_back(SwerveModule(backLeftDrive, backLeftRot));
+	//modules->push_back(SwerveModule(backRightDrive, backRightRot));
 
 	angleTimer.reset(new frc::Timer());
 	angleTimer->Reset();
@@ -69,9 +69,9 @@ void TigerSwerve::Drive(double xSpeed, double ySpeed, double rotSpeed, double he
 	angleTimer->Reset();
 	angleTimer->Start();
 	modules->at(0).Set(flWheelSpeed, flWheelAngle, true);
-	modules->at(1).Set(frWheelSpeed, frWheelAngle, true);
-	modules->at(2).Set(blWheelSpeed, blWheelAngle, true);
-	modules->at(3).Set(brWheelSpeed, brWheelAngle, true);
+	//modules->at(1).Set(frWheelSpeed, frWheelAngle, true);
+	//modules->at(2).Set(blWheelSpeed, blWheelAngle, true);
+	//modules->at(3).Set(brWheelSpeed, brWheelAngle, true);
 
 
 	prevFLAngle = flWheelAngle;

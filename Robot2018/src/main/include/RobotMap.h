@@ -17,14 +17,14 @@ public:
 	static void resetTalons(std::vector<std::shared_ptr<can::TalonSRX>>);
 
 	static std::shared_ptr<rev::CANSparkMax> swerveSubsystemFLDriveSpark;
-	static std::shared_ptr<rev::CANSparkMax> swerveSubsystemFRDriveSpark;
-	static std::shared_ptr<rev::CANSparkMax> swerveSubsystemBLDriveSpark;
-	static std::shared_ptr<rev::CANSparkMax> swerveSubsystemBRDriveSpark;
+	//static std::shared_ptr<rev::CANSparkMax> swerveSubsystemFRDriveSpark;
+	//static std::shared_ptr<rev::CANSparkMax> swerveSubsystemBLDriveSpark;
+	//static std::shared_ptr<rev::CANSparkMax> swerveSubsystemBRDriveSpark;
 
 	static std::shared_ptr<can::TalonSRX> swerveSubsystemFLRotTalon;
-	static std::shared_ptr<can::TalonSRX> swerveSubsystemFRRotTalon;
-	static std::shared_ptr<can::TalonSRX> swerveSubsystemBLRotTalon;
-	static std::shared_ptr<can::TalonSRX> swerveSubsystemBRRotTalon;
+	//static std::shared_ptr<can::TalonSRX> swerveSubsystemFRRotTalon;
+	//static std::shared_ptr<can::TalonSRX> swerveSubsystemBLRotTalon;
+	//static std::shared_ptr<can::TalonSRX> swerveSubsystemBRRotTalon;
 
 	static std::shared_ptr<AHRS> robotIMU;
 	static std::shared_ptr<TigerDrive> tigerDrive;

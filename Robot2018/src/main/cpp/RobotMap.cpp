@@ -2,14 +2,14 @@
 #include "frc/WPILib.h"
 
 std::shared_ptr<rev::CANSparkMax> RobotMap::swerveSubsystemFLDriveSpark;
-std::shared_ptr<rev::CANSparkMax> RobotMap::swerveSubsystemFRDriveSpark;
-std::shared_ptr<rev::CANSparkMax> RobotMap::swerveSubsystemBLDriveSpark;
-std::shared_ptr<rev::CANSparkMax> RobotMap::swerveSubsystemBRDriveSpark;
+//std::shared_ptr<rev::CANSparkMax> RobotMap::swerveSubsystemFRDriveSpark;
+//std::shared_ptr<rev::CANSparkMax> RobotMap::swerveSubsystemBLDriveSpark;
+//std::shared_ptr<rev::CANSparkMax> RobotMap::swerveSubsystemBRDriveSpark;
 
 std::shared_ptr<can::TalonSRX> RobotMap::swerveSubsystemFLRotTalon;
-std::shared_ptr<can::TalonSRX> RobotMap::swerveSubsystemFRRotTalon;
-std::shared_ptr<can::TalonSRX> RobotMap::swerveSubsystemBLRotTalon;
-std::shared_ptr<can::TalonSRX> RobotMap::swerveSubsystemBRRotTalon;
+//std::shared_ptr<can::TalonSRX> RobotMap::swerveSubsystemFRRotTalon;
+//std::shared_ptr<can::TalonSRX> RobotMap::swerveSubsystemBLRotTalon;
+//std::shared_ptr<can::TalonSRX> RobotMap::swerveSubsystemBRRotTalon;
 
 std::shared_ptr<AHRS> RobotMap::robotIMU;
 std::shared_ptr<frc::PowerDistributionPanel> RobotMap::powerDistributionPanel;
@@ -31,31 +31,31 @@ void RobotMap::init() {
 	LiveWindow::GetInstance()->DisableAllTelemetry();
 
 	swerveSubsystemFLDriveSpark.reset(new rev::CANSparkMax(2, rev::CANSparkMaxLowLevel::MotorType::kBrushless));
-	swerveSubsystemFRDriveSpark.reset(new rev::CANSparkMax(3, rev::CANSparkMaxLowLevel::MotorType::kBrushless));
-	swerveSubsystemBLDriveSpark.reset(new rev::CANSparkMax(4, rev::CANSparkMaxLowLevel::MotorType::kBrushless));
-	swerveSubsystemBRDriveSpark.reset(new rev::CANSparkMax(5, rev::CANSparkMaxLowLevel::MotorType::kBrushless));
+	//swerveSubsystemFRDriveSpark.reset(new rev::CANSparkMax(3, rev::CANSparkMaxLowLevel::MotorType::kBrushless));
+	//swerveSubsystemBLDriveSpark.reset(new rev::CANSparkMax(4, rev::CANSparkMaxLowLevel::MotorType::kBrushless));
+	//swerveSubsystemBRDriveSpark.reset(new rev::CANSparkMax(5, rev::CANSparkMaxLowLevel::MotorType::kBrushless));
 
 	swerveSubsystemFLRotTalon.reset(new can::TalonSRX(6));
-	swerveSubsystemFRRotTalon.reset(new can::TalonSRX(7));
-	swerveSubsystemBLRotTalon.reset(new can::TalonSRX(8));
-	swerveSubsystemBRRotTalon.reset(new can::TalonSRX(9));
+	//swerveSubsystemFRRotTalon.reset(new can::TalonSRX(7));
+	//swerveSubsystemBLRotTalon.reset(new can::TalonSRX(8));
+	//swerveSubsystemBRRotTalon.reset(new can::TalonSRX(9));
 
 	allTalons.push_back(swerveSubsystemFLRotTalon);
-	allTalons.push_back(swerveSubsystemFRRotTalon);
-	allTalons.push_back(swerveSubsystemBLRotTalon);
-	allTalons.push_back(swerveSubsystemBRRotTalon);
+	//allTalons.push_back(swerveSubsystemFRRotTalon);
+	//allTalons.push_back(swerveSubsystemBLRotTalon);
+	//allTalons.push_back(swerveSubsystemBRRotTalon);
 
 	RobotMap::resetTalons(allTalons);
 
 	sparkVector.push_back(swerveSubsystemFLDriveSpark);
-	sparkVector.push_back(swerveSubsystemFRDriveSpark);
-	sparkVector.push_back(swerveSubsystemBLDriveSpark);
-	sparkVector.push_back(swerveSubsystemBRDriveSpark);
+	//sparkVector.push_back(swerveSubsystemFRDriveSpark);
+	//sparkVector.push_back(swerveSubsystemBLDriveSpark);
+	//sparkVector.push_back(swerveSubsystemBRDriveSpark);
 
 	talonVector.push_back(swerveSubsystemFLRotTalon);
-	talonVector.push_back(swerveSubsystemFRRotTalon);
-	talonVector.push_back(swerveSubsystemBLRotTalon);
-	talonVector.push_back(swerveSubsystemBRRotTalon);
+	//talonVector.push_back(swerveSubsystemFRRotTalon);
+	//talonVector.push_back(swerveSubsystemBLRotTalon);
+	//talonVector.push_back(swerveSubsystemBRRotTalon);
 
 	robotIMU.reset(new AHRS(frc::SPI::Port::kMXP));
 	powerDistributionPanel.reset(new frc::PowerDistributionPanel());
@@ -97,9 +97,9 @@ void RobotMap::init() {
 
 	//we want to use relative for rotation motors because it is much faster read time
 	swerveSubsystemFLRotTalon->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, 10);
-	swerveSubsystemFRRotTalon->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, 10);
-	swerveSubsystemBLRotTalon->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, 10);
-	swerveSubsystemBRRotTalon->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, 10);
+	//swerveSubsystemFRRotTalon->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, 10);
+	//swerveSubsystemBLRotTalon->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, 10);
+	//swerveSubsystemBRRotTalon->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, 10);
 
 	//we set the rotation sensor pos to the pulse width position masked. The masking makes sure we only are from 0 - 4096
 	/*swerveSubsystemFLRotTalon->SetSelectedSensorPosition(swerveSubsystemFLRotTalon->GetSensorCollection().GetPulseWidthPosition() & 0xFFF, 0, 10);
@@ -115,61 +115,61 @@ void RobotMap::init() {
 
 	//see drive motor explanation above
 	swerveSubsystemFLRotTalon->SetSensorPhase(false);
-	swerveSubsystemFRRotTalon->SetSensorPhase(false);
-	swerveSubsystemBLRotTalon->SetSensorPhase(false);
-	swerveSubsystemBRRotTalon->SetSensorPhase(false);
+	//swerveSubsystemFRRotTalon->SetSensorPhase(false);
+	//swerveSubsystemBLRotTalon->SetSensorPhase(false);
+	//swerveSubsystemBRRotTalon->SetSensorPhase(false);
 
 	//makes sure we are rotating clockwise with positive voltage
 	swerveSubsystemFLRotTalon->SetInverted(true);
-	swerveSubsystemFRRotTalon->SetInverted(true);
-	swerveSubsystemBLRotTalon->SetInverted(true);
-	swerveSubsystemBRRotTalon->SetInverted(true);
+	//swerveSubsystemFRRotTalon->SetInverted(true);
+	//swerveSubsystemBLRotTalon->SetInverted(true);
+	//swerveSubsystemBRRotTalon->SetInverted(true);
 
 	//PIDS
 	swerveSubsystemFLRotTalon->Config_kP(0, 12, 10);
 	swerveSubsystemFLRotTalon->Config_kI(0, 0, 10);
 	swerveSubsystemFLRotTalon->Config_kD(0, 120, 10);
 
-	swerveSubsystemFRRotTalon->Config_kP(0, 12, 10);
-	swerveSubsystemFRRotTalon->Config_kI(0, 0, 10);
-	swerveSubsystemFRRotTalon->Config_kD(0, 120, 10);
+	//swerveSubsystemFRRotTalon->Config_kP(0, 12, 10);
+	//swerveSubsystemFRRotTalon->Config_kI(0, 0, 10);
+	//swerveSubsystemFRRotTalon->Config_kD(0, 120, 10);
 
-	swerveSubsystemBLRotTalon->Config_kP(0, 12, 10);
-	swerveSubsystemBLRotTalon->Config_kI(0, 0, 10);
-	swerveSubsystemBLRotTalon->Config_kD(0, 120, 10);
+	//swerveSubsystemBLRotTalon->Config_kP(0, 12, 10);
+	//swerveSubsystemBLRotTalon->Config_kI(0, 0, 10);
+	//swerveSubsystemBLRotTalon->Config_kD(0, 120, 10);
 
-	swerveSubsystemBRRotTalon->Config_kP(0, 12, 10);
-	swerveSubsystemBRRotTalon->Config_kI(0, 0, 10);
-	swerveSubsystemBRRotTalon->Config_kD(0, 120, 10);
+	//swerveSubsystemBRRotTalon->Config_kP(0, 12, 10);
+	//swerveSubsystemBRRotTalon->Config_kI(0, 0, 10);
+	//swerveSubsystemBRRotTalon->Config_kD(0, 120, 10);
 
 	//Rotation motors are too strong so we limit them to around half total output
 	swerveSubsystemFLRotTalon->ConfigPeakOutputForward(1.0, 10); //.416
-	swerveSubsystemFRRotTalon->ConfigPeakOutputForward(1.0, 10);
-	swerveSubsystemBLRotTalon->ConfigPeakOutputForward(1.0, 10);
-	swerveSubsystemBRRotTalon->ConfigPeakOutputForward(1.0, 10);
+	//swerveSubsystemFRRotTalon->ConfigPeakOutputForward(1.0, 10);
+	//swerveSubsystemBLRotTalon->ConfigPeakOutputForward(1.0, 10);
+	//swerveSubsystemBRRotTalon->ConfigPeakOutputForward(1.0, 10);
 
 	//same as above except in reverse
 	swerveSubsystemFLRotTalon->ConfigPeakOutputReverse(-1.0, 10); //-.416
-	swerveSubsystemFRRotTalon->ConfigPeakOutputReverse(-1.0, 10);
-	swerveSubsystemBLRotTalon->ConfigPeakOutputReverse(-1.0, 10);
-	swerveSubsystemBRRotTalon->ConfigPeakOutputReverse(-1.0, 10);
+	//swerveSubsystemFRRotTalon->ConfigPeakOutputReverse(-1.0, 10);
+	//swerveSubsystemBLRotTalon->ConfigPeakOutputReverse(-1.0, 10);
+	//swerveSubsystemBRRotTalon->ConfigPeakOutputReverse(-1.0, 10);
 
 	//Tolerance for PID
 	swerveSubsystemFLRotTalon->ConfigAllowableClosedloopError(0, 5, 10);
-	swerveSubsystemFRRotTalon->ConfigAllowableClosedloopError(0, 5, 10);
-	swerveSubsystemBLRotTalon->ConfigAllowableClosedloopError(0, 5, 10);
-	swerveSubsystemBRRotTalon->ConfigAllowableClosedloopError(0, 5, 10);
+	//swerveSubsystemFRRotTalon->ConfigAllowableClosedloopError(0, 5, 10);
+	//swerveSubsystemBLRotTalon->ConfigAllowableClosedloopError(0, 5, 10);
+	//swerveSubsystemBRRotTalon->ConfigAllowableClosedloopError(0, 5, 10);
 
 	//This prevents the rotation motors from drawing too much current
 	swerveSubsystemFLRotTalon->ConfigContinuousCurrentLimit(10, 10);
-	swerveSubsystemFRRotTalon->ConfigContinuousCurrentLimit(10, 10);
-	swerveSubsystemBLRotTalon->ConfigContinuousCurrentLimit(10, 10);
-	swerveSubsystemBRRotTalon->ConfigContinuousCurrentLimit(10, 10);
+	//swerveSubsystemFRRotTalon->ConfigContinuousCurrentLimit(10, 10);
+	//swerveSubsystemBLRotTalon->ConfigContinuousCurrentLimit(10, 10);
+	//swerveSubsystemBRRotTalon->ConfigContinuousCurrentLimit(10, 10);
 
 	swerveSubsystemFLRotTalon->ConfigPeakCurrentLimit(0, 10);
-	swerveSubsystemFRRotTalon->ConfigPeakCurrentLimit(0, 10);
-	swerveSubsystemBLRotTalon->ConfigPeakCurrentLimit(0, 10);
-	swerveSubsystemBRRotTalon->ConfigPeakCurrentLimit(0, 10);
+	//swerveSubsystemFRRotTalon->ConfigPeakCurrentLimit(0, 10);
+	//swerveSubsystemBLRotTalon->ConfigPeakCurrentLimit(0, 10);
+	//swerveSubsystemBRRotTalon->ConfigPeakCurrentLimit(0, 10);
 }
 
 void RobotMap::resetTalons(std::vector<std::shared_ptr<can::TalonSRX>> allTalons) {

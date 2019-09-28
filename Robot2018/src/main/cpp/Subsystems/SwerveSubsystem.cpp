@@ -4,14 +4,14 @@
 SwerveSubsystem::SwerveSubsystem() : Subsystem("SwerveSubsystem") {
 	std::cout << "Constructor for Swerve Subsystem!" << std::endl;
 	frontLeftDriveSpark = RobotMap::swerveSubsystemFLDriveSpark;
-	frontRightDriveSpark = RobotMap::swerveSubsystemFRDriveSpark;
-	backLeftDriveSpark = RobotMap::swerveSubsystemBLDriveSpark;
-	backRightDriveSpark = RobotMap::swerveSubsystemBRDriveSpark;
+	//frontRightDriveSpark = RobotMap::swerveSubsystemFRDriveSpark;
+	//backLeftDriveSpark = RobotMap::swerveSubsystemBLDriveSpark;
+	//backRightDriveSpark = RobotMap::swerveSubsystemBRDriveSpark;
 
 	frontLeftRotationTalon = RobotMap::swerveSubsystemFLRotTalon;
-	frontRightRotationTalon = RobotMap::swerveSubsystemFRRotTalon;
-	backLeftRotationTalon = RobotMap::swerveSubsystemBLRotTalon;
-	backRightRotationTalon = RobotMap::swerveSubsystemBRRotTalon;
+	//frontRightRotationTalon = RobotMap::swerveSubsystemFRRotTalon;
+	//backLeftRotationTalon = RobotMap::swerveSubsystemBLRotTalon;
+	//backRightRotationTalon = RobotMap::swerveSubsystemBRRotTalon;
 
 	tigerSwerve = RobotMap::tigerSwerve;
 	tigerDrive = RobotMap::tigerDrive;
@@ -20,24 +20,24 @@ SwerveSubsystem::SwerveSubsystem() : Subsystem("SwerveSubsystem") {
 void SwerveSubsystem::CalibrateWheelsSimple(){
 
 	RobotMap::swerveSubsystemFLRotTalon->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, 0);
-	RobotMap::swerveSubsystemFRRotTalon->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, 0);
-	RobotMap::swerveSubsystemBLRotTalon->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, 0);
-	RobotMap::swerveSubsystemBRRotTalon->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, 0);
+	//RobotMap::swerveSubsystemFRRotTalon->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, 0);
+	//RobotMap::swerveSubsystemBLRotTalon->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, 0);
+	//RobotMap::swerveSubsystemBRRotTalon->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0, 0);
 
 	int flpw = RobotMap::swerveSubsystemFLRotTalon->GetSensorCollection().GetPulseWidthPosition() & 0xFFF;
-	int frpw = RobotMap::swerveSubsystemFRRotTalon->GetSensorCollection().GetPulseWidthPosition() & 0xFFF;
-	int blpw = RobotMap::swerveSubsystemBLRotTalon->GetSensorCollection().GetPulseWidthPosition() & 0xFFF;
-	int brpw = RobotMap::swerveSubsystemBRRotTalon->GetSensorCollection().GetPulseWidthPosition() & 0xFFF;
+	//int frpw = RobotMap::swerveSubsystemFRRotTalon->GetSensorCollection().GetPulseWidthPosition() & 0xFFF;
+	//int blpw = RobotMap::swerveSubsystemBLRotTalon->GetSensorCollection().GetPulseWidthPosition() & 0xFFF;
+	//int brpw = RobotMap::swerveSubsystemBRRotTalon->GetSensorCollection().GetPulseWidthPosition() & 0xFFF;
 
 	int flset = flpw - FL_CAL;
-	int frset = frpw - FR_CAL;
-	int blset = blpw - BL_CAL;
-	int brset = brpw - BR_CAL;
+	//int frset = frpw - FR_CAL;
+	//int blset = blpw - BL_CAL;
+	//int brset = brpw - BR_CAL;
 
 	RobotMap::swerveSubsystemFLRotTalon->Set(ControlMode::Position, flset);
-	RobotMap::swerveSubsystemFRRotTalon->Set(ControlMode::Position, frset);
-	RobotMap::swerveSubsystemBLRotTalon->Set(ControlMode::Position, blset);
-	RobotMap::swerveSubsystemBRRotTalon->Set(ControlMode::Position, brset);
+	//RobotMap::swerveSubsystemFRRotTalon->Set(ControlMode::Position, frset);
+	//RobotMap::swerveSubsystemBLRotTalon->Set(ControlMode::Position, blset);
+	//RobotMap::swerveSubsystemBRRotTalon->Set(ControlMode::Position, brset);
 }
 
 void SwerveSubsystem::CalibrateWheels() {
