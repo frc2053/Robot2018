@@ -3,10 +3,10 @@
 
 SwerveSubsystem::SwerveSubsystem() : Subsystem("SwerveSubsystem") {
 	std::cout << "Constructor for Swerve Subsystem!" << std::endl;
-	frontLeftDriveTalon = RobotMap::swerveSubsystemFLDriveTalon;
-	frontRightDriveTalon = RobotMap::swerveSubsystemFRDriveTalon;
-	backLeftDriveTalon = RobotMap::swerveSubsystemBLDriveTalon;
-	backRightDriveTalon = RobotMap::swerveSubsystemBRDriveTalon;
+	frontLeftDriveSpark = RobotMap::swerveSubsystemFLDriveSpark;
+	frontRightDriveSpark = RobotMap::swerveSubsystemFRDriveSpark;
+	backLeftDriveSpark = RobotMap::swerveSubsystemBLDriveSpark;
+	backRightDriveSpark = RobotMap::swerveSubsystemBRDriveSpark;
 
 	frontLeftRotationTalon = RobotMap::swerveSubsystemFLRotTalon;
 	frontRightRotationTalon = RobotMap::swerveSubsystemFRRotTalon;

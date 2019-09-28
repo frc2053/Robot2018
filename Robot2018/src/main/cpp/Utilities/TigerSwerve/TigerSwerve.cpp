@@ -3,7 +3,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-TigerSwerve::TigerSwerve(std::vector<std::shared_ptr<can::TalonSRX>>& talons) {
+TigerSwerve::TigerSwerve(std::vector<std::shared_ptr<can::TalonSRX>>& talons, std::vector<std::shared_ptr<rev::CANSparkMax>>& sparks) {
 
 	xAxis = 0;
 	yAxis = 0;
@@ -11,15 +11,15 @@ TigerSwerve::TigerSwerve(std::vector<std::shared_ptr<can::TalonSRX>>& talons) {
 	currentYaw = 0;
 	modules.reset(new std::vector<SwerveModule>());
 
-	frontLeftDrive = talons.at(0);
-	frontRightDrive = talons.at(1);
-	backLeftDrive = talons.at(2);
-	backRightDrive = talons.at(3);
+	frontLeftDrive = sparks.at(0);
+	frontRightDrive = sparks.at(1);
+	backLeftDrive = sparks.at(2);
+	backRightDrive = sparks.at(3);
 
-	frontLeftRot = talons.at(4);
-	frontRightRot = talons.at(5);
-	backLeftRot = talons.at(6);
-	backRightRot = talons.at(7);
+	frontLeftRot = talons.at(0);
+	frontRightRot = talons.at(1);
+	backLeftRot = talons.at(2);
+	backRightRot = talons.at(3);
 
 	modules->push_back(SwerveModule(frontLeftDrive, frontLeftRot));
 	modules->push_back(SwerveModule(frontRightDrive, frontRightRot));

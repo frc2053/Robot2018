@@ -15,10 +15,10 @@ private:
 
 	std::shared_ptr<Rotation2D> centerOfRotation;
 
-	std::shared_ptr<can::TalonSRX> frontRightDrive;
-	std::shared_ptr<can::TalonSRX> frontLeftDrive;
-	std::shared_ptr<can::TalonSRX> backRightDrive;
-	std::shared_ptr<can::TalonSRX> backLeftDrive;
+	std::shared_ptr<rev::CANSparkMax> frontRightDrive;
+	std::shared_ptr<rev::CANSparkMax> frontLeftDrive;
+	std::shared_ptr<rev::CANSparkMax> backRightDrive;
+	std::shared_ptr<rev::CANSparkMax> backLeftDrive;
 
 	std::shared_ptr<can::TalonSRX> frontRightRot;
 	std::shared_ptr<can::TalonSRX> frontLeftRot;
@@ -34,7 +34,7 @@ private:
 
 	std::shared_ptr<frc::Timer> angleTimer;
 public:
-	TigerSwerve(std::vector<std::shared_ptr<can::TalonSRX>>& talons);
+	TigerSwerve(std::vector<std::shared_ptr<can::TalonSRX>>& talons, std::vector<std::shared_ptr<rev::CANSparkMax>>& sparks);
 	virtual ~TigerSwerve();
 	void SetCenterOfRotation(double x, double y);
 	void SetBrakeMode();

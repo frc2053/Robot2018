@@ -4,7 +4,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-SwerveModule::SwerveModule(std::shared_ptr<can::TalonSRX> driveController, std::shared_ptr<can::TalonSRX> rotateController) {
+SwerveModule::SwerveModule(std::shared_ptr<rev::CANSparkMax> driveController, std::shared_ptr<can::TalonSRX> rotateController) {
 	_driveController.reset(driveController.get());
 	_rotateController.reset(rotateController.get());
 	_angleEncoder.reset(new CTREMagEncoder(_rotateController.get()));
@@ -57,15 +57,15 @@ void SwerveModule::SetAngle(Rotation2D angle, bool doOptimization) {
 }
 
 void SwerveModule::Stop() {
-	_driveController->Set(ControlMode::PercentOutput, 0);
+	_driveController->Set(0);
 }
 
 void SwerveModule::Set(double speed, Rotation2D angle, bool doOptimization) {
 	SetAngle(angle, doOptimization);
 	if(isOptimizedAngle) {
-		_driveController->Set(ControlMode::PercentOutput, speed*-1);
+		_driveController->Set(speed*-1);
 	}
 	else {
-		_driveController->Set(ControlMode::PercentOutput, speed);
+		_driveController->Set(speed);
 	}
 }

@@ -27,10 +27,10 @@ public:
 	std::shared_ptr<TigerDrive> tigerDrive;
 	std::shared_ptr<TigerSwerve> GetSwerveStuff();
 private:
-	std::shared_ptr<can::TalonSRX> frontRightDriveTalon;
-	std::shared_ptr<can::TalonSRX> frontLeftDriveTalon;
-	std::shared_ptr<can::TalonSRX> backRightDriveTalon;
-	std::shared_ptr<can::TalonSRX> backLeftDriveTalon;
+	std::shared_ptr<rev::CANSparkMax> frontRightDriveSpark;
+	std::shared_ptr<rev::CANSparkMax> frontLeftDriveSpark;
+	std::shared_ptr<rev::CANSparkMax> backRightDriveSpark;
+	std::shared_ptr<rev::CANSparkMax> backLeftDriveSpark;
 
 	std::shared_ptr<can::TalonSRX> frontRightRotationTalon;
 	std::shared_ptr<can::TalonSRX> frontLeftRotationTalon;

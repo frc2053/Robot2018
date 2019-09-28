@@ -1,10 +1,10 @@
 #include "RobotMap.h"
 #include "frc/WPILib.h"
 
-std::shared_ptr<can::TalonSRX> RobotMap::swerveSubsystemFLDriveTalon;
-std::shared_ptr<can::TalonSRX> RobotMap::swerveSubsystemFRDriveTalon;
-std::shared_ptr<can::TalonSRX> RobotMap::swerveSubsystemBLDriveTalon;
-std::shared_ptr<can::TalonSRX> RobotMap::swerveSubsystemBRDriveTalon;
+std::shared_ptr<rev::CANSparkMax> RobotMap::swerveSubsystemFLDriveSpark;
+std::shared_ptr<rev::CANSparkMax> RobotMap::swerveSubsystemFRDriveSpark;
+std::shared_ptr<rev::CANSparkMax> RobotMap::swerveSubsystemBLDriveSpark;
+std::shared_ptr<rev::CANSparkMax> RobotMap::swerveSubsystemBRDriveSpark;
 
 std::shared_ptr<can::TalonSRX> RobotMap::swerveSubsystemFLRotTalon;
 std::shared_ptr<can::TalonSRX> RobotMap::swerveSubsystemFRRotTalon;
@@ -16,72 +16,30 @@ std::shared_ptr<frc::PowerDistributionPanel> RobotMap::powerDistributionPanel;
 std::shared_ptr<TigerDrive> RobotMap::tigerDrive;
 std::shared_ptr<TigerSwerve> RobotMap::tigerSwerve;
 std::vector<std::shared_ptr<can::TalonSRX>> RobotMap::talonVector;
+std::vector<std::shared_ptr<rev::CANSparkMax>> RobotMap::sparkVector;
 std::vector<std::shared_ptr<can::TalonSRX>> RobotMap::allTalons;
 
-int RobotMap::TOP_POSITION_TICKS;
-double RobotMap::GROUND_POS_FT;
-double RobotMap::SCALE_POS_FT;
-double RobotMap::SWITCH_POS_FT;
-double RobotMap::CLIMBBAR_POS_FT;
 double RobotMap::WHEELBASE_WIDTH;
 double RobotMap::WHEELBASE_LENGTH;
-double RobotMap::TIMESTEP;
-double RobotMap::MAX_VEL;
-double RobotMap::MAX_ACCEL;
-double RobotMap::MAX_JERK;
-int RobotMap::TICKS_PER_REV;
-int RobotMap::TICKS_PER_FOOT_DRIVE;
-double RobotMap::WHEEL_CIRCUMFERENCE;
-double RobotMap::K_P;
-double RobotMap::K_I;
-double RobotMap::K_D;
-double RobotMap::K_V;
-double RobotMap::K_A;
-double RobotMap::K_T;
 
 void RobotMap::init() {
 	std::cout << "RobotMap is starting!" << std::endl;
 
-	TOP_POSITION_TICKS = 129751; //24000; VALUE TO BE TESTED AND CHANGED
-	//FEET
-	GROUND_POS_FT = -0.6;
-	SCALE_POS_FT = -5.9;
-	SWITCH_POS_FT = -2;
-	CLIMBBAR_POS_FT = -7.0;
-	//INCHES - don't question it
 	WHEELBASE_LENGTH = 21;
 	WHEELBASE_WIDTH = 26.249;
 
-	TIMESTEP = 0.02;
-	MAX_VEL = 18;
-	MAX_ACCEL = 12;
-	MAX_JERK = 60;
-	TICKS_PER_REV = 26214;
-	TICKS_PER_FOOT_DRIVE = 37187;
-	WHEEL_CIRCUMFERENCE = 0.65449867893738;
-	K_P = 1;
-	K_I = 0.0;
-	K_D = .15;
-	K_V = .06; //.06
-	K_A = .0856;
-	K_T = .35; //.35
-
 	LiveWindow::GetInstance()->DisableAllTelemetry();
 
-	swerveSubsystemFLDriveTalon.reset(new can::TalonSRX(2));
-	swerveSubsystemFRDriveTalon.reset(new can::TalonSRX(3));
-	swerveSubsystemBLDriveTalon.reset(new can::TalonSRX(4));
-	swerveSubsystemBRDriveTalon.reset(new can::TalonSRX(5));
+	swerveSubsystemFLDriveSpark.reset(new rev::CANSparkMax(2, rev::CANSparkMaxLowLevel::MotorType::kBrushless));
+	swerveSubsystemFRDriveSpark.reset(new rev::CANSparkMax(3, rev::CANSparkMaxLowLevel::MotorType::kBrushless));
+	swerveSubsystemBLDriveSpark.reset(new rev::CANSparkMax(4, rev::CANSparkMaxLowLevel::MotorType::kBrushless));
+	swerveSubsystemBRDriveSpark.reset(new rev::CANSparkMax(5, rev::CANSparkMaxLowLevel::MotorType::kBrushless));
 
 	swerveSubsystemFLRotTalon.reset(new can::TalonSRX(6));
 	swerveSubsystemFRRotTalon.reset(new can::TalonSRX(7));
 	swerveSubsystemBLRotTalon.reset(new can::TalonSRX(8));
 	swerveSubsystemBRRotTalon.reset(new can::TalonSRX(9));
 
-	allTalons.push_back(swerveSubsystemFLDriveTalon);
-	allTalons.push_back(swerveSubsystemFRDriveTalon);
-	allTalons.push_back(swerveSubsystemBLDriveTalon);
-	allTalons.push_back(swerveSubsystemBRDriveTalon);
 	allTalons.push_back(swerveSubsystemFLRotTalon);
 	allTalons.push_back(swerveSubsystemFRRotTalon);
 	allTalons.push_back(swerveSubsystemBLRotTalon);
@@ -89,10 +47,10 @@ void RobotMap::init() {
 
 	RobotMap::resetTalons(allTalons);
 
-	talonVector.push_back(swerveSubsystemFLDriveTalon);
-	talonVector.push_back(swerveSubsystemFRDriveTalon);
-	talonVector.push_back(swerveSubsystemBLDriveTalon);
-	talonVector.push_back(swerveSubsystemBRDriveTalon);
+	sparkVector.push_back(swerveSubsystemFLDriveSpark);
+	sparkVector.push_back(swerveSubsystemFRDriveSpark);
+	sparkVector.push_back(swerveSubsystemBLDriveSpark);
+	sparkVector.push_back(swerveSubsystemBRDriveSpark);
 
 	talonVector.push_back(swerveSubsystemFLRotTalon);
 	talonVector.push_back(swerveSubsystemFRRotTalon);
@@ -101,39 +59,39 @@ void RobotMap::init() {
 
 	robotIMU.reset(new AHRS(frc::SPI::Port::kMXP));
 	powerDistributionPanel.reset(new frc::PowerDistributionPanel());
-	tigerSwerve.reset(new TigerSwerve(RobotMap::talonVector));
+	tigerSwerve.reset(new TigerSwerve(RobotMap::talonVector, RobotMap::sparkVector));
 	tigerDrive.reset(new TigerDrive(RobotMap::robotIMU.get()));
 
 	//makes the drive talons drive the right way
-	swerveSubsystemFLDriveTalon->SetInverted(false);
-	swerveSubsystemFRDriveTalon->SetInverted(false);
-	swerveSubsystemBLDriveTalon->SetInverted(false);
-	swerveSubsystemBRDriveTalon->SetInverted(false);
+	//swerveSubsystemFLDriveTalon->SetInverted(false);
+	//swerveSubsystemFRDriveTalon->SetInverted(false);
+	//swerveSubsystemBLDriveTalon->SetInverted(false);
+	//swerveSubsystemBRDriveTalon->SetInverted(false);
 
 	//zeros the quad encoders on start up
-	swerveSubsystemFLDriveTalon->GetSensorCollection().SetQuadraturePosition(0, 10);
-	swerveSubsystemFRDriveTalon->GetSensorCollection().SetQuadraturePosition(0, 10);
-	swerveSubsystemBLDriveTalon->GetSensorCollection().SetQuadraturePosition(0, 10);
-	swerveSubsystemBRDriveTalon->GetSensorCollection().SetQuadraturePosition(0, 10);
+	//swerveSubsystemFLDriveTalon->GetSensorCollection().SetQuadraturePosition(0, 10);
+	//swerveSubsystemFRDriveTalon->GetSensorCollection().SetQuadraturePosition(0, 10);
+	//swerveSubsystemBLDriveTalon->GetSensorCollection().SetQuadraturePosition(0, 10);
+	//swerveSubsystemBRDriveTalon->GetSensorCollection().SetQuadraturePosition(0, 10);
 
 	//make sure we use the quad encoders when we do PID on them
-	swerveSubsystemFLDriveTalon->ConfigSelectedFeedbackSensor(FeedbackDevice::QuadEncoder, 0, 10);
-	swerveSubsystemFRDriveTalon->ConfigSelectedFeedbackSensor(FeedbackDevice::QuadEncoder, 0, 10);
-	swerveSubsystemBLDriveTalon->ConfigSelectedFeedbackSensor(FeedbackDevice::QuadEncoder, 0, 10);
-	swerveSubsystemBRDriveTalon->ConfigSelectedFeedbackSensor(FeedbackDevice::QuadEncoder, 0, 10);
+	//swerveSubsystemFLDriveTalon->ConfigSelectedFeedbackSensor(FeedbackDevice::QuadEncoder, 0, 10);
+	//swerveSubsystemFRDriveTalon->ConfigSelectedFeedbackSensor(FeedbackDevice::QuadEncoder, 0, 10);
+	//swerveSubsystemBLDriveTalon->ConfigSelectedFeedbackSensor(FeedbackDevice::QuadEncoder, 0, 10);
+	//swerveSubsystemBRDriveTalon->ConfigSelectedFeedbackSensor(FeedbackDevice::QuadEncoder, 0, 10);
 
 	//for the talon PID to work we need to make sure that the sensors are in phase
 	//this means that when we give the motor a positive voltage the encoder ticks MUST go more positive
 	//if this is not set correctly PID will not work at all
-	swerveSubsystemFLDriveTalon->SetSensorPhase(true);
-	swerveSubsystemFRDriveTalon->SetSensorPhase(true);
-	swerveSubsystemBLDriveTalon->SetSensorPhase(true);
-	swerveSubsystemBRDriveTalon->SetSensorPhase(true);
+	//swerveSubsystemFLDriveTalon->SetSensorPhase(true);
+	//swerveSubsystemFRDriveTalon->SetSensorPhase(true);
+	//swerveSubsystemBLDriveTalon->SetSensorPhase(true);
+	//swerveSubsystemBRDriveTalon->SetSensorPhase(true);
 
-	swerveSubsystemFLDriveTalon->ConfigOpenloopRamp(0.4, 10);
-	swerveSubsystemFRDriveTalon->ConfigOpenloopRamp(0.4, 10);
-	swerveSubsystemBLDriveTalon->ConfigOpenloopRamp(0.4, 10);
-	swerveSubsystemBRDriveTalon->ConfigOpenloopRamp(0.4, 10);
+	//swerveSubsystemFLDriveTalon->ConfigOpenloopRamp(0.4, 10);
+	//swerveSubsystemFRDriveTalon->ConfigOpenloopRamp(0.4, 10);
+	//swerveSubsystemBLDriveTalon->ConfigOpenloopRamp(0.4, 10);
+	//swerveSubsystemBRDriveTalon->ConfigOpenloopRamp(0.4, 10);
 
 
 
