@@ -51,7 +51,7 @@ void TigerSwerve::Drive(double xSpeed, double ySpeed, double rotSpeed, double he
 	Rotation2D gyroAngle = Rotation2D::fromDegrees(-headingOffset);
 	currentYaw = headingOffset;
 	//std::cout << "gyroAngle: " << gyroAngle.getDegrees() << std::endl;
-	//std::cout << "trans: (" << trans.getX() << ", " << trans.getY() << ")" <<std::endl;
+	std::cout << "trans: (" << trans.getX() << ", " << trans.getY() << ")" << std::endl;
 	trans = trans.rotateBy(gyroAngle);
 	//std::cout << "trans: (" << trans.getX() << ", " << trans.getY() << ")" <<std::endl;
 
@@ -68,6 +68,7 @@ void TigerSwerve::Drive(double xSpeed, double ySpeed, double rotSpeed, double he
 	SwerveInverseKinematics(trans, rotSpeed, frWheelSpeed, flWheelSpeed, brWheelSpeed, blWheelSpeed, flWheelAngle, frWheelAngle, blWheelAngle, brWheelAngle);
 	angleTimer->Reset();
 	angleTimer->Start();
+
 	modules->at(0).Set(flWheelSpeed, flWheelAngle, true);
 	//modules->at(1).Set(frWheelSpeed, frWheelAngle, true);
 	//modules->at(2).Set(blWheelSpeed, blWheelAngle, true);

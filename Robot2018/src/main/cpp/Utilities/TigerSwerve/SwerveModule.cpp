@@ -62,6 +62,7 @@ void SwerveModule::Stop() {
 
 void SwerveModule::Set(double speed, Rotation2D angle, bool doOptimization) {
 	SetAngle(angle, doOptimization);
+	std::cout << "speed: " << speed << "\n";
 	if(isOptimizedAngle) {
 		_driveController->Set(speed*-1);
 	}
